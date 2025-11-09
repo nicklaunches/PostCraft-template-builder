@@ -1,7 +1,7 @@
 import { Extension } from "@tiptap/core";
 import Suggestion from "@tiptap/suggestion";
 import { ReactRenderer } from "@tiptap/react";
-import tippy from "tippy.js";
+import tippy, { Instance } from "tippy.js";
 import CommandList from "./CommandList";
 
 export const SlashCommand = Extension.create({
@@ -12,6 +12,7 @@ export const SlashCommand = Extension.create({
             suggestion: {
                 char: "/",
                 command: ({ editor, range, props }: any) => {
+                    console.log("Command triggered!", { editor, range, props });
                     props.command({ editor, range });
                 },
             },
@@ -19,6 +20,7 @@ export const SlashCommand = Extension.create({
     },
 
     addProseMirrorPlugins() {
+        console.log("SlashCommand plugin is being added to editor");
         return [
             Suggestion({
                 editor: this.editor,
@@ -26,10 +28,15 @@ export const SlashCommand = Extension.create({
             }),
         ];
     },
+
+    onCreate() {
+        console.log("SlashCommand extension created");
+    },
 });
 
 export const suggestion = {
     items: ({ query }: { query: string }) => {
+        console.log("Items called with query:", query);
         return [
             {
                 title: "Heading 1",
@@ -80,15 +87,24 @@ export const suggestion = {
     },
 
     render: () => {
+        console.log("Render function called");
         let component: ReactRenderer;
-        let popup: any;
+        let popup: Instance[];
 
         return {
             onStart: (props: any) => {
+                console.log("onStart called with props:", props);
                 component = new ReactRenderer(CommandList, {
                     props,
                     editor: props.editor,
                 });
+
+                console.log("props.clientRect:", props.clientRect);
+
+                if (!props.clientRect) {
+                    console.log("No clientRect, returning early");
+                    return;
+                }
 
                 popup = tippy("body", {
                     getReferenceClientRect: props.clientRect,
@@ -99,10 +115,17 @@ export const suggestion = {
                     trigger: "manual",
                     placement: "bottom-start",
                 });
+
+                console.log("Popup created:", popup);
             },
 
             onUpdate(props: any) {
+                console.log("onUpdate called");
                 component.updateProps(props);
+
+                if (!props.clientRect) {
+                    return;
+                }
 
                 popup[0].setProps({
                     getReferenceClientRect: props.clientRect,
@@ -110,15 +133,17 @@ export const suggestion = {
             },
 
             onKeyDown(props: any) {
+                console.log("onKeyDown called:", props.event.key);
                 if (props.event.key === "Escape") {
                     popup[0].hide();
                     return true;
                 }
 
-                return component.ref?.onKeyDown(props);
+                return (component.ref as any)?.onKeyDown(props);
             },
 
             onExit() {
+                console.log("onExit called");
                 popup[0].destroy();
                 component.destroy();
             },

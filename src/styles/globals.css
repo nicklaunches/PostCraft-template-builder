@@ -25,8 +25,7 @@ body {
 
 /* Tiptap Editor Styles */
 .tiptap {
-    outline: none;
-    min-height: 500px;
+    outline: none !important;
 }
 
 .tiptap p.is-editor-empty:first-child::before {
@@ -38,34 +37,56 @@ body {
 }
 
 .tiptap p {
-    line-height: 1.6;
-    margin: 0.5rem 0;
+    margin: 1rem 0;
+    position: relative;
+}
+
+/* Make blocks hoverable to show drag handles */
+.tiptap p:hover,
+.tiptap h1:hover,
+.tiptap h2:hover,
+.tiptap h3:hover,
+.tiptap ul:hover,
+.tiptap ol:hover,
+.tiptap blockquote:hover {
+    background-color: rgba(0, 0, 0, 0.01);
+}
+
+/* Show drag handle when hovering over the content */
+.tiptap p:hover .drag-handle,
+.tiptap h1:hover .drag-handle,
+.tiptap h2:hover .drag-handle,
+.tiptap h3:hover .drag-handle,
+.tiptap ul:hover .drag-handle,
+.tiptap ol:hover .drag-handle,
+.tiptap blockquote:hover .drag-handle {
+    opacity: 1 !important;
 }
 
 .tiptap h1 {
-    font-size: 2.5em;
-    font-weight: 700;
-    line-height: 1.2;
-    margin: 2rem 0 1rem;
+    font-size: 2em;
+    font-weight: bold;
+    margin: 1.5rem 0 1rem;
+    position: relative;
 }
 
 .tiptap h2 {
-    font-size: 2em;
-    font-weight: 600;
-    line-height: 1.3;
-    margin: 1.5rem 0 0.75rem;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 1.25rem 0 0.75rem;
+    position: relative;
 }
 
 .tiptap h3 {
-    font-size: 1.5em;
-    font-weight: 600;
-    line-height: 1.4;
-    margin: 1.25rem 0 0.5rem;
+    font-size: 1.25em;
+    font-weight: bold;
+    margin: 1rem 0 0.5rem;
+    position: relative;
 }
 
 .tiptap ul,
 .tiptap ol {
-    padding: 0 0 0 1.5rem;
+    padding: 0 1rem;
     margin: 1rem 0;
 }
 
@@ -77,41 +98,32 @@ body {
     list-style-type: decimal;
 }
 
-.tiptap li {
-    margin: 0.25rem 0;
-}
-
 .tiptap blockquote {
     padding-left: 1rem;
-    border-left: 3px solid #e5e7eb;
-    margin: 1.5rem 0;
-    font-style: italic;
-    color: #6b7280;
+    border-left: 3px solid #ccc;
+    margin: 1rem 0;
+    position: relative;
 }
 
 .tiptap code {
     background-color: #f3f4f6;
-    color: #1f2937;
     padding: 0.2em 0.4em;
     border-radius: 0.25rem;
-    font-family: "Courier New", Courier, monospace;
-    font-size: 0.9em;
+    font-family: monospace;
 }
 
 .tiptap pre {
-    background: #1f2937;
-    color: #f9fafb;
-    padding: 1rem;
+    background: #0d0d0d;
+    color: #fff;
+    padding: 0.75rem 1rem;
     border-radius: 0.5rem;
-    margin: 1.5rem 0;
-    overflow-x: auto;
+    margin: 1rem 0;
 }
 
 .tiptap pre code {
     background: none;
     color: inherit;
     padding: 0;
-    font-size: 0.875rem;
 }
 
 .tiptap hr {
@@ -120,10 +132,79 @@ body {
     margin: 2rem 0;
 }
 
-.tiptap strong {
-    font-weight: 600;
+/* Drag Handle Styles - Notion-like */
+.drag-handle {
+    position: absolute;
+    left: -2.5rem;
+    top: 2px;
+    width: 1.25rem;
+    height: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition:
+        opacity 0.15s ease,
+        background-color 0.15s ease;
+    cursor: grab;
+    color: #d1d5db;
+    z-index: 50;
+    user-select: none;
+    border-radius: 0.25rem;
+    padding: 0.125rem;
 }
 
-.tiptap em {
-    font-style: italic;
+.drag-handle svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+.drag-handle:hover {
+    color: #6b7280;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Show drag handle when hovering near the block */
+.ProseMirror-widget:has(.drag-handle) {
+    position: relative;
+}
+
+.ProseMirror > p:hover + .ProseMirror-widget .drag-handle,
+.ProseMirror > h1:hover + .ProseMirror-widget .drag-handle,
+.ProseMirror > h2:hover + .ProseMirror-widget .drag-handle,
+.ProseMirror > h3:hover + .ProseMirror-widget .drag-handle,
+.ProseMirror > ul:hover + .ProseMirror-widget .drag-handle,
+.ProseMirror > ol:hover + .ProseMirror-widget .drag-handle,
+.ProseMirror > blockquote:hover + .ProseMirror-widget .drag-handle,
+.drag-handle:hover {
+    opacity: 1;
+}
+
+/* Ensure content is visible during drag */
+.ProseMirror [draggable="true"] {
+    opacity: 1 !important;
+}
+
+/* Style for block being dragged */
+.ProseMirror .ProseMirror-selectednode {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+    background-color: rgba(59, 130, 246, 0.05);
+}
+
+/* Keep text visible when dragging */
+.ProseMirror p,
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3,
+.ProseMirror ul,
+.ProseMirror ol,
+.ProseMirror blockquote {
+    position: relative;
 }

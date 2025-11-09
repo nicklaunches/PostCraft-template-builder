@@ -1,3 +1,4 @@
+// update to React Component-Based
 "use client";
 
 import { useEffect, useState } from "react";
@@ -6,6 +7,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import { SlashCommand, suggestion } from "./SlashCommand";
+import { DragHandleExtension } from "./DragHandleExtension";
 
 export interface ContentEditorProps {
     initialContent?: string;
@@ -32,11 +34,12 @@ export default function ContentEditor({
             SlashCommand.configure({
                 suggestion,
             }),
+            DragHandleExtension,
         ],
         content: _initialContent || "",
         editorProps: {
             attributes: {
-                class: "prose prose-sm sm:prose lg:prose-lg xl:prose-xl focus:outline-none min-h-[500px] max-w-none",
+                class: "tiptap prose prose-sm sm:prose lg:prose-lg xl:prose-xl focus:outline-none min-h-[500px] max-w-none",
             },
         },
     });
@@ -55,7 +58,10 @@ export default function ContentEditor({
         <main className="flex-1 overflow-y-auto bg-white">
             <div className="mx-auto max-w-4xl px-8 py-16">
                 <MenuBar editor={editor} />
-                <EditorContent editor={editor} className="tiptap" />
+                {/* Add relative positioning and left padding for drag handles */}
+                <div className="relative pl-12">
+                    <EditorContent editor={editor} />
+                </div>
             </div>
         </main>
     );
