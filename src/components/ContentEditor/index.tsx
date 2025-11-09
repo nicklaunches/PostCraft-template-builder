@@ -5,7 +5,7 @@ import MenuBar from "../MenuBar";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
-import { SlashCommand, suggestion } from "./SplashCommand";
+import { SlashCommand, suggestion } from "./SlashCommand";
 
 export interface ContentEditorProps {
     initialContent?: string;
