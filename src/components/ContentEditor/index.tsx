@@ -1,15 +1,11 @@
 "use client";
 
-import React from "react";
+import { useEffect, useState } from "react";
+import MenuBar from "../MenuBar";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
-import Link from "@tiptap/extension-link";
-import Image from "@tiptap/extension-image";
-import TextAlign from "@tiptap/extension-text-align";
-import { TextStyle } from "@tiptap/extension-text-style";
-import Color from "@tiptap/extension-color";
-import MenuBar from "../MenuBar";
+import { SlashCommand, suggestion } from "./SplashCommand";
 
 export interface ContentEditorProps {
     initialContent?: string;
@@ -20,43 +16,46 @@ export default function ContentEditor({
     initialContent: _initialContent,
     onSave: _onSave,
 }: ContentEditorProps) {
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
     const editor = useEditor({
         immediatelyRender: false,
         extensions: [
-            StarterKit.configure({
-                heading: {
-                    levels: [1, 2, 3],
-                },
-            }),
+            StarterKit,
             Placeholder.configure({
-                placeholder: "Start typing or press '/' for commands...",
+                placeholder: "Start writing your thoughts here … ✍️",
             }),
-            Link.configure({
-                openOnClick: false,
-                HTMLAttributes: {
-                    class: "text-blue-600 underline",
-                },
+            SlashCommand.configure({
+                suggestion,
             }),
-            Image,
-            TextAlign.configure({
-                types: ["heading", "paragraph"],
-            }),
-            TextStyle,
-            Color,
         ],
-        content: _initialContent || "<p>Start writing your email template...</p>",
+        content: _initialContent || "",
         editorProps: {
             attributes: {
-                class: "prose prose-sm sm:prose lg:prose-lg xl:prose-xl focus:outline-none min-h-[500px]",
+                class: "prose prose-sm sm:prose lg:prose-lg xl:prose-xl focus:outline-none min-h-[500px] max-w-none",
             },
         },
     });
 
+    if (!isMounted) {
+        return (
+            <main className="flex-1 overflow-y-auto bg-white">
+                <div className="mx-auto max-w-4xl px-8 py-16">
+                    <div className="min-h-[500px] animate-pulse bg-gray-100 rounded"></div>
+                </div>
+            </main>
+        );
+    }
+
     return (
-        <main className="flex-1 overflow-y-auto bg-white p-8">
-            <div className="mx-auto max-w-3xl">
+        <main className="flex-1 overflow-y-auto bg-white">
+            <div className="mx-auto max-w-4xl px-8 py-16">
                 <MenuBar editor={editor} />
-                <EditorContent editor={editor} />
+                <EditorContent editor={editor} className="tiptap" />
             </div>
         </main>
     );
