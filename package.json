@@ -60,5 +60,15 @@
         "*.{json,css,md}": [
             "prettier --write"
         ]
+    },
+    "dependencies": {
+        "@tiptap/extension-color": "^3.10.4",
+        "@tiptap/extension-image": "^3.10.4",
+        "@tiptap/extension-link": "^3.10.4",
+        "@tiptap/extension-placeholder": "^3.10.4",
+        "@tiptap/extension-text-align": "^3.10.4",
+        "@tiptap/extension-text-style": "^3.10.4",
+        "@tiptap/react": "^3.10.4",
+        "@tiptap/starter-kit": "^3.10.4"
     }
 }
