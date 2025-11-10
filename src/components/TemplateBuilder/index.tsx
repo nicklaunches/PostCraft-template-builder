@@ -1,5 +1,3 @@
-"use client";
-
 import Nav from "../Nav";
 import LeftSidebar from "../LeftSidebar";
 import ContentEditor from "../ContentEditor";

@@ -1,10 +1,8 @@
-"use client";
-
 import TemplateBuilder from "@/components/TemplateBuilder";
 import { useTemplateBuilder } from "@/hooks/useTemplateBuilder";
 import { useEditor } from "@/hooks/useEditor";
 
-export default function Home() {
+export default function App() {
     const builder = useTemplateBuilder();
     const editor = useEditor();
 

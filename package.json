@@ -16,17 +16,16 @@
         "dist"
     ],
     "scripts": {
-        "dev": "next dev",
-        "build:next": "next build",
-        "build:package": "tsup src/index.ts --format cjs,esm --dts --external react --external react-dom --external next",
+        "dev": "vite",
+        "build:app": "vite build",
+        "build:package": "tsup src/index.ts --format cjs,esm --dts --external react --external react-dom",
         "build": "pnpm run build:package",
-        "start": "next start",
+        "preview": "vite preview",
         "lint": "eslint src/",
         "format": "prettier --write .",
         "prepare": "husky"
     },
     "peerDependencies": {
-        "next": "^14.0.0 || ^15.0.0",
         "react": "^18.0.0 || ^19.0.0",
         "react-dom": "^18.0.0 || ^19.0.0"
     },
@@ -34,15 +33,17 @@
         "@eslint/eslintrc": "^3.3.1",
         "@eslint/js": "^9.39.1",
         "@tailwindcss/postcss": "^4.1.17",
+        "@types/deep-equal": "^1.0.4",
         "@types/node": "^20.0.0",
         "@types/react": "^18.0.0",
         "@types/react-dom": "^18.0.0",
+        "@vitejs/plugin-react": "^4.3.4",
         "autoprefixer": "^10.4.21",
         "eslint": "^9.39.1",
-        "eslint-config-next": "^16.0.1",
+        "eslint-plugin-react-hooks": "^5.0.0",
+        "eslint-plugin-react-refresh": "^0.4.16",
         "husky": "^9.1.7",
         "lint-staged": "^16.2.6",
-        "next": "^15.0.0",
         "postcss": "^8.5.6",
         "prettier": "^3.6.2",
         "react": "^18.0.0",
@@ -50,7 +51,8 @@
         "tailwindcss": "^4.1.17",
         "tsup": "^8.0.0",
         "typescript": "^5.0.0",
-        "typescript-eslint": "^8.46.3"
+        "typescript-eslint": "^8.46.3",
+        "vite": "^6.0.1"
     },
     "lint-staged": {
         "*.{js,jsx,ts,tsx}": [
@@ -63,6 +65,17 @@
     },
     "dependencies": {
         "@hello-pangea/dnd": "^18.0.1",
-        "novel": "^1.0.2"
+        "@tiptap/core": "^3.10.5",
+        "@tiptap/extension-collaboration": "^3.10.5",
+        "@tiptap/extension-drag-handle": "^3.10.5",
+        "@tiptap/extension-drag-handle-react": "^3.10.5",
+        "@tiptap/extension-node-range": "^3.10.5",
+        "@tiptap/pm": "^3.10.5",
+        "@tiptap/react": "^3.10.5",
+        "@tiptap/starter-kit": "^3.10.5",
+        "@tiptap/y-tiptap": "^3.0.0",
+        "deep-equal": "^2.2.3",
+        "y-protocols": "^1.0.6",
+        "yjs": "^13.6.27"
     }
 }
