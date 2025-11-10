@@ -1,6 +1,8 @@
 import DragHandle from "@tiptap/extension-drag-handle-react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import Collaboration from "@tiptap/extension-collaboration";
+import * as Y from "yjs";
 
 export interface ContentEditorProps {
     initialContent?: string;
@@ -11,14 +13,21 @@ export default function ContentEditor({
     initialContent: _initialContent,
     onSave: _onSave,
 }: ContentEditorProps) {
+    const ydoc = new Y.Doc();
+
     const editor = useEditor({
-        extensions: [StarterKit],
+        extensions: [
+            StarterKit,
+            Collaboration.configure({
+                document: ydoc,
+            }),
+        ],
         content: `
       <h1>
         This is a very unique heading.
       </h1>
       <p>
-        This is a unique paragraph. It’s so unique, it even has an ID attached to it.
+        This is a unique paragraph. It's so unique, it even has an ID attached to it.
       </p>
       <p>
         And this one, too.
@@ -44,6 +53,7 @@ export default function ContentEditor({
                         viewBox="0 0 24 24"
                         strokeWidth="1.5"
                         stroke="currentColor"
+                        className="w-6 h-6 cursor-grab"
                     >
                         <path
                             strokeLinecap="round"
