@@ -53,7 +53,7 @@ export default function ContentEditor({
                         viewBox="0 0 24 24"
                         strokeWidth="1.5"
                         stroke="currentColor"
-                        className="w-6 h-6 cursor-grab"
+                        className="w-6 h-6 p-1 cursor-grab hover:bg-gray-300 rounded"
                     >
                         <path
                             strokeLinecap="round"
