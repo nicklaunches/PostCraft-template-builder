@@ -1,4 +1,5 @@
 import TemplateBuilder from "@/components/layout/TemplateBuilder";
+import { GlobalStateProvider } from "@/context/GlobalState";
 import { useTemplateBuilder } from "@/hooks/useTemplateBuilder";
 import { useEditor } from "@/hooks/useEditor";
 
@@ -13,5 +14,9 @@ export default function App() {
         console.log("Exported HTML:", html);
     };
 
-    return <TemplateBuilder onSave={handleSave} />;
+    return (
+        <GlobalStateProvider>
+            <TemplateBuilder onSave={handleSave} />
+        </GlobalStateProvider>
+    );
 }

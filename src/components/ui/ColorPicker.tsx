@@ -5,18 +5,25 @@ import { PlusIcon, ResetIcon } from "@/utils/icons";
 
 interface ColorPickerProps {
     label: string;
+    value?: string;
     defaultValue?: string;
     onChange?: (value: string) => void;
 }
 
-export default function ColorPicker({ label, defaultValue = "", onChange }: ColorPickerProps) {
-    const [color, setColor] = useState(defaultValue);
+export default function ColorPicker({
+    label,
+    value,
+    defaultValue = "",
+    onChange,
+}: ColorPickerProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
     const [pickerPosition, setPickerPosition] = useState<"left" | "right">("right");
     const containerRef = useRef<HTMLDivElement>(null);
     const pickerRef = useRef<HTMLDivElement>(null);
+
+    const color = value ?? defaultValue;
 
     // Handle click outside to close picker
     useEffect(() => {
@@ -59,21 +66,17 @@ export default function ColorPicker({ label, defaultValue = "", onChange }: Colo
     }, [isOpen]);
 
     const handleColorChange = (newColor: string) => {
-        setColor(newColor);
         onChange?.(newColor);
     };
 
     const handleReset = (e: React.MouseEvent) => {
         e.stopPropagation();
-        setColor("");
         onChange?.("");
         setIsOpen(false);
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setColor(value);
-        onChange?.(value);
+        onChange?.(e.target.value);
     };
 
     return (

@@ -10,5 +10,9 @@ export { default as RightSidebar } from "./components/layout/RightSidebar";
 // Hooks
 export { useTemplateBuilder, useEditor } from "./hooks";
 
+// Context
+export { GlobalStateProvider, useGlobalState } from "./context/GlobalState";
+export type { EmailStyles } from "./context/GlobalState";
+
 // Types
 export type * from "./types";

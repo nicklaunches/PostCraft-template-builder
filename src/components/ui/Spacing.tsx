@@ -3,19 +3,39 @@ import { PaddingHorizontalIcon, PaddingVerticalIcon } from "@/utils/icons";
 
 interface SpacingProps {
     label: string;
+    horizontal?: number;
+    vertical?: number;
     defaultHorizontal?: number;
     defaultVertical?: number;
+    onChange?: (value: { horizontal: number; vertical: number }) => void;
     onHorizontalChange?: (value: number) => void;
     onVerticalChange?: (value: number) => void;
 }
 
 export default function Spacing({
     label,
+    horizontal,
+    vertical,
     defaultHorizontal = 0,
     defaultVertical = 0,
+    onChange,
     onHorizontalChange,
     onVerticalChange,
 }: SpacingProps) {
+    const handleHorizontalChange = (newValue: number) => {
+        if (onChange) {
+            onChange({ horizontal: newValue, vertical: vertical ?? defaultVertical });
+        }
+        onHorizontalChange?.(newValue);
+    };
+
+    const handleVerticalChange = (newValue: number) => {
+        if (onChange) {
+            onChange({ horizontal: horizontal ?? defaultHorizontal, vertical: newValue });
+        }
+        onVerticalChange?.(newValue);
+    };
+
     return (
         <div className="flex px-2">
             <Label>{label}</Label>
@@ -28,9 +48,10 @@ export default function Spacing({
                             <input
                                 type="number"
                                 className="h-6 w-full min-w-[36px] cursor-text rounded border-0 bg-transparent pl-2 pr-1 text-xs transition-colors focus:outline-none text-gray-900"
+                                value={horizontal}
                                 defaultValue={defaultHorizontal}
                                 onChange={(e) =>
-                                    onHorizontalChange?.(parseInt(e.target.value) || 0)
+                                    handleHorizontalChange(parseInt(e.target.value) || 0)
                                 }
                             />
                         </div>
@@ -42,8 +63,11 @@ export default function Spacing({
                             <input
                                 type="number"
                                 className="h-6 w-full min-w-[36px] cursor-text rounded border-0 bg-transparent pl-2 pr-1 text-xs transition-colors focus:outline-none text-gray-900"
+                                value={vertical}
                                 defaultValue={defaultVertical}
-                                onChange={(e) => onVerticalChange?.(parseInt(e.target.value) || 0)}
+                                onChange={(e) =>
+                                    handleVerticalChange(parseInt(e.target.value) || 0)
+                                }
                             />
                         </div>
                     </div>

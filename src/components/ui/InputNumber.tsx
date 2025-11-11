@@ -3,12 +3,19 @@ import { RadiusIcon, BorderWidthIcon } from "@/utils/icons";
 
 interface InputNumberProps {
     label: string;
+    value?: number;
     defaultValue?: number;
     icon?: "radius" | "border-width";
     onChange?: (value: number) => void;
 }
 
-export default function InputNumber({ label, defaultValue = 0, icon, onChange }: InputNumberProps) {
+export default function InputNumber({
+    label,
+    value,
+    defaultValue = 0,
+    icon,
+    onChange,
+}: InputNumberProps) {
     const renderIcon = () => {
         if (icon === "radius") {
             return <RadiusIcon />;
@@ -30,6 +37,7 @@ export default function InputNumber({ label, defaultValue = 0, icon, onChange }:
                     <input
                         type="number"
                         className="h-6 w-full min-w-[36px] cursor-text rounded border-0 bg-transparent pl-2 pr-1 text-xs transition-colors focus:outline-none text-gray-900"
+                        value={value}
                         defaultValue={defaultValue}
                         onChange={(e) => onChange?.(parseInt(e.target.value) || 0)}
                     />
