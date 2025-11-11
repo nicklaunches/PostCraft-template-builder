@@ -1,8 +1,7 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useGlobalState } from "@/context/GlobalState";
 import { useDynamicCss } from "@/hooks";
 import { ExtendedTipTap } from "@/components/ui";
-import { generateClassName } from "@/utils/helpers";
 
 /**
  * Props for the ContentEditor component.
@@ -29,11 +28,8 @@ export default function ContentEditor({
     initialContent: _initialContent,
     onSave: _onSave,
 }: ContentEditorProps) {
-    const { emailStyles } = useGlobalState();
+    const { emailStyles, updateEmailStyle } = useGlobalState();
     const [isEditable, setIsEditable] = useState(true);
-
-    // Generate a unique class name for this template
-    const className = useMemo(() => generateClassName(), []);
 
     const defaultContent = `
       <h1>
@@ -52,7 +48,7 @@ export default function ContentEditor({
     };
 
     // Generate dynamic CSS from emailStyles
-    const dynamicCSS = useDynamicCss(className, emailStyles);
+    const { css: dynamicCSS, className } = useDynamicCss(emailStyles, updateEmailStyle);
 
     return (
         <main className="flex-1 overflow-y-auto bg-gray-100">

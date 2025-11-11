@@ -1,47 +1,66 @@
 import { useMemo } from "react";
 import { EmailStyles } from "@/context/GlobalState";
+import { generateClassName } from "@/utils/helpers";
 
 /**
  * Custom hook for generating dynamic CSS from email styles.
  *
  * Creates CSS rules based on email styling configuration and applies them
- * to a specified class name. Automatically memoizes the result for performance.
+ * to a class name stored in the email styles. If no className exists,
+ * generates a new one. Automatically memoizes the result for performance.
  *
- * @param {string} className - CSS class name to apply styles to
  * @param {EmailStyles} emailStyles - Email styling configuration object
+ * @param {(key: "className", value: string) => void} updateEmailStyle - Function to update className in global state
  *
- * @returns {string} Generated CSS string
+ * @returns {Object} Object containing the generated CSS and className
+ * @returns {string} css - Generated CSS string
+ * @returns {string} className - CSS class name used
  */
-export function useDynamicCss(className: string, emailStyles: EmailStyles): string {
-    return useMemo(() => {
-        let css = `.${className} {\n`;
+export function useDynamicCss(
+    emailStyles: EmailStyles,
+    updateEmailStyle: <K extends keyof EmailStyles>(key: K, value: EmailStyles[K]) => void
+): { css: string; className: string } {
+    // Generate className if it doesn't exist
+    const className = useMemo(() => {
+        if (!emailStyles.className) {
+            const newClassName = generateClassName();
+            updateEmailStyle("className", newClassName);
+            return newClassName;
+        }
+        return emailStyles.className;
+    }, [emailStyles.className, updateEmailStyle]);
 
-        css += `  font-family: ${emailStyles.font}, ${emailStyles.fallback};\n`;
-        css += `  padding: ${emailStyles.padding.vertical}px ${emailStyles.padding.horizontal}px;\n`;
-        css += `  margin: ${emailStyles.margin.vertical}px ${emailStyles.margin.horizontal}px;\n`;
+    const css = useMemo(() => {
+        let cssString = `.${className} {\n`;
+
+        cssString += `  font-family: ${emailStyles.font}, ${emailStyles.fallback};\n`;
+        cssString += `  padding: ${emailStyles.padding.vertical}px ${emailStyles.padding.horizontal}px;\n`;
+        cssString += `  margin: ${emailStyles.margin.vertical}px ${emailStyles.margin.horizontal}px;\n`;
 
         if (emailStyles.bodyColor) {
-            css += `  color: ${emailStyles.bodyColor};\n`;
+            cssString += `  color: ${emailStyles.bodyColor};\n`;
         }
 
         if (emailStyles.backgroundColor) {
-            css += `  background-color: ${emailStyles.backgroundColor};\n`;
+            cssString += `  background-color: ${emailStyles.backgroundColor};\n`;
         }
 
         if (emailStyles.radius > 0) {
-            css += `  border-radius: ${emailStyles.radius}px;\n`;
+            cssString += `  border-radius: ${emailStyles.radius}px;\n`;
         }
 
         if (emailStyles.borderWidth > 0) {
-            css += `  border-width: ${emailStyles.borderWidth}px;\n`;
-            css += `  border-style: solid;\n`;
+            cssString += `  border-width: ${emailStyles.borderWidth}px;\n`;
+            cssString += `  border-style: solid;\n`;
 
             if (emailStyles.borderColor) {
-                css += `  border-color: ${emailStyles.borderColor};\n`;
+                cssString += `  border-color: ${emailStyles.borderColor};\n`;
             }
         }
 
-        css += `}`;
-        return css;
+        cssString += `}`;
+        return cssString;
     }, [className, emailStyles]);
+
+    return { css, className };
 }

@@ -3,6 +3,7 @@ import { createContext, useContext, useState, ReactNode } from "react";
 /**
  * Email styling configuration interface.
  *
+ * @property {string} [className] - Unique CSS class name for the template
  * @property {string} font - Primary font family
  * @property {string} fallback - Fallback font family
  * @property {{ horizontal: number; vertical: number }} padding - Inner spacing
@@ -14,6 +15,7 @@ import { createContext, useContext, useState, ReactNode } from "react";
  * @property {string} borderColor - Border color (hex)
  */
 export interface EmailStyles {
+    className?: string;
     font: string;
     fallback: string;
     padding: { horizontal: number; vertical: number };
