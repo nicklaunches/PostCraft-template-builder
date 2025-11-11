@@ -11,7 +11,7 @@ import EmailStyles from "@/components/panels/EmailStylesPanel";
  */
 export default function LeftSidebar() {
     return (
-        <aside className="w-64 border-r bg-gray-50">
+        <aside className="w-72 border-r bg-gray-50">
             <div className="min-h-[44px] w-full px-2">
                 <EmailStyles />
             </div>

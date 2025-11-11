@@ -11,7 +11,7 @@ import BlockStyles from "@/components/panels/BlockStylesPanel";
  */
 export default function RightSidebar() {
     return (
-        <aside className="w-64 border-l bg-gray-50">
+        <aside className="w-72 border-l bg-gray-50">
             <div className="min-h-[44px] w-full px-2">
                 <BlockStyles />
             </div>

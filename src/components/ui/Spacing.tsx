@@ -184,7 +184,7 @@ export default function Spacing({
                         </div>
                         <input
                             type="number"
-                            className={`h-6 w-full min-w-[36px] cursor-text rounded border-0 bg-transparent pl-2 pr-1 text-xs transition-colors focus:outline-none ${
+                            className={`h-6 w-full min-w-[46px] cursor-text rounded border-0 bg-transparent pl-2 pr-1 text-xs transition-colors focus:outline-none ${
                                 horizontalInvalid ? "text-red-700" : "text-gray-900"
                             }`}
                             value={displayHorizontal}
@@ -211,7 +211,7 @@ export default function Spacing({
                         </div>
                         <input
                             type="number"
-                            className={`h-6 w-full min-w-[36px] cursor-text rounded border-0 bg-transparent pl-2 pr-1 text-xs transition-colors focus:outline-none ${
+                            className={`h-6 w-full min-w-[46px] cursor-text rounded border-0 bg-transparent pl-2 pr-1 text-xs transition-colors focus:outline-none ${
                                 verticalInvalid ? "text-red-700" : "text-gray-900"
                             }`}
                             value={displayVertical}
