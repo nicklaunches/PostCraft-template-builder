@@ -23,3 +23,40 @@ body {
     font-family:
         -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
+
+.ProseMirror {
+    padding-inline: 4rem;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    white-space: break-spaces;
+    -webkit-font-variant-ligatures: none;
+    font-variant-ligatures: none;
+    font-feature-settings: "liga" 0;
+
+    > * + * {
+        margin-top: 0.75em;
+    }
+
+    [data-id] {
+        border: 3px solid #0d0d0d;
+        border-radius: 0.5rem;
+        margin: 1rem 0;
+        position: relative;
+        margin-top: 1.5rem;
+        padding: 2rem 1rem 1rem;
+
+        &::before {
+            content: attr(data-id);
+            background-color: #0d0d0d;
+            font-size: 0.6rem;
+            letter-spacing: 1px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #fff;
+            position: absolute;
+            top: 0;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0 0 0.5rem 0.5rem;
+        }
+    }
+}

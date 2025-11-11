@@ -1,8 +1,6 @@
 import DragHandle from "@tiptap/extension-drag-handle-react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Collaboration from "@tiptap/extension-collaboration";
-import * as Y from "yjs";
 
 export interface ContentEditorProps {
     initialContent?: string;
@@ -13,15 +11,8 @@ export default function ContentEditor({
     initialContent: _initialContent,
     onSave: _onSave,
 }: ContentEditorProps) {
-    const ydoc = new Y.Doc();
-
     const editor = useEditor({
-        extensions: [
-            StarterKit,
-            Collaboration.configure({
-                document: ydoc,
-            }),
-        ],
+        extensions: [StarterKit],
         content: `
       <h1>
         This is a very unique heading.
@@ -47,20 +38,22 @@ export default function ContentEditor({
                     <button onClick={toggleEditable}>Toggle editable</button>
                 </div>
                 <DragHandle editor={editor}>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="w-6 h-6 p-1 cursor-grab hover:bg-gray-300 rounded"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M3.75 9h16.5m-16.5 6.75h16.5"
-                        />
-                    </svg>
+                    <div className="flex items-center justify-center w-6 h-6 bg-gray-100 border border-black/10 rounded cursor-grab">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="1.5"
+                            stroke="currentColor"
+                            className="w-4 h-4"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M3.75 9h16.5m-16.5 6.75h16.5"
+                            />
+                        </svg>
+                    </div>
                 </DragHandle>
                 <EditorContent editor={editor} />
             </div>
