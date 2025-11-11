@@ -30,7 +30,7 @@ export default function Tooltip({
     content,
     children,
     delay = 300,
-    position = "top",
+    position = "bottom",
 }: TooltipProps) {
     const [isVisible, setIsVisible] = useState(false);
     const [coords, setCoords] = useState({ top: 0, left: 0 });

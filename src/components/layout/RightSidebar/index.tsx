@@ -1,16 +1,20 @@
+import BlockStyles from "@/components/builder/block-styles";
+
 /**
- * Right sidebar component for additional settings.
+ * Right sidebar component for block-specific settings.
  *
- * Placeholder for block-specific settings and other configuration options.
- * Currently displays a basic heading without content.
+ * Provides a control panel for configuring block styles including
+ * alignment, border, padding, and background color. Also includes
+ * actions for creating components, duplicating, and deleting blocks.
  *
  * @returns {JSX.Element} Right sidebar component
  */
 export default function RightSidebar() {
     return (
-        <aside className="w-64 border-l bg-gray-50 p-4">
-            <h3 className="mb-4 font-semibold">Settings</h3>
-            {/* Settings panel will go here */}
+        <aside className="w-64 border-l bg-gray-50">
+            <div className="min-h-[44px] w-full px-2">
+                <BlockStyles />
+            </div>
         </aside>
     );
 }

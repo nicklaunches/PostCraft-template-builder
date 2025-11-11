@@ -30,16 +30,37 @@ export interface EmailStyles {
 }
 
 /**
+ * Block styling configuration interface.
+ *
+ * @property {"left" | "center" | "right"} alignment - Text/content alignment
+ * @property {number} borderWidth - Border width in pixels
+ * @property {{ horizontal: number; vertical: number }} padding - Inner spacing (X and Y)
+ * @property {string} backgroundColor - Background color (hex)
+ */
+export interface BlockStyles {
+    alignment: "left" | "center" | "right";
+    borderWidth: number;
+    padding: { horizontal: number; vertical: number };
+    backgroundColor: string;
+}
+
+/**
  * Global state context type definition.
  *
  * @property {EmailStyles} emailStyles - Current email styling configuration
  * @property {<K extends keyof EmailStyles>(key: K, value: EmailStyles[K]) => void} updateEmailStyle - Update a specific style property
  * @property {() => void} resetEmailStyles - Reset all styles to defaults
+ * @property {BlockStyles} blockStyles - Current block styling configuration
+ * @property {<K extends keyof BlockStyles>(key: K, value: BlockStyles[K]) => void} updateBlockStyle - Update a specific block style property
+ * @property {() => void} resetBlockStyles - Reset all block styles to defaults
  */
 interface GlobalStateContextType {
     emailStyles: EmailStyles;
     updateEmailStyle: <K extends keyof EmailStyles>(key: K, value: EmailStyles[K]) => void;
     resetEmailStyles: () => void;
+    blockStyles: BlockStyles;
+    updateBlockStyle: <K extends keyof BlockStyles>(key: K, value: BlockStyles[K]) => void;
+    resetBlockStyles: () => void;
 }
 
 const defaultEmailStyles: EmailStyles = {
@@ -53,6 +74,13 @@ const defaultEmailStyles: EmailStyles = {
     radius: 0,
     borderWidth: 0,
     borderColor: "",
+};
+
+const defaultBlockStyles: BlockStyles = {
+    alignment: "left",
+    borderWidth: 0,
+    padding: { horizontal: 0, vertical: 0 },
+    backgroundColor: "",
 };
 
 const GlobalStateContext = createContext<GlobalStateContextType | undefined>(undefined);
@@ -69,6 +97,7 @@ const GlobalStateContext = createContext<GlobalStateContextType | undefined>(und
  */
 export function GlobalStateProvider({ children }: { children: ReactNode }) {
     const [emailStyles, setEmailStyles] = useState<EmailStyles>(defaultEmailStyles);
+    const [blockStyles, setBlockStyles] = useState<BlockStyles>(defaultBlockStyles);
 
     const updateEmailStyle = <K extends keyof EmailStyles>(key: K, value: EmailStyles[K]) => {
         setEmailStyles((prev) => ({
@@ -81,8 +110,28 @@ export function GlobalStateProvider({ children }: { children: ReactNode }) {
         setEmailStyles(defaultEmailStyles);
     };
 
+    const updateBlockStyle = <K extends keyof BlockStyles>(key: K, value: BlockStyles[K]) => {
+        setBlockStyles((prev) => ({
+            ...prev,
+            [key]: value,
+        }));
+    };
+
+    const resetBlockStyles = () => {
+        setBlockStyles(defaultBlockStyles);
+    };
+
     return (
-        <GlobalStateContext.Provider value={{ emailStyles, updateEmailStyle, resetEmailStyles }}>
+        <GlobalStateContext.Provider
+            value={{
+                emailStyles,
+                updateEmailStyle,
+                resetEmailStyles,
+                blockStyles,
+                updateBlockStyle,
+                resetBlockStyles,
+            }}
+        >
             {children}
         </GlobalStateContext.Provider>
     );
