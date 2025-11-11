@@ -50,12 +50,7 @@ export default function ColorPicker({
     // Handle click outside to close picker
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (
-                pickerRef.current &&
-                !pickerRef.current.contains(event.target as Node) &&
-                containerRef.current &&
-                !containerRef.current.contains(event.target as Node)
-            ) {
+            if (pickerRef.current && !pickerRef.current.contains(event.target as Node)) {
                 setIsOpen(false);
             }
         };

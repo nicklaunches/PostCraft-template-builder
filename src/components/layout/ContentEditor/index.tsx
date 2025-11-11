@@ -7,12 +7,12 @@ import { useGlobalState } from "@/context/GlobalState";
 /**
  * Props for the ContentEditor component.
  *
- * @property {string} [initialContent] - Initial content to load in the editor
- * @property {(content: string) => void} [onSave] - Callback when content is saved
+ * @property {any} [initialContent] - Initial content to load in the editor
+ * @property {(content: any) => void} [onSave] - Callback when content is saved
  */
 export interface ContentEditorProps {
-    initialContent?: string;
-    onSave?: (content: string) => void;
+    initialContent?: any;
+    onSave?: (content: any) => void;
 }
 
 /**
