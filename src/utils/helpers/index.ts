@@ -23,3 +23,18 @@ export function generateClassName(
     }
     return result;
 }
+
+/**
+ * Generate a unique ID for a block node in the TipTap editor.
+ *
+ * Creates a unique identifier using a timestamp and random string
+ * for tracking individual blocks and their associated styles.
+ *
+ * @returns {string} A unique block identifier in the format "block-{timestamp}-{random}"
+ *
+ * @example
+ * generateBlockId() // "block-1699999999999-abc123xy"
+ */
+export function generateBlockId(): string {
+    return `block-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+}

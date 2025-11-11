@@ -7,40 +7,67 @@ import { useEffect, useState } from "react";
  * Block styles configuration component.
  *
  * Provides a control panel for configuring block-specific styles including
- * alignment, border radius, padding, and background color. Updates are applied
- * to the currently selected block in the TipTap editor in real-time via inline
- * styles. Listens to editor selection changes to ensure styles are applied to
- * the active block.
+ * alignment, border radius, padding, and background color. Each block in the
+ * editor has its own set of styles stored in GlobalState by block ID. Updates
+ * are applied to the currently selected block in the TipTap editor in real-time
+ * via inline styles. Listens to editor selection changes to ensure the correct
+ * block's styles are displayed and edited.
  *
  * Includes actions for creating components, duplicating, and deleting blocks.
  *
  * @returns {JSX.Element} Block styles component
  */
 export default function BlockStyles() {
-    const { blockStyles, updateBlockStyle, editor } = useGlobalState();
+    const { blockStylesMap, getBlockStyles, updateBlockStyle, setSelectedBlockId, editor } =
+        useGlobalState();
     const [, setSelectionUpdate] = useState(0);
+    const [currentBlockId, setCurrentBlockId] = useState<string | null>(null);
 
-    // Listen to selection changes in the editor
+    // Get the current block's styles or defaults
+    const currentBlockStyles = currentBlockId ? getBlockStyles(currentBlockId) : getBlockStyles("");
+
+    // Listen to selection changes in the editor to update the current block ID
     useEffect(() => {
         if (!editor) return;
 
         const handleUpdate = () => {
+            const { state } = editor;
+            const { selection } = state;
+            const { $from } = selection;
+
+            // Find the parent block node (paragraph, heading, etc.)
+            let depth = $from.depth;
+            let blockId: string | null = null;
+
+            while (depth > 0) {
+                const node = $from.node(depth);
+                if (node.type.name === "paragraph" || node.type.name === "heading") {
+                    blockId = node.attrs.id || null;
+                    break;
+                }
+                depth--;
+            }
+
+            setCurrentBlockId(blockId);
+            setSelectedBlockId(blockId);
             setSelectionUpdate((prev) => prev + 1);
         };
 
         editor.on("selectionUpdate", handleUpdate);
         editor.on("transaction", handleUpdate);
 
+        // Initialize on mount
+        handleUpdate();
+
         return () => {
             editor.off("selectionUpdate", handleUpdate);
             editor.off("transaction", handleUpdate);
         };
-    }, [editor]);
+    }, [editor, setSelectedBlockId]);
 
     // Apply block styles to the currently selected node in the editor
     useEffect(() => {
-        if (!editor) {
-            console.log("BlockStyles: Editor not available");
+        if (!editor || !currentBlockId) {
             return;
         }
 
@@ -49,77 +76,62 @@ export default function BlockStyles() {
             const { selection } = state;
             const { $from } = selection;
 
-            // Get the parent block node (paragraph, heading, etc.) instead of the text node
+            // Get the parent block node (paragraph, heading, etc.)
             let depth = $from.depth;
             let parentNode = null;
+            let nodeType = null;
 
-            // Walk up the tree to find a block-level node
             while (depth > 0) {
                 const node = $from.node(depth);
-                console.log(`BlockStyles: Checking depth ${depth}`, {
-                    type: node.type.name,
-                    attrs: node.attrs,
-                });
-
                 if (node.type.name === "paragraph" || node.type.name === "heading") {
-                    parentNode = node;
-                    break;
+                    if (node.attrs.id === currentBlockId) {
+                        parentNode = node;
+                        nodeType = node.type.name;
+                        break;
+                    }
                 }
-
                 depth--;
             }
 
-            if (!parentNode) {
-                console.log("BlockStyles: No valid block node found in selection");
+            if (!parentNode || !nodeType) {
                 return;
             }
 
+            const styles = getBlockStyles(currentBlockId);
+
             // Build inline style string
-            const styles: string[] = [];
+            const styleArray: string[] = [];
 
             // Padding
-            if (blockStyles.padding.horizontal > 0 || blockStyles.padding.vertical > 0) {
-                styles.push(
-                    `padding: ${blockStyles.padding.vertical}px ${blockStyles.padding.horizontal}px`
+            if (styles.padding.horizontal > 0 || styles.padding.vertical > 0) {
+                styleArray.push(
+                    `padding: ${styles.padding.vertical}px ${styles.padding.horizontal}px`
                 );
             }
 
-            // Radius
-            if (blockStyles.borderWidth > 0) {
-                styles.push(`border-radius: ${blockStyles.borderWidth}px`);
+            // Radius (border-radius)
+            if (styles.borderWidth > 0) {
+                styleArray.push(`border-radius: ${styles.borderWidth}px`);
             }
 
             // Background
-            if (blockStyles.backgroundColor) {
-                styles.push(`background-color: ${blockStyles.backgroundColor}`);
+            if (styles.backgroundColor) {
+                styleArray.push(`background-color: ${styles.backgroundColor}`);
             }
 
             // Alignment
-            if (blockStyles.alignment) {
-                styles.push(`text-align: ${blockStyles.alignment}`);
+            if (styles.alignment) {
+                styleArray.push(`text-align: ${styles.alignment}`);
             }
 
-            const styleString = styles.join("; ");
-
-            console.log("BlockStyles: Generated style string", {
-                styleString,
-                blockStyles,
-            });
+            const styleString = styleArray.join("; ");
 
             // Apply styles to the current node
-            const nodeType = parentNode.type.name;
-            console.log("BlockStyles: Node type", nodeType);
-
-            if (nodeType === "paragraph" || nodeType === "heading") {
-                console.log("BlockStyles: Applying styles to", nodeType);
-                editor.chain().focus().updateAttributes(nodeType, { style: styleString }).run();
-            } else {
-                console.log("BlockStyles: Node type not supported for styling", nodeType);
-            }
+            editor.chain().focus().updateAttributes(nodeType, { style: styleString }).run();
         };
 
         applyStylesToNode();
-    }, [blockStyles, editor]);
+    }, [currentBlockId, blockStylesMap, editor, getBlockStyles]);
 
     const handleCreateComponent = () => {
         // TODO: Implement create component functionality
@@ -135,6 +147,15 @@ export default function BlockStyles() {
         // TODO: Implement delete block functionality
         console.log("Delete current block");
     };
+
+    // If no block is selected, show a message
+    if (!currentBlockId) {
+        return (
+            <Card title="Block styles">
+                <div className="text-sm text-gray-500 py-4">Select a block to edit its styles</div>
+            </Card>
+        );
+    }
 
     return (
         <Card
@@ -173,25 +194,25 @@ export default function BlockStyles() {
         >
             <Alignment
                 label="Alignment"
-                value={blockStyles.alignment}
-                onChange={(value) => updateBlockStyle("alignment", value)}
+                value={currentBlockStyles.alignment}
+                onChange={(value) => updateBlockStyle(currentBlockId, "alignment", value)}
             />
 
             <InputNumber
                 label="Radius"
                 icon="radius"
-                value={blockStyles.borderWidth}
-                onChange={(value) => updateBlockStyle("borderWidth", value)}
+                value={currentBlockStyles.borderWidth}
+                onChange={(value) => updateBlockStyle(currentBlockId, "borderWidth", value)}
                 tooltip="Border radius"
             />
 
             <Spacing
                 label="X Padding"
-                horizontal={blockStyles.padding.horizontal}
+                horizontal={currentBlockStyles.padding.horizontal}
                 vertical={0}
                 onChange={(value) =>
-                    updateBlockStyle("padding", {
-                        ...blockStyles.padding,
+                    updateBlockStyle(currentBlockId, "padding", {
+                        ...currentBlockStyles.padding,
                         horizontal: value.horizontal,
                     })
                 }
@@ -201,10 +222,10 @@ export default function BlockStyles() {
             <Spacing
                 label="Y Padding"
                 horizontal={0}
-                vertical={blockStyles.padding.vertical}
+                vertical={currentBlockStyles.padding.vertical}
                 onChange={(value) =>
-                    updateBlockStyle("padding", {
-                        ...blockStyles.padding,
+                    updateBlockStyle(currentBlockId, "padding", {
+                        ...currentBlockStyles.padding,
                         vertical: value.vertical,
                     })
                 }
@@ -213,8 +234,8 @@ export default function BlockStyles() {
 
             <ColorPicker
                 label="Background"
-                value={blockStyles.backgroundColor}
-                onChange={(value) => updateBlockStyle("backgroundColor", value)}
+                value={currentBlockStyles.backgroundColor}
+                onChange={(value) => updateBlockStyle(currentBlockId, "backgroundColor", value)}
                 tooltip="Background color"
                 labelPosition="top"
                 position="left"

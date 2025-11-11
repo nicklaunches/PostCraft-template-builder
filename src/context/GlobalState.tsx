@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import type { Editor } from "@tiptap/react";
+import type { BlockStyles, BlockStylesMap } from "@/types";
 
 /**
  * Email styling configuration interface.
@@ -31,29 +32,18 @@ export interface EmailStyles {
 }
 
 /**
- * Block styling configuration interface.
- *
- * @property {"left" | "center" | "right"} alignment - Text/content alignment
- * @property {number} borderWidth - Border radius in pixels (note: property name is borderWidth but represents radius)
- * @property {{ horizontal: number; vertical: number }} padding - Inner spacing (X and Y)
- * @property {string} backgroundColor - Background color (hex)
- */
-export interface BlockStyles {
-    alignment: "left" | "center" | "right";
-    borderWidth: number;
-    padding: { horizontal: number; vertical: number };
-    backgroundColor: string;
-}
-
-/**
  * Global state context type definition.
  *
  * @property {EmailStyles} emailStyles - Current email styling configuration
  * @property {<K extends keyof EmailStyles>(key: K, value: EmailStyles[K]) => void} updateEmailStyle - Update a specific style property
  * @property {() => void} resetEmailStyles - Reset all styles to defaults
- * @property {BlockStyles} blockStyles - Current block styling configuration
- * @property {<K extends keyof BlockStyles>(key: K, value: BlockStyles[K]) => void} updateBlockStyle - Update a specific block style property
- * @property {() => void} resetBlockStyles - Reset all block styles to defaults
+ * @property {BlockStylesMap} blockStylesMap - Map of block IDs to their style configurations
+ * @property {(blockId: string) => BlockStyles} getBlockStyles - Get styles for a specific block (returns defaults if not found)
+ * @property {(blockId: string, key: keyof BlockStyles, value: BlockStyles[keyof BlockStyles]) => void} updateBlockStyle - Update a specific style property for a block
+ * @property {(blockId: string) => void} deleteBlockStyles - Remove styles for a specific block
+ * @property {() => void} resetAllBlockStyles - Reset all block styles
+ * @property {string | null} selectedBlockId - Currently selected block ID
+ * @property {(blockId: string | null) => void} setSelectedBlockId - Set the currently selected block ID
  * @property {Editor | null} editor - TipTap editor instance
  * @property {(editor: Editor | null) => void} setEditor - Set the TipTap editor instance
  */
@@ -61,9 +51,17 @@ interface GlobalStateContextType {
     emailStyles: EmailStyles;
     updateEmailStyle: <K extends keyof EmailStyles>(key: K, value: EmailStyles[K]) => void;
     resetEmailStyles: () => void;
-    blockStyles: BlockStyles;
-    updateBlockStyle: <K extends keyof BlockStyles>(key: K, value: BlockStyles[K]) => void;
-    resetBlockStyles: () => void;
+    blockStylesMap: BlockStylesMap;
+    getBlockStyles: (blockId: string) => BlockStyles;
+    updateBlockStyle: (
+        blockId: string,
+        key: keyof BlockStyles,
+        value: BlockStyles[keyof BlockStyles]
+    ) => void;
+    deleteBlockStyles: (blockId: string) => void;
+    resetAllBlockStyles: () => void;
+    selectedBlockId: string | null;
+    setSelectedBlockId: (blockId: string | null) => void;
     editor: Editor | null;
     setEditor: (editor: Editor | null) => void;
 }
@@ -93,8 +91,8 @@ const GlobalStateContext = createContext<GlobalStateContextType | undefined>(und
 /**
  * Global state provider component.
  *
- * Provides access to global email styling configuration and update methods
- * throughout the component tree via React context.
+ * Provides access to global email styling configuration, per-block styles,
+ * and update methods throughout the component tree via React context.
  *
  * @param {Object} props - Component props
  * @param {ReactNode} props.children - Child components to wrap
@@ -102,7 +100,8 @@ const GlobalStateContext = createContext<GlobalStateContextType | undefined>(und
  */
 export function GlobalStateProvider({ children }: { children: ReactNode }) {
     const [emailStyles, setEmailStyles] = useState<EmailStyles>(defaultEmailStyles);
-    const [blockStyles, setBlockStyles] = useState<BlockStyles>(defaultBlockStyles);
+    const [blockStylesMap, setBlockStylesMap] = useState<BlockStylesMap>({});
+    const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
     const [editor, setEditor] = useState<Editor | null>(null);
 
     const updateEmailStyle = <K extends keyof EmailStyles>(key: K, value: EmailStyles[K]) => {
@@ -116,15 +115,37 @@ export function GlobalStateProvider({ children }: { children: ReactNode }) {
         setEmailStyles(defaultEmailStyles);
     };
 
-    const updateBlockStyle = <K extends keyof BlockStyles>(key: K, value: BlockStyles[K]) => {
-        setBlockStyles((prev) => ({
-            ...prev,
-            [key]: value,
-        }));
+    const getBlockStyles = (blockId: string): BlockStyles => {
+        return blockStylesMap[blockId] || { ...defaultBlockStyles };
     };
 
-    const resetBlockStyles = () => {
-        setBlockStyles(defaultBlockStyles);
+    const updateBlockStyle = (
+        blockId: string,
+        key: keyof BlockStyles,
+        value: BlockStyles[keyof BlockStyles]
+    ) => {
+        setBlockStylesMap((prev) => {
+            const currentStyles = prev[blockId] || { ...defaultBlockStyles };
+            return {
+                ...prev,
+                [blockId]: {
+                    ...currentStyles,
+                    [key]: value,
+                },
+            };
+        });
+    };
+
+    const deleteBlockStyles = (blockId: string) => {
+        setBlockStylesMap((prev) => {
+            const newMap = { ...prev };
+            delete newMap[blockId];
+            return newMap;
+        });
+    };
+
+    const resetAllBlockStyles = () => {
+        setBlockStylesMap({});
     };
 
     return (
@@ -133,9 +154,13 @@ export function GlobalStateProvider({ children }: { children: ReactNode }) {
                 emailStyles,
                 updateEmailStyle,
                 resetEmailStyles,
-                blockStyles,
+                blockStylesMap,
+                getBlockStyles,
                 updateBlockStyle,
-                resetBlockStyles,
+                deleteBlockStyles,
+                resetAllBlockStyles,
+                selectedBlockId,
+                setSelectedBlockId,
                 editor,
                 setEditor,
             }}

@@ -48,6 +48,28 @@ export interface TemplateBuilderProps {
 }
 
 /**
+ * Block styling configuration interface.
+ *
+ * @property {"left" | "center" | "right"} alignment - Text/content alignment
+ * @property {number} borderWidth - Border radius in pixels (note: property name is borderWidth but represents radius)
+ * @property {{ horizontal: number; vertical: number }} padding - Inner spacing (X and Y)
+ * @property {string} backgroundColor - Background color (hex)
+ */
+export interface BlockStyles {
+    alignment: "left" | "center" | "right";
+    borderWidth: number;
+    padding: { horizontal: number; vertical: number };
+    backgroundColor: string;
+}
+
+/**
+ * Map of block IDs to their corresponding styles.
+ * Key: unique block identifier
+ * Value: BlockStyles configuration for that block
+ */
+export type BlockStylesMap = Record<string, BlockStyles>;
+
+/**
  * Props for the ContentEditor component.
  *
  * @property {unknown} [initialContent] - Initial content to load in the editor
