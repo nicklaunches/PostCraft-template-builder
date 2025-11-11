@@ -52,13 +52,19 @@ export interface TemplateBuilderProps {
  *
  * @property {"left" | "center" | "right"} alignment - Text/content alignment
  * @property {number} borderWidth - Border radius in pixels (note: property name is borderWidth but represents radius)
- * @property {{ horizontal: number; vertical: number }} padding - Inner spacing (X and Y)
+ * @property {number} paddingLeft - Left padding in pixels
+ * @property {number} paddingRight - Right padding in pixels
+ * @property {number} paddingTop - Top padding in pixels
+ * @property {number} paddingBottom - Bottom padding in pixels
  * @property {string} backgroundColor - Background color (hex)
  */
 export interface BlockStyles {
     alignment: "left" | "center" | "right";
     borderWidth: number;
-    padding: { horizontal: number; vertical: number };
+    paddingLeft: number;
+    paddingRight: number;
+    paddingTop: number;
+    paddingBottom: number;
     backgroundColor: string;
 }
 

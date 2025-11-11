@@ -8,9 +8,15 @@ import type { BlockStyles, BlockStylesMap } from "@/types";
  * @property {string} [className] - Unique CSS class name for the template
  * @property {string} font - Primary font family
  * @property {string} fallback - Fallback font family
- * @property {{ horizontal: number; vertical: number }} padding - Inner spacing
+ * @property {number} paddingLeft - Left padding in pixels
+ * @property {number} paddingRight - Right padding in pixels
+ * @property {number} paddingTop - Top padding in pixels
+ * @property {number} paddingBottom - Bottom padding in pixels
  * @property {string} bodyColor - Text color (hex)
- * @property {{ horizontal: number; vertical: number }} margin - Outer spacing
+ * @property {number} marginLeft - Left margin in pixels
+ * @property {number} marginRight - Right margin in pixels
+ * @property {number} marginTop - Top margin in pixels
+ * @property {number} marginBottom - Bottom margin in pixels
  * @property {string} backgroundColor - Page background color (hex)
  * @property {string} contentBackgroundColor - Content container background color (hex)
  * @property {number} radius - Border radius in pixels
@@ -21,9 +27,15 @@ export interface EmailStyles {
     className?: string;
     font: string;
     fallback: string;
-    padding: { horizontal: number; vertical: number };
+    paddingLeft: number;
+    paddingRight: number;
+    paddingTop: number;
+    paddingBottom: number;
     bodyColor: string;
-    margin: { horizontal: number; vertical: number };
+    marginLeft: number;
+    marginRight: number;
+    marginTop: number;
+    marginBottom: number;
     backgroundColor: string;
     contentBackgroundColor: string;
     radius: number;
@@ -69,9 +81,15 @@ interface GlobalStateContextType {
 const defaultEmailStyles: EmailStyles = {
     font: "Inter",
     fallback: "sans-serif",
-    padding: { horizontal: 24, vertical: 12 },
+    paddingLeft: 24,
+    paddingRight: 24,
+    paddingTop: 12,
+    paddingBottom: 12,
     bodyColor: "",
-    margin: { horizontal: 0, vertical: 24 },
+    marginLeft: 0,
+    marginRight: 0,
+    marginTop: 24,
+    marginBottom: 24,
     backgroundColor: "#f3f4f6",
     contentBackgroundColor: "",
     radius: 0,
@@ -82,7 +100,10 @@ const defaultEmailStyles: EmailStyles = {
 const defaultBlockStyles: BlockStyles = {
     alignment: "left",
     borderWidth: 0,
-    padding: { horizontal: 0, vertical: 0 },
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
     backgroundColor: "",
 };
 

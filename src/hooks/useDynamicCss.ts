@@ -34,8 +34,8 @@ export function useDynamicCss(
         let cssString = `.${className} {\n`;
 
         cssString += `  font-family: ${emailStyles.font}, ${emailStyles.fallback};\n`;
-        cssString += `  padding: ${emailStyles.padding.vertical}px ${emailStyles.padding.horizontal}px;\n`;
-        cssString += `  margin: ${emailStyles.margin.vertical}px ${emailStyles.margin.horizontal}px;\n`;
+        cssString += `  padding: ${emailStyles.paddingTop}px ${emailStyles.paddingRight}px ${emailStyles.paddingBottom}px ${emailStyles.paddingLeft}px;\n`;
+        cssString += `  margin: ${emailStyles.marginTop}px ${emailStyles.marginRight}px ${emailStyles.marginBottom}px ${emailStyles.marginLeft}px;\n`;
 
         if (emailStyles.bodyColor) {
             cssString += `  color: ${emailStyles.bodyColor};\n`;

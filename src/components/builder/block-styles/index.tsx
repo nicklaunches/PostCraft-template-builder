@@ -103,9 +103,14 @@ export default function BlockStyles() {
             const styleArray: string[] = [];
 
             // Padding
-            if (styles.padding.horizontal > 0 || styles.padding.vertical > 0) {
+            if (
+                styles.paddingLeft > 0 ||
+                styles.paddingRight > 0 ||
+                styles.paddingTop > 0 ||
+                styles.paddingBottom > 0
+            ) {
                 styleArray.push(
-                    `padding: ${styles.padding.vertical}px ${styles.padding.horizontal}px`
+                    `padding: ${styles.paddingTop}px ${styles.paddingRight}px ${styles.paddingBottom}px ${styles.paddingLeft}px`
                 );
             }
 
@@ -208,28 +213,28 @@ export default function BlockStyles() {
 
             <Spacing
                 label="X Padding"
-                horizontal={currentBlockStyles.padding.horizontal}
-                vertical={0}
-                onChange={(value) =>
-                    updateBlockStyle(currentBlockId, "padding", {
-                        ...currentBlockStyles.padding,
-                        horizontal: value.horizontal,
-                    })
+                horizontal={currentBlockStyles.paddingLeft}
+                vertical={currentBlockStyles.paddingRight}
+                onHorizontalChange={(value) =>
+                    updateBlockStyle(currentBlockId, "paddingLeft", value)
                 }
-                tooltip="Horizontal padding"
+                onVerticalChange={(value) =>
+                    updateBlockStyle(currentBlockId, "paddingRight", value)
+                }
+                tooltip="Horizontal padding (left and right)"
             />
 
             <Spacing
                 label="Y Padding"
-                horizontal={0}
-                vertical={currentBlockStyles.padding.vertical}
-                onChange={(value) =>
-                    updateBlockStyle(currentBlockId, "padding", {
-                        ...currentBlockStyles.padding,
-                        vertical: value.vertical,
-                    })
+                horizontal={currentBlockStyles.paddingTop}
+                vertical={currentBlockStyles.paddingBottom}
+                onHorizontalChange={(value) =>
+                    updateBlockStyle(currentBlockId, "paddingTop", value)
                 }
-                tooltip="Vertical padding"
+                onVerticalChange={(value) =>
+                    updateBlockStyle(currentBlockId, "paddingBottom", value)
+                }
+                tooltip="Vertical padding (top and bottom)"
             />
 
             <ColorPicker

@@ -63,19 +63,39 @@ export default function EmailStyles() {
             />
 
             <Spacing
-                label="Padding"
-                horizontal={emailStyles.padding.horizontal}
-                vertical={emailStyles.padding.vertical}
-                onChange={(value) => updateEmailStyle("padding", value)}
-                tooltip="Inner spacing of the email container"
+                label="X Padding"
+                horizontal={emailStyles.paddingLeft}
+                vertical={emailStyles.paddingRight}
+                onHorizontalChange={(value) => updateEmailStyle("paddingLeft", value)}
+                onVerticalChange={(value) => updateEmailStyle("paddingRight", value)}
+                tooltip="Horizontal padding (left and right) of the email container"
             />
 
             <Spacing
-                label="Margin"
-                horizontal={emailStyles.margin.horizontal}
-                vertical={emailStyles.margin.vertical}
-                onChange={(value) => updateEmailStyle("margin", value)}
-                tooltip="Outer spacing around the email container"
+                label="Y Padding"
+                horizontal={emailStyles.paddingTop}
+                vertical={emailStyles.paddingBottom}
+                onHorizontalChange={(value) => updateEmailStyle("paddingTop", value)}
+                onVerticalChange={(value) => updateEmailStyle("paddingBottom", value)}
+                tooltip="Vertical padding (top and bottom) of the email container"
+            />
+
+            <Spacing
+                label="X Margin"
+                horizontal={emailStyles.marginLeft}
+                vertical={emailStyles.marginRight}
+                onHorizontalChange={(value) => updateEmailStyle("marginLeft", value)}
+                onVerticalChange={(value) => updateEmailStyle("marginRight", value)}
+                tooltip="Horizontal margin (left and right) around the email container"
+            />
+
+            <Spacing
+                label="Y Margin"
+                horizontal={emailStyles.marginTop}
+                vertical={emailStyles.marginBottom}
+                onHorizontalChange={(value) => updateEmailStyle("marginTop", value)}
+                onVerticalChange={(value) => updateEmailStyle("marginBottom", value)}
+                tooltip="Vertical margin (top and bottom) around the email container"
             />
 
             <ColorPicker
