@@ -1,5 +1,6 @@
 import { Card, Select, Spacing, ColorPicker, InputNumber, Tooltip } from "@/components/ui";
 import { useGlobalState } from "@/context/GlobalState";
+import { FONT_OPTIONS, FALLBACK_OPTIONS } from "@/utils/constants";
 import ArrowPathIcon from "@heroicons/react/24/outline/ArrowPathIcon";
 import { useState } from "react";
 
@@ -39,12 +40,7 @@ export default function EmailStyles() {
         >
             <Select
                 label="Font"
-                options={[
-                    { value: "Inter", label: "Inter" },
-                    { value: "Arial", label: "Arial" },
-                    { value: "Helvetica", label: "Helvetica" },
-                    { value: "Georgia", label: "Georgia" },
-                ]}
+                options={FONT_OPTIONS}
                 value={emailStyles.font}
                 onChange={(value) => updateEmailStyle("font", value)}
                 tooltip="Primary font family for email content"
@@ -52,11 +48,7 @@ export default function EmailStyles() {
 
             <Select
                 label="Fallback"
-                options={[
-                    { value: "sans-serif", label: "Sans" },
-                    { value: "serif", label: "Serif" },
-                    { value: "monospace", label: "Mono" },
-                ]}
+                options={FALLBACK_OPTIONS}
                 value={emailStyles.fallback}
                 onChange={(value) => updateEmailStyle("fallback", value)}
                 tooltip="Font fallback for unsupported email clients"

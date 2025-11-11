@@ -1,3 +1,10 @@
+import type { BlockType as BlockTypeImport } from "@/utils/constants";
+
+/**
+ * Re-export BlockType for convenience
+ */
+export type BlockType = BlockTypeImport;
+
 /**
  * Represents email template metadata and content.
  *
@@ -19,13 +26,13 @@ export interface TemplateData {
  * Represents a content block in the email template editor.
  *
  * @property {string} id - Unique identifier for the block
- * @property {"text" | "heading" | "image" | "button" | "divider"} type - Type of content block
+ * @property {BlockType} type - Type of content block
  * @property {unknown} content - Block content data (varies by type)
  * @property {Record<string, unknown>} [styles] - Optional custom styles for the block
  */
 export interface Block {
     id: string;
-    type: "text" | "heading" | "image" | "button" | "divider";
+    type: BlockType;
     content: unknown;
     styles?: Record<string, unknown>;
 }
@@ -45,6 +52,47 @@ export interface TemplateBuilderProps {
     showRightSidebar?: boolean;
     onSave?: (content: unknown) => void;
     initialContent?: unknown;
+}
+
+/**
+ * Email styling configuration interface.
+ *
+ * @property {string} [className] - Unique CSS class name for the template
+ * @property {string} font - Primary font family
+ * @property {string} fallback - Fallback font family
+ * @property {number} paddingLeft - Left padding in pixels
+ * @property {number} paddingRight - Right padding in pixels
+ * @property {number} paddingTop - Top padding in pixels
+ * @property {number} paddingBottom - Bottom padding in pixels
+ * @property {string} bodyColor - Text color (hex)
+ * @property {number} marginLeft - Left margin in pixels
+ * @property {number} marginRight - Right margin in pixels
+ * @property {number} marginTop - Top margin in pixels
+ * @property {number} marginBottom - Bottom margin in pixels
+ * @property {string} backgroundColor - Page background color (hex)
+ * @property {string} contentBackgroundColor - Content container background color (hex)
+ * @property {number} radius - Border radius in pixels
+ * @property {number} borderWidth - Border width in pixels
+ * @property {string} borderColor - Border color (hex)
+ */
+export interface EmailStyles {
+    className?: string;
+    font: string;
+    fallback: string;
+    paddingLeft: number;
+    paddingRight: number;
+    paddingTop: number;
+    paddingBottom: number;
+    bodyColor: string;
+    marginLeft: number;
+    marginRight: number;
+    marginTop: number;
+    marginBottom: number;
+    backgroundColor: string;
+    contentBackgroundColor: string;
+    radius: number;
+    borderWidth: number;
+    borderColor: string;
 }
 
 /**

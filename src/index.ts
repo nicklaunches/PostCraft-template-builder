@@ -19,7 +19,17 @@ export { useTemplateBuilder, useEditor, useDynamicCss } from "./hooks";
 
 // Context
 export { GlobalStateProvider, useGlobalState } from "./context/GlobalState";
-export type { EmailStyles } from "./context/GlobalState";
 
 // Types
 export type * from "./types";
+
+// Constants
+export {
+    BLOCK_TYPES,
+    DEFAULT_EMAIL_STYLES,
+    DEFAULT_BLOCK_STYLES,
+    FONT_OPTIONS,
+    FALLBACK_OPTIONS,
+    MAX_HISTORY_SIZE,
+} from "./utils/constants";
+export type { BlockType } from "./utils/constants";

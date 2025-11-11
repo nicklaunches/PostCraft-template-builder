@@ -1,47 +1,7 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import type { Editor } from "@tiptap/react";
-import type { BlockStyles, BlockStylesMap } from "@/types";
-
-/**
- * Email styling configuration interface.
- *
- * @property {string} [className] - Unique CSS class name for the template
- * @property {string} font - Primary font family
- * @property {string} fallback - Fallback font family
- * @property {number} paddingLeft - Left padding in pixels
- * @property {number} paddingRight - Right padding in pixels
- * @property {number} paddingTop - Top padding in pixels
- * @property {number} paddingBottom - Bottom padding in pixels
- * @property {string} bodyColor - Text color (hex)
- * @property {number} marginLeft - Left margin in pixels
- * @property {number} marginRight - Right margin in pixels
- * @property {number} marginTop - Top margin in pixels
- * @property {number} marginBottom - Bottom margin in pixels
- * @property {string} backgroundColor - Page background color (hex)
- * @property {string} contentBackgroundColor - Content container background color (hex)
- * @property {number} radius - Border radius in pixels
- * @property {number} borderWidth - Border width in pixels
- * @property {string} borderColor - Border color (hex)
- */
-export interface EmailStyles {
-    className?: string;
-    font: string;
-    fallback: string;
-    paddingLeft: number;
-    paddingRight: number;
-    paddingTop: number;
-    paddingBottom: number;
-    bodyColor: string;
-    marginLeft: number;
-    marginRight: number;
-    marginTop: number;
-    marginBottom: number;
-    backgroundColor: string;
-    contentBackgroundColor: string;
-    radius: number;
-    borderWidth: number;
-    borderColor: string;
-}
+import type { BlockStyles, BlockStylesMap, EmailStyles } from "@/types";
+import { DEFAULT_EMAIL_STYLES, DEFAULT_BLOCK_STYLES } from "@/utils/constants";
 
 /**
  * Global state context type definition.
@@ -78,39 +38,6 @@ interface GlobalStateContextType {
     setEditor: (editor: Editor | null) => void;
 }
 
-const defaultEmailStyles: EmailStyles = {
-    font: "Inter",
-    fallback: "sans-serif",
-    paddingLeft: 24,
-    paddingRight: 24,
-    paddingTop: 12,
-    paddingBottom: 12,
-    bodyColor: "",
-    marginLeft: 0,
-    marginRight: 0,
-    marginTop: 24,
-    marginBottom: 24,
-    backgroundColor: "#f3f4f6",
-    contentBackgroundColor: "",
-    radius: 0,
-    borderWidth: 0,
-    borderColor: "",
-};
-
-const defaultBlockStyles: BlockStyles = {
-    alignment: "left",
-    borderWidth: 0,
-    paddingLeft: 0,
-    paddingRight: 0,
-    paddingTop: 0,
-    paddingBottom: 0,
-    marginLeft: 0,
-    marginRight: 0,
-    marginTop: 0,
-    marginBottom: 0,
-    backgroundColor: "",
-};
-
 const GlobalStateContext = createContext<GlobalStateContextType | undefined>(undefined);
 
 /**
@@ -124,7 +51,7 @@ const GlobalStateContext = createContext<GlobalStateContextType | undefined>(und
  * @returns {JSX.Element} Provider component
  */
 export function GlobalStateProvider({ children }: { children: ReactNode }) {
-    const [emailStyles, setEmailStyles] = useState<EmailStyles>(defaultEmailStyles);
+    const [emailStyles, setEmailStyles] = useState<EmailStyles>(DEFAULT_EMAIL_STYLES);
     const [blockStylesMap, setBlockStylesMap] = useState<BlockStylesMap>({});
     const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
     const [editor, setEditor] = useState<Editor | null>(null);
@@ -137,11 +64,11 @@ export function GlobalStateProvider({ children }: { children: ReactNode }) {
     };
 
     const resetEmailStyles = () => {
-        setEmailStyles(defaultEmailStyles);
+        setEmailStyles(DEFAULT_EMAIL_STYLES);
     };
 
     const getBlockStyles = (blockId: string): BlockStyles => {
-        return blockStylesMap[blockId] || { ...defaultBlockStyles };
+        return blockStylesMap[blockId] || { ...DEFAULT_BLOCK_STYLES };
     };
 
     const updateBlockStyle = (
@@ -150,7 +77,7 @@ export function GlobalStateProvider({ children }: { children: ReactNode }) {
         value: BlockStyles[keyof BlockStyles]
     ) => {
         setBlockStylesMap((prev) => {
-            const currentStyles = prev[blockId] || { ...defaultBlockStyles };
+            const currentStyles = prev[blockId] || { ...DEFAULT_BLOCK_STYLES };
             return {
                 ...prev,
                 [blockId]: {
