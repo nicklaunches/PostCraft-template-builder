@@ -1,25 +1,19 @@
-import { useState, useCallback } from "react";
-
-/**
- * Represents a content block in the email template editor.
- *
- * @property {string} id - Unique identifier for the block
- * @property {"text" | "heading" | "image" | "button" | "divider"} type - Type of content block
- * @property {unknown} content - Block content data (varies by type)
- * @property {Record<string, unknown>} [styles] - Optional custom styles for the block
- */
-export interface Block {
-    id: string;
-    type: "text" | "heading" | "image" | "button" | "divider";
-    content: unknown;
-    styles?: Record<string, unknown>;
-}
+import { useCallback } from "react";
+import type { Block } from "../types";
+import { useEditorState } from "./useEditorState";
+import { useEditorSelection } from "./useEditorSelection";
+import { useEditorHistory } from "./useEditorHistory";
 
 /**
  * Custom hook for managing email template editor state and operations.
  *
  * Provides functionality for creating, updating, deleting, and moving blocks within
  * the editor. Includes selection state management and history tracking for undo/redo.
+ *
+ * This hook composes three specialized hooks:
+ * - useEditorState: Manages blocks and CRUD operations
+ * - useEditorSelection: Manages block selection
+ * - useEditorHistory: Manages undo/redo functionality
  *
  * @param {Block[]} [initialContent] - Initial array of blocks to populate the editor
  *
@@ -38,61 +32,32 @@ export interface Block {
  * @returns {() => string} exportToHTML - Export blocks to HTML string
  */
 export function useEditor(initialContent?: Block[]) {
-    const [blocks, setBlocks] = useState<Block[]>(initialContent || []);
-    const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
-    const [history] = useState<Block[][]>([]);
-    const [historyIndex, setHistoryIndex] = useState(-1);
+    // Block state management
+    const {
+        blocks,
+        setBlocks,
+        addBlock,
+        updateBlock,
+        deleteBlock: deleteBlockFromState,
+        moveBlock,
+    } = useEditorState(initialContent);
 
-    const addBlock = useCallback((block: Block, index?: number) => {
-        setBlocks((prev) => {
-            const newBlocks = [...prev];
-            if (index !== undefined) {
-                newBlocks.splice(index, 0, block);
-            } else {
-                newBlocks.push(block);
-            }
-            return newBlocks;
-        });
-    }, []);
+    // Selection management
+    const { selectedBlockId, setSelectedBlockId } = useEditorSelection();
 
-    const updateBlock = useCallback((id: string, updates: Partial<Block>) => {
-        setBlocks((prev) =>
-            prev.map((block) => (block.id === id ? { ...block, ...updates } : block))
-        );
-    }, []);
+    // History management
+    const { undo, redo, canUndo, canRedo } = useEditorHistory(blocks, setBlocks);
 
+    // Enhanced delete that also clears selection
     const deleteBlock = useCallback(
         (id: string) => {
-            setBlocks((prev) => prev.filter((block) => block.id !== id));
+            deleteBlockFromState(id);
             if (selectedBlockId === id) {
                 setSelectedBlockId(null);
             }
         },
-        [selectedBlockId]
+        [deleteBlockFromState, selectedBlockId, setSelectedBlockId]
     );
-
-    const moveBlock = useCallback((fromIndex: number, toIndex: number) => {
-        setBlocks((prev) => {
-            const newBlocks = [...prev];
-            const [movedBlock] = newBlocks.splice(fromIndex, 1);
-            newBlocks.splice(toIndex, 0, movedBlock);
-            return newBlocks;
-        });
-    }, []);
-
-    const undo = useCallback(() => {
-        if (historyIndex > 0) {
-            setHistoryIndex((prev) => prev - 1);
-            setBlocks(history[historyIndex - 1]);
-        }
-    }, [history, historyIndex]);
-
-    const redo = useCallback(() => {
-        if (historyIndex < history.length - 1) {
-            setHistoryIndex((prev) => prev + 1);
-            setBlocks(history[historyIndex + 1]);
-        }
-    }, [history, historyIndex]);
 
     const exportToHTML = useCallback(() => {
         // Convert blocks to HTML email template
@@ -123,8 +88,8 @@ export function useEditor(initialContent?: Block[]) {
         moveBlock,
         undo,
         redo,
-        canUndo: historyIndex > 0,
-        canRedo: historyIndex < history.length - 1,
+        canUndo,
+        canRedo,
         exportToHTML,
     };
 }
