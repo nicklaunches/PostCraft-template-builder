@@ -180,7 +180,7 @@ export default function BlockStyles() {
         <Card
             title="Block styles"
             action={
-                <>
+                <div className="flex space-x-2">
                     <Tooltip content="Reset block styles to default">
                         <button
                             onClick={handleReset}
@@ -217,7 +217,7 @@ export default function BlockStyles() {
                             <TrashIcon />
                         </button>
                     </Tooltip>
-                </>
+                </div>
             }
         >
             <Alignment
