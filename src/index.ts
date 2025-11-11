@@ -14,6 +14,9 @@ export { default as LeftSidebar } from "./components/layout/LeftSidebar";
 export { default as ContentEditor } from "./components/layout/ContentEditor";
 export { default as RightSidebar } from "./components/layout/RightSidebar";
 
+// Shared components
+export { ErrorBoundary, LoadingSpinner } from "./components/shared";
+
 // Hooks
 export { useTemplateBuilder, useEditor, useDynamicCss } from "./hooks";
 

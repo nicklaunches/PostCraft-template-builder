@@ -2,6 +2,7 @@ import Nav from "../Nav";
 import LeftSidebar from "../LeftSidebar";
 import ContentEditor from "../ContentEditor";
 import RightSidebar from "../RightSidebar";
+import ErrorBoundary from "@/components/shared/ErrorBoundary";
 
 /**
  * Props for the TemplateBuilder component.
@@ -41,9 +42,37 @@ export default function TemplateBuilder({
         <div className="flex h-screen flex-col">
             {showNav && <Nav />}
             <div className="flex flex-1 overflow-hidden">
-                {showLeftSidebar && <LeftSidebar />}
-                <ContentEditor initialContent={initialContent} onSave={onSave} />
-                {showRightSidebar && <RightSidebar />}
+                {showLeftSidebar && (
+                    <ErrorBoundary
+                        fallback={
+                            <div className="w-72 border-r bg-gray-50 p-4 text-red-600">
+                                Email styles panel unavailable
+                            </div>
+                        }
+                    >
+                        <LeftSidebar />
+                    </ErrorBoundary>
+                )}
+                <ErrorBoundary
+                    fallback={
+                        <div className="flex-1 p-8 text-center text-red-600">
+                            Editor failed to load
+                        </div>
+                    }
+                >
+                    <ContentEditor initialContent={initialContent} onSave={onSave} />
+                </ErrorBoundary>
+                {showRightSidebar && (
+                    <ErrorBoundary
+                        fallback={
+                            <div className="w-72 border-l bg-gray-50 p-4 text-red-600">
+                                Block styles panel unavailable
+                            </div>
+                        }
+                    >
+                        <RightSidebar />
+                    </ErrorBoundary>
+                )}
             </div>
         </div>
     );

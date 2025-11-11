@@ -1,13 +1,10 @@
 import type {
     Block,
-    BlockStyles, // eslint-disable-line @typescript-eslint/no-unused-vars
-    EmailStyles, // eslint-disable-line @typescript-eslint/no-unused-vars
     TextContent,
     HeadingContent,
     ButtonContent,
     ImageContent,
     DividerContent,
-    TemplateData, // eslint-disable-line @typescript-eslint/no-unused-vars
 } from "@/types";
 import { BLOCK_TYPES } from "./constants";
 

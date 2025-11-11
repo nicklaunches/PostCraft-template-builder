@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useGlobalState } from "@/context/GlobalState";
 import { useDynamicCss } from "@/hooks";
 import { ExtendedTipTap } from "@/components/ui";
+import ErrorBoundary from "@/components/shared/ErrorBoundary";
 
 /**
  * Props for the ContentEditor component.
@@ -55,12 +56,20 @@ export default function ContentEditor({
                         Toggle editable
                     </button>
                 </div>
-                <ExtendedTipTap
-                    initialContent={defaultContent}
-                    className={className}
-                    editable={isEditable}
-                    onEditorReady={setEditor}
-                />
+                <ErrorBoundary
+                    fallback={
+                        <div className="p-8 text-center text-red-600 border border-red-300 rounded">
+                            Rich text editor failed to initialize
+                        </div>
+                    }
+                >
+                    <ExtendedTipTap
+                        initialContent={defaultContent}
+                        className={className}
+                        editable={isEditable}
+                        onEditorReady={setEditor}
+                    />
+                </ErrorBoundary>
             </div>
         </main>
     );

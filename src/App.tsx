@@ -1,4 +1,6 @@
 import TemplateBuilder from "@/components/layout/TemplateBuilder";
+import ErrorBoundary from "@/components/shared/ErrorBoundary";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { GlobalStateProvider } from "@/context/GlobalState";
 import { useTemplateBuilder } from "@/hooks/useTemplateBuilder";
 import { useEditor } from "@/hooks/useEditor";
@@ -17,6 +19,7 @@ export default function App() {
     const editor = useEditor();
 
     const handleSave = async () => {
+        await builder.saveTemplate();
         const html = editor.exportToHTML();
 
         console.log("Template Builder State:", builder.template);
@@ -25,7 +28,10 @@ export default function App() {
 
     return (
         <GlobalStateProvider>
-            <TemplateBuilder onSave={handleSave} />
+            {builder.isSaving && <LoadingSpinner fullScreen text="Saving template..." size="lg" />}
+            <ErrorBoundary>
+                <TemplateBuilder onSave={handleSave} />
+            </ErrorBoundary>
         </GlobalStateProvider>
     );
 }
