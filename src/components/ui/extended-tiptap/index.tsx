@@ -2,6 +2,7 @@ import DragHandle from "@tiptap/extension-drag-handle-react";
 import { EditorContent, useEditor, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect } from "react";
+import { Command, renderItems } from "@/utils/extensions";
 
 /**
  * Props for the ExtendedTipTap component.
@@ -37,7 +38,15 @@ export default function ExtendedTipTap({
     onChange,
 }: ExtendedTipTapProps) {
     const editor = useEditor({
-        extensions: [StarterKit],
+        extensions: [
+            StarterKit,
+            Command.configure({
+                suggestion: {
+                    items: () => [],
+                    render: renderItems,
+                },
+            }),
+        ],
         content: initialContent,
         editable,
         onUpdate: ({ editor }) => {

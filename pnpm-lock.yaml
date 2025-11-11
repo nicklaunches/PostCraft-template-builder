@@ -10,6 +10,9 @@ importers:
             "@hello-pangea/dnd":
                 specifier: ^18.0.1
                 version: 18.0.1(@types/react@18.3.26)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+            "@heroicons/react":
+                specifier: ^2.2.0
+                version: 2.2.0(react@18.3.1)
             "@tiptap/core":
                 specifier: ^3.10.5
                 version: 3.10.5(@tiptap/pm@3.10.5)
@@ -34,6 +37,9 @@ importers:
             "@tiptap/starter-kit":
                 specifier: ^3.10.5
                 version: 3.10.5
+            "@tiptap/suggestion":
+                specifier: ^3.10.5
+                version: 3.10.5(@tiptap/core@3.10.5(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5)
             "@tiptap/y-tiptap":
                 specifier: ^3.0.0
                 version: 3.0.0(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.3)(y-protocols@1.0.6(yjs@13.6.27))(yjs@13.6.27)
@@ -43,6 +49,9 @@ importers:
             react-colorful:
                 specifier: ^5.6.1
                 version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+            tippy.js:
+                specifier: ^6.3.7
+                version: 6.3.7
             y-protocols:
                 specifier: ^1.0.6
                 version: 1.0.6(yjs@13.6.27)
@@ -601,6 +610,14 @@ packages:
             react: ^18.0.0 || ^19.0.0
             react-dom: ^18.0.0 || ^19.0.0
 
+    "@heroicons/react@2.2.0":
+        resolution:
+            {
+                integrity: sha512-LMcepvRaS9LYHJGsF0zzmgKCUim/X3N/DQKc4jepAXJ7l8QxJ1PmxJzqplF2Z3FE4PqBAIGyJAQ/w4B5dsqbtQ==,
+            }
+        peerDependencies:
+            react: ">= 16 || ^19.0.0-rc"
+
     "@humanfs/core@0.19.1":
         resolution:
             {
@@ -694,6 +711,12 @@ packages:
                 integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==,
             }
         engines: { node: ">=14" }
+
+    "@popperjs/core@2.11.8":
+        resolution:
+            {
+                integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==,
+            }
 
     "@remirror/core-constants@3.0.0":
         resolution:
@@ -1292,6 +1315,15 @@ packages:
             {
                 integrity: sha512-CdFlqKGboxKgFHLqLkvtUtvavfxXpWKq7o5i9P9xntaooFq1nucB6ME/axJgua6lJamltrQ90ddS1/pMwAmfrg==,
             }
+
+    "@tiptap/suggestion@3.10.5":
+        resolution:
+            {
+                integrity: sha512-7bBd7L0+0u7tIgrs8U4Bb6dvxkrOlVTBb5BwfEa5jMqc0P0j3uw/rYRB/P5DwupavxVWi1KurhueNMPu477hJw==,
+            }
+        peerDependencies:
+            "@tiptap/core": ^3.10.5
+            "@tiptap/pm": ^3.10.5
 
     "@tiptap/y-tiptap@3.0.0":
         resolution:
@@ -3580,6 +3612,12 @@ packages:
             }
         engines: { node: ">=12.0.0" }
 
+    tippy.js@6.3.7:
+        resolution:
+            {
+                integrity: sha512-E1d3oP2emgJ9dRQZdf3Kkn0qJgI6ZLpyS5z6ZkY1DF3kaQaBsGZsndEpHwx+eC+tYM41HaSNvNtLx8tU57FzTQ==,
+            }
+
     to-regex-range@5.0.1:
         resolution:
             {
@@ -4122,6 +4160,10 @@ snapshots:
         transitivePeerDependencies:
             - "@types/react"
 
+    "@heroicons/react@2.2.0(react@18.3.1)":
+        dependencies:
+            react: 18.3.1
+
     "@humanfs/core@0.19.1": {}
 
     "@humanfs/node@0.16.7":
@@ -4175,6 +4217,8 @@ snapshots:
 
     "@pkgjs/parseargs@0.11.0":
         optional: true
+
+    "@popperjs/core@2.11.8": {}
 
     "@remirror/core-constants@3.0.0": {}
 
@@ -4519,6 +4563,11 @@ snapshots:
             "@tiptap/extension-text": 3.10.5(@tiptap/core@3.10.5(@tiptap/pm@3.10.5))
             "@tiptap/extension-underline": 3.10.5(@tiptap/core@3.10.5(@tiptap/pm@3.10.5))
             "@tiptap/extensions": 3.10.5(@tiptap/core@3.10.5(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5)
+            "@tiptap/pm": 3.10.5
+
+    "@tiptap/suggestion@3.10.5(@tiptap/core@3.10.5(@tiptap/pm@3.10.5))(@tiptap/pm@3.10.5)":
+        dependencies:
+            "@tiptap/core": 3.10.5(@tiptap/pm@3.10.5)
             "@tiptap/pm": 3.10.5
 
     "@tiptap/y-tiptap@3.0.0(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.3)(y-protocols@1.0.6(yjs@13.6.27))(yjs@13.6.27)":
@@ -5927,6 +5976,10 @@ snapshots:
         dependencies:
             fdir: 6.5.0(picomatch@4.0.3)
             picomatch: 4.0.3
+
+    tippy.js@6.3.7:
+        dependencies:
+            "@popperjs/core": 2.11.8
 
     to-regex-range@5.0.1:
         dependencies:
