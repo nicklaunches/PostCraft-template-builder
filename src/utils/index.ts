@@ -21,3 +21,18 @@ export type { BlockType } from "./constants";
 
 // Helpers
 export { generateClassName, generateBlockId } from "./helpers";
+
+// Type Guards
+export {
+    isValidBlockType,
+    isTextBlock,
+    isHeadingBlock,
+    isButtonBlock,
+    isImageBlock,
+    isDividerBlock,
+    isValidBlock,
+    isValidButtonContent,
+    isValidImageContent,
+    isValidBlockArray,
+    toTypedBlock,
+} from "./type-guards";

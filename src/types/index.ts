@@ -6,6 +6,46 @@ import type { BlockType as BlockTypeImport } from "@/utils/constants";
 export type BlockType = BlockTypeImport;
 
 /**
+ * Text block content structure
+ */
+export interface TextContent {
+    text: string;
+}
+
+/**
+ * Heading block content structure
+ */
+export interface HeadingContent {
+    text: string;
+    level?: 1 | 2 | 3 | 4 | 5 | 6;
+}
+
+/**
+ * Button block content structure
+ */
+export interface ButtonContent {
+    text: string;
+    url: string;
+}
+
+/**
+ * Image block content structure
+ */
+export interface ImageContent {
+    src: string;
+    alt?: string;
+    width?: number;
+    height?: number;
+}
+
+/**
+ * Divider block content structure (no content needed)
+ */
+export interface DividerContent {
+    style?: "solid" | "dashed" | "dotted";
+}
+
+/**
  * Represents email template metadata and content.
  *
  * @property {string} [id] - Unique template identifier
@@ -36,6 +76,62 @@ export interface Block {
     content: unknown;
     styles?: Record<string, unknown>;
 }
+
+/**
+ * Text block with strongly-typed content
+ */
+export interface TextBlock {
+    id: string;
+    type: "text";
+    content: string | TextContent;
+    styles?: Record<string, unknown>;
+}
+
+/**
+ * Heading block with strongly-typed content
+ */
+export interface HeadingBlock {
+    id: string;
+    type: "heading";
+    content: string | HeadingContent;
+    styles?: Record<string, unknown>;
+}
+
+/**
+ * Button block with strongly-typed content
+ */
+export interface ButtonBlock {
+    id: string;
+    type: "button";
+    content: ButtonContent;
+    styles?: Record<string, unknown>;
+}
+
+/**
+ * Image block with strongly-typed content
+ */
+export interface ImageBlock {
+    id: string;
+    type: "image";
+    content: ImageContent;
+    styles?: Record<string, unknown>;
+}
+
+/**
+ * Divider block with strongly-typed content
+ */
+export interface DividerBlock {
+    id: string;
+    type: "divider";
+    content?: DividerContent;
+    styles?: Record<string, unknown>;
+}
+
+/**
+ * Discriminated union of all block types.
+ * Provides type narrowing based on the block type property.
+ */
+export type TypedBlock = TextBlock | HeadingBlock | ButtonBlock | ImageBlock | DividerBlock;
 
 /**
  * Props for the TemplateBuilder component.

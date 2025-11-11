@@ -33,6 +33,18 @@ export {
     // Helpers
     generateClassName,
     generateBlockId,
+    // Type Guards
+    isValidBlockType,
+    isTextBlock,
+    isHeadingBlock,
+    isButtonBlock,
+    isImageBlock,
+    isDividerBlock,
+    isValidBlock,
+    isValidButtonContent,
+    isValidImageContent,
+    isValidBlockArray,
+    toTypedBlock,
     // Constants
     BLOCK_TYPES,
     DEFAULT_EMAIL_STYLES,

@@ -1,26 +1,20 @@
-import type { Block } from "@/types";
-
-/**
- * Button block content structure
- */
-interface ButtonContent {
-    url?: string;
-    text?: string;
-}
-
-/**
- * Image block content structure
- */
-interface ImageContent {
-    src?: string;
-    alt?: string;
-}
+import type { Block, HeadingContent, TextContent } from "@/types";
+import {
+    isTextBlock,
+    isHeadingBlock,
+    isButtonBlock,
+    isImageBlock,
+    isDividerBlock,
+    isValidButtonContent,
+    isValidImageContent,
+} from "./type-guards";
 
 /**
  * Converts an array of blocks to an HTML email template string.
  *
  * Generates email-compatible HTML from the block structure, handling different
  * block types (text, heading, image, button, divider) and their content.
+ * Uses type guards for safe type narrowing.
  *
  * @param {Block[]} blocks - Array of blocks to convert to HTML
  * @returns {string} Generated HTML string for email template
@@ -36,38 +30,52 @@ interface ImageContent {
 export function blocksToHTML(blocks: Block[]): string {
     return blocks
         .map((block) => {
-            // Handle different block types
-            switch (block.type) {
-                case "text":
-                    return `<p>${escapeHTML(String(block.content || ""))}</p>`;
-
-                case "heading": {
-                    const content = escapeHTML(String(block.content || ""));
-                    // You can extend this to support different heading levels
-                    return `<h2>${content}</h2>`;
-                }
-
-                case "image": {
-                    const imgContent = block.content as ImageContent;
-                    const src = imgContent?.src || "";
-                    const alt = imgContent?.alt || "";
-                    return `<img src="${escapeHTML(src)}" alt="${escapeHTML(alt)}" />`;
-                }
-
-                case "button": {
-                    const btnContent = block.content as ButtonContent;
-                    const url = btnContent?.url || "#";
-                    const text = btnContent?.text || "Click here";
-                    return `<a href="${escapeHTML(url)}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 4px;">${escapeHTML(text)}</a>`;
-                }
-
-                case "divider":
-                    return `<hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;" />`;
-
-                default:
-                    // Return empty string for unknown block types
-                    return "";
+            // Use type guards for safe type narrowing
+            if (isTextBlock(block)) {
+                const text =
+                    typeof block.content === "string"
+                        ? block.content
+                        : (block.content as TextContent)?.text || "";
+                return `<p>${escapeHTML(text)}</p>`;
             }
+
+            if (isHeadingBlock(block)) {
+                const content =
+                    typeof block.content === "string"
+                        ? block.content
+                        : (block.content as HeadingContent)?.text || "";
+                const level =
+                    typeof block.content === "object"
+                        ? (block.content as HeadingContent)?.level || 2
+                        : 2;
+                return `<h${level}>${escapeHTML(content)}</h${level}>`;
+            }
+
+            if (isImageBlock(block)) {
+                if (!isValidImageContent(block.content)) {
+                    return "";
+                }
+                const { src, alt = "", width, height } = block.content;
+                const widthAttr = width ? ` width="${width}"` : "";
+                const heightAttr = height ? ` height="${height}"` : "";
+                return `<img src="${escapeHTML(src)}" alt="${escapeHTML(alt)}"${widthAttr}${heightAttr} />`;
+            }
+
+            if (isButtonBlock(block)) {
+                if (!isValidButtonContent(block.content)) {
+                    return "";
+                }
+                const { url, text } = block.content;
+                return `<a href="${escapeHTML(url)}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 4px;">${escapeHTML(text)}</a>`;
+            }
+
+            if (isDividerBlock(block)) {
+                const style = block.content?.style || "solid";
+                return `<hr style="border: none; border-top: 1px ${style} #e5e7eb; margin: 20px 0;" />`;
+            }
+
+            // Return empty string for unknown block types
+            return "";
         })
         .filter((html) => html !== "") // Remove empty strings
         .join("\n");
