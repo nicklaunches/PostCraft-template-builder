@@ -330,7 +330,7 @@ export function validateEmailStyles(styles: unknown): styles is EmailStyles {
 }
 ```
 
-## 9. **Extract CSS Generation**
+## 9. **Extract CSS Generation** ✅
 
 The `useDynamicCss` logic is mixing concerns:
 
@@ -345,6 +345,70 @@ export function useDynamicCss(emailStyles: EmailStyles, ...) {
         [emailStyles, className]
     );
 }
+```
+
+### ✅ IMPLEMENTATION COMPLETED
+
+Created comprehensive CSS generation utilities with the following features:
+
+**Core Generator Functions:**
+
+- `generateEmailCSS(styles, className)` - Generate CSS for email-wide styles
+- `generateBlockCSS(styles, className)` - Generate CSS for block-level styles
+- `generateEmailInlineStyles(styles)` - Generate React inline styles for email
+- `generateBlockInlineStyles(styles)` - Generate React inline styles for blocks
+- `generateCompleteStylesheet(emailStyles, emailClassName, blocks)` - Generate complete stylesheet
+
+**Utility Functions:**
+
+- `minifyCSS(css)` - Minify CSS for production
+- `addVendorPrefixes(css)` - Add vendor prefixes for cross-browser support
+
+**Benefits:**
+
+- ✅ Clean separation of concerns
+- ✅ Reusable CSS generation logic
+- ✅ Support for both CSS classes and inline styles
+- ✅ Production-ready with minification
+- ✅ Cross-browser compatibility with vendor prefixes
+- ✅ Well-documented with JSDoc and examples
+- ✅ Exported from main package for external use
+- ✅ Maintains backward compatibility
+
+**Files Created:**
+
+- `/src/utils/cssGenerator.ts` - CSS generation utilities
+
+**Files Updated:**
+
+- `/src/hooks/useDynamicCss.ts` - Refactored to use CSS generator
+- `/src/utils/index.ts` - Export CSS generators
+- `/src/index.ts` - Export CSS generators from main package
+
+**Usage Example:**
+
+```typescript
+import {
+    generateEmailCSS,
+    generateBlockCSS,
+    generateCompleteStylesheet,
+    minifyCSS,
+} from "@postcraft/template-builder";
+
+// Generate email CSS
+const emailCSS = generateEmailCSS(emailStyles, "email-container");
+
+// Generate block CSS
+const blockCSS = generateBlockCSS(blockStyles, "block-123");
+
+// Generate complete stylesheet
+const stylesheet = generateCompleteStylesheet(emailStyles, "email-abc", [
+    { id: "block-1", styles: blockStyles1 },
+    { id: "block-2", styles: blockStyles2 },
+]);
+
+// Minify for production
+const minified = minifyCSS(stylesheet);
 ```
 
 ## 10. **Add Error Boundaries & Error Handling**

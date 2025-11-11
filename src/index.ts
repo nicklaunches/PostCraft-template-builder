@@ -84,5 +84,13 @@ export {
     sanitizeUrl,
     sanitizeString,
     sanitizeBlockArray,
+    // CSS Generators
+    generateEmailCSS,
+    generateBlockCSS,
+    generateEmailInlineStyles,
+    generateBlockInlineStyles,
+    generateCompleteStylesheet,
+    minifyCSS,
+    addVendorPrefixes,
 } from "./utils";
 export type { BlockType, ValidationResult, ValidationOptions } from "./utils";
