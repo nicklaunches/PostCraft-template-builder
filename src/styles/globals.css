@@ -25,17 +25,12 @@ body {
 }
 
 .ProseMirror {
-    padding-inline: 4rem;
     word-wrap: break-word;
     white-space: pre-wrap;
     white-space: break-spaces;
     -webkit-font-variant-ligatures: none;
     font-variant-ligatures: none;
     font-feature-settings: "liga" 0;
-
-    > * + * {
-        margin-top: 0.75em;
-    }
 
     [data-id] {
         border: 3px solid #0d0d0d;

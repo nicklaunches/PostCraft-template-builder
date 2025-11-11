@@ -32,9 +32,9 @@ export default function ContentEditor({
     };
 
     return (
-        <main className="flex-1 overflow-y-auto bg-white">
-            <div className="mx-auto max-w-4xl px-8 py-16">
-                <div>
+        <main className="flex-1 overflow-y-auto bg-gray-100">
+            <div className="mx-auto px-8 py-16 max-w-[600px]">
+                <div className="mb-8">
                     <button onClick={toggleEditable}>Toggle editable</button>
                 </div>
                 <DragHandle editor={editor}>
