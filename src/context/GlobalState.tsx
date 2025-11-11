@@ -1,10 +1,13 @@
-import { createContext, useContext, useState, ReactNode } from "react";
-import type { Editor } from "@tiptap/react";
-import type { BlockStyles, BlockStylesMap, EmailStyles } from "@/types";
-import { DEFAULT_EMAIL_STYLES, DEFAULT_BLOCK_STYLES } from "@/utils/constants";
+import { ReactNode } from "react";
+import { EmailStylesProvider, useEmailStyles } from "./EmailStylesContext";
+import { BlockStylesProvider, useBlockStyles } from "./BlockStylesContext";
+import { EditorProvider, useEditorContext } from "./EditorContext";
 
 /**
- * Global state context type definition.
+ * Combined global state type from all context providers.
+ *
+ * This aggregates email styles, block styles, and editor contexts into a single
+ * interface for backwards compatibility with existing components.
  *
  * @property {EmailStyles} emailStyles - Current email styling configuration
  * @property {<K extends keyof EmailStyles>(key: K, value: EmailStyles[K]) => void} updateEmailStyle - Update a specific style property
@@ -20,121 +23,73 @@ import { DEFAULT_EMAIL_STYLES, DEFAULT_BLOCK_STYLES } from "@/utils/constants";
  * @property {(editor: Editor | null) => void} setEditor - Set the TipTap editor instance
  */
 interface GlobalStateContextType {
-    emailStyles: EmailStyles;
-    updateEmailStyle: <K extends keyof EmailStyles>(key: K, value: EmailStyles[K]) => void;
-    resetEmailStyles: () => void;
-    blockStylesMap: BlockStylesMap;
-    getBlockStyles: (blockId: string) => BlockStyles;
-    updateBlockStyle: (
-        blockId: string,
-        key: keyof BlockStyles,
-        value: BlockStyles[keyof BlockStyles]
-    ) => void;
-    deleteBlockStyles: (blockId: string) => void;
-    resetAllBlockStyles: () => void;
-    selectedBlockId: string | null;
-    setSelectedBlockId: (blockId: string | null) => void;
-    editor: Editor | null;
-    setEditor: (editor: Editor | null) => void;
+    // Email styles
+    emailStyles: ReturnType<typeof useEmailStyles>["emailStyles"];
+    updateEmailStyle: ReturnType<typeof useEmailStyles>["updateEmailStyle"];
+    resetEmailStyles: ReturnType<typeof useEmailStyles>["resetEmailStyles"];
+    // Block styles
+    blockStylesMap: ReturnType<typeof useBlockStyles>["blockStylesMap"];
+    getBlockStyles: ReturnType<typeof useBlockStyles>["getBlockStyles"];
+    updateBlockStyle: ReturnType<typeof useBlockStyles>["updateBlockStyle"];
+    deleteBlockStyles: ReturnType<typeof useBlockStyles>["deleteBlockStyles"];
+    resetAllBlockStyles: ReturnType<typeof useBlockStyles>["resetAllBlockStyles"];
+    selectedBlockId: ReturnType<typeof useBlockStyles>["selectedBlockId"];
+    setSelectedBlockId: ReturnType<typeof useBlockStyles>["setSelectedBlockId"];
+    // Editor
+    editor: ReturnType<typeof useEditorContext>["editor"];
+    setEditor: ReturnType<typeof useEditorContext>["setEditor"];
 }
 
-const GlobalStateContext = createContext<GlobalStateContextType | undefined>(undefined);
-
 /**
- * Global state provider component.
+ * Global state provider that composes email styles, block styles, and editor contexts.
  *
- * Provides access to global email styling configuration, per-block styles,
- * and update methods throughout the component tree via React context.
+ * This provider nests all three specialized context providers to maintain a single
+ * entry point for the application state. Components can use either the unified
+ * `useGlobalState` hook or the individual context hooks for more granular subscriptions.
  *
  * @param {Object} props - Component props
  * @param {ReactNode} props.children - Child components to wrap
- * @returns {JSX.Element} Provider component
+ * @returns {JSX.Element} Composed provider component
+ *
+ * @example
+ * <GlobalStateProvider>
+ *   <App />
+ * </GlobalStateProvider>
  */
 export function GlobalStateProvider({ children }: { children: ReactNode }) {
-    const [emailStyles, setEmailStyles] = useState<EmailStyles>(DEFAULT_EMAIL_STYLES);
-    const [blockStylesMap, setBlockStylesMap] = useState<BlockStylesMap>({});
-    const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
-    const [editor, setEditor] = useState<Editor | null>(null);
-
-    const updateEmailStyle = <K extends keyof EmailStyles>(key: K, value: EmailStyles[K]) => {
-        setEmailStyles((prev) => ({
-            ...prev,
-            [key]: value,
-        }));
-    };
-
-    const resetEmailStyles = () => {
-        setEmailStyles(DEFAULT_EMAIL_STYLES);
-    };
-
-    const getBlockStyles = (blockId: string): BlockStyles => {
-        return blockStylesMap[blockId] || { ...DEFAULT_BLOCK_STYLES };
-    };
-
-    const updateBlockStyle = (
-        blockId: string,
-        key: keyof BlockStyles,
-        value: BlockStyles[keyof BlockStyles]
-    ) => {
-        setBlockStylesMap((prev) => {
-            const currentStyles = prev[blockId] || { ...DEFAULT_BLOCK_STYLES };
-            return {
-                ...prev,
-                [blockId]: {
-                    ...currentStyles,
-                    [key]: value,
-                },
-            };
-        });
-    };
-
-    const deleteBlockStyles = (blockId: string) => {
-        setBlockStylesMap((prev) => {
-            const newMap = { ...prev };
-            delete newMap[blockId];
-            return newMap;
-        });
-    };
-
-    const resetAllBlockStyles = () => {
-        setBlockStylesMap({});
-    };
-
     return (
-        <GlobalStateContext.Provider
-            value={{
-                emailStyles,
-                updateEmailStyle,
-                resetEmailStyles,
-                blockStylesMap,
-                getBlockStyles,
-                updateBlockStyle,
-                deleteBlockStyles,
-                resetAllBlockStyles,
-                selectedBlockId,
-                setSelectedBlockId,
-                editor,
-                setEditor,
-            }}
-        >
-            {children}
-        </GlobalStateContext.Provider>
+        <EmailStylesProvider>
+            <BlockStylesProvider>
+                <EditorProvider>{children}</EditorProvider>
+            </BlockStylesProvider>
+        </EmailStylesProvider>
     );
 }
 
 /**
- * Hook to access global state context.
+ * Hook to access all global state contexts in a single object.
  *
- * Provides access to email styles and update functions. Must be used
- * within a GlobalStateProvider component.
+ * This hook combines the three specialized contexts (email styles, block styles,
+ * and editor) into a single return object for backwards compatibility. For better
+ * performance, consider using the individual context hooks instead:
+ * - `useEmailStyles()` for email-wide styling
+ * - `useBlockStyles()` for block-specific styling
+ * - `useEditorContext()` for editor instance
  *
- * @returns {GlobalStateContextType} Global state context value
+ * @returns {GlobalStateContextType} Combined global state value
  * @throws {Error} If used outside of GlobalStateProvider
+ *
+ * @example
+ * const { emailStyles, updateBlockStyle, editor } = useGlobalState();
  */
-export function useGlobalState() {
-    const context = useContext(GlobalStateContext);
-    if (context === undefined) {
-        throw new Error("useGlobalState must be used within a GlobalStateProvider");
-    }
-    return context;
+export function useGlobalState(): GlobalStateContextType {
+    const emailStylesContext = useEmailStyles();
+    const blockStylesContext = useBlockStyles();
+    const editorContext = useEditorContext();
+
+    return {
+        ...emailStylesContext,
+        ...blockStylesContext,
+        ...editorContext,
+    };
 }

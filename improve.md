@@ -260,22 +260,61 @@ const styledText = createTextBlock("Centered", {
 const duplicate = cloneBlock(text, { content: { text: "Modified" } });
 ```
 
-## 7. **Decouple GlobalState Context**
+## 7. **Decouple GlobalState Context** ✅
 
-Split the massive context into focused providers:
+The `GlobalState` context is handling three separate concerns:
+
+- Email styles (email-wide properties)
+- Block styles (per-block styling)
+- Editor instance (TipTap editor)
+
+**Implemented Solution:**
+
+Created three separate contexts with focused responsibilities:
 
 ```typescript
 // filepath: /src/context/EmailStylesContext.tsx
-// Only email-wide styles
+export function EmailStylesProvider({ children }: { children: ReactNode }) {
+    // emailStyles, updateEmailStyle, resetEmailStyles
+}
+export function useEmailStyles() {}
 
 // filepath: /src/context/BlockStylesContext.tsx
-// Only per-block styles
+export function BlockStylesProvider({ children }: { children: ReactNode }) {
+    // blockStylesMap, getBlockStyles, updateBlockStyle, deleteBlockStyles
+    // selectedBlockId, setSelectedBlockId
+}
+export function useBlockStyles() {}
 
 // filepath: /src/context/EditorContext.tsx
-// Only editor instance
+export function EditorProvider({ children }: { children: ReactNode }) {
+    // editor, setEditor
+}
+export function useEditorContext() {}
+
+// filepath: /src/context/GlobalState.tsx
+// Composes all three contexts for backwards compatibility
+export function GlobalStateProvider({ children }: { children: ReactNode }) {
+    return (
+        <EmailStylesProvider>
+            <BlockStylesProvider>
+                <EditorProvider>{children}</EditorProvider>
+            </BlockStylesProvider>
+        </EmailStylesProvider>
+    );
+}
+export function useGlobalState() {
+    // Aggregates all three context hooks
+}
 ```
 
-Then compose them in GlobalStateProvider.
+**Benefits:**
+
+- Components can subscribe to only what they need (better performance)
+- Clearer separation of concerns
+- Easier to test individual contexts
+- Backwards compatible with existing `useGlobalState` hook
+- Granular exports allow specific imports: `useEmailStyles()`, `useBlockStyles()`, `useEditorContext()`
 
 ## 8. **Add Input Validation Layer**
 

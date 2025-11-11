@@ -17,8 +17,13 @@ export { default as RightSidebar } from "./components/layout/RightSidebar";
 // Hooks
 export { useTemplateBuilder, useEditor, useDynamicCss } from "./hooks";
 
-// Context
+// Context - Full global state (composes all contexts)
 export { GlobalStateProvider, useGlobalState } from "./context/GlobalState";
+
+// Context - Granular exports for specific concerns
+export { EmailStylesProvider, useEmailStyles } from "./context/EmailStylesContext";
+export { BlockStylesProvider, useBlockStyles } from "./context/BlockStylesContext";
+export { EditorProvider, useEditorContext } from "./context/EditorContext";
 
 // Types
 export type * from "./types";
