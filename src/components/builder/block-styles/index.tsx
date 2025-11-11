@@ -39,14 +39,46 @@ export default function BlockStyles() {
 
     // Apply block styles to the currently selected node in the editor
     useEffect(() => {
-        if (!editor) return;
+        if (!editor) {
+            console.log("BlockStyles: Editor not available");
+            return;
+        }
 
         const applyStylesToNode = () => {
             const { state } = editor;
-            const { from } = state.selection;
-            const node = state.doc.nodeAt(from);
+            const { selection } = state;
+            const { $from } = selection;
 
-            if (!node) return;
+            // Get the parent block node (paragraph, heading, etc.) instead of the text node
+            let depth = $from.depth;
+            let parentNode = null;
+            let parentPos = null;
+
+            // Walk up the tree to find a block-level node
+            while (depth > 0) {
+                const node = $from.node(depth);
+                console.log(`BlockStyles: Checking depth ${depth}`, {
+                    type: node.type.name,
+                    attrs: node.attrs,
+                });
+
+                if (node.type.name === "paragraph" || node.type.name === "heading") {
+                    parentNode = node;
+                    parentPos = $from.before(depth);
+                    break;
+                }
+                depth--;
+            }
+
+            console.log("BlockStyles: Found parent node", {
+                node: parentNode ? { type: parentNode.type.name, attrs: parentNode.attrs } : null,
+                pos: parentPos,
+            });
+
+            if (!parentNode) {
+                console.log("BlockStyles: No valid block node found in selection");
+                return;
+            }
 
             // Build inline style string
             const styles: string[] = [];
@@ -75,10 +107,20 @@ export default function BlockStyles() {
 
             const styleString = styles.join("; ");
 
+            console.log("BlockStyles: Generated style string", {
+                styleString,
+                blockStyles,
+            });
+
             // Apply styles to the current node
-            const nodeType = node.type.name;
+            const nodeType = parentNode.type.name;
+            console.log("BlockStyles: Node type", nodeType);
+
             if (nodeType === "paragraph" || nodeType === "heading") {
+                console.log("BlockStyles: Applying styles to", nodeType);
                 editor.chain().focus().updateAttributes(nodeType, { style: styleString }).run();
+            } else {
+                console.log("BlockStyles: Node type not supported for styling", nodeType);
             }
         };
 
