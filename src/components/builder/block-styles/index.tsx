@@ -1,6 +1,7 @@
 import { Card, Alignment, Spacing, ColorPicker, InputNumber, Tooltip } from "@/components/ui";
 import { useGlobalState } from "@/context/GlobalState";
 import { PlusIcon, DocumentDuplicateIcon, TrashIcon } from "@heroicons/react/24/outline";
+import ArrowPathIcon from "@heroicons/react/24/outline/ArrowPathIcon";
 import { useEffect, useState } from "react";
 
 /**
@@ -18,10 +19,17 @@ import { useEffect, useState } from "react";
  * @returns {JSX.Element} Block styles component
  */
 export default function BlockStyles() {
-    const { blockStylesMap, getBlockStyles, updateBlockStyle, setSelectedBlockId, editor } =
-        useGlobalState();
+    const {
+        blockStylesMap,
+        getBlockStyles,
+        updateBlockStyle,
+        setSelectedBlockId,
+        editor,
+        resetAllBlockStyles,
+    } = useGlobalState();
     const [, setSelectionUpdate] = useState(0);
     const [currentBlockId, setCurrentBlockId] = useState<string | null>(null);
+    const [isSpinning, setIsSpinning] = useState(false);
 
     // Get the current block's styles or defaults
     const currentBlockStyles = currentBlockId ? getBlockStyles(currentBlockId) : getBlockStyles("");
@@ -138,6 +146,12 @@ export default function BlockStyles() {
         applyStylesToNode();
     }, [currentBlockId, blockStylesMap, editor, getBlockStyles]);
 
+    const handleReset = () => {
+        setIsSpinning(true);
+        resetAllBlockStyles();
+        setTimeout(() => setIsSpinning(false), 500);
+    };
+
     const handleCreateComponent = () => {
         // TODO: Implement create component functionality
         console.log("Create component");
@@ -167,6 +181,15 @@ export default function BlockStyles() {
             title="Block styles"
             action={
                 <>
+                    <Tooltip content="Reset block styles to default">
+                        <button
+                            onClick={handleReset}
+                            className="flex h-4 w-4 items-center justify-center transition-colors hover:text-gray-600"
+                            title="Reset to defaults"
+                        >
+                            <ArrowPathIcon className={isSpinning ? "animate-spin" : ""} />
+                        </button>
+                    </Tooltip>
                     <Tooltip content="Create component">
                         <button
                             onClick={handleCreateComponent}
