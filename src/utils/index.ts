@@ -49,3 +49,24 @@ export {
     createDefaultBlock,
     createBlocksFromTypes,
 } from "./factories/blockFactory";
+
+// Validators
+export {
+    isValidHexColor,
+    isValidUrl,
+    isPositiveNumber,
+    isInRange,
+    isValidTextContent,
+    isValidHeadingContent,
+    isValidDividerContent,
+    validateBlock,
+    validateBlockStyles,
+    validateEmailStyles,
+    validateTemplateData,
+    sanitizeNumber,
+    sanitizeHexColor,
+    sanitizeUrl,
+    sanitizeString,
+    sanitizeBlockArray,
+} from "./validators";
+export type { ValidationResult, ValidationOptions } from "./validators";

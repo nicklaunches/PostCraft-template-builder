@@ -1,6 +1,8 @@
+import { useState } from "react";
 import Label from "./Label";
 import Tooltip from "./Tooltip";
 import { RadiusIcon, BorderWidthIcon } from "@/utils/icons";
+import { sanitizeNumber } from "@/utils/validators";
 
 /**
  * Props for the InputNumber component.
@@ -11,6 +13,10 @@ import { RadiusIcon, BorderWidthIcon } from "@/utils/icons";
  * @property {"radius" | "border-width"} [icon] - Optional icon to display
  * @property {(value: number) => void} [onChange] - Callback when value changes
  * @property {string} [tooltip] - Optional tooltip text
+ * @property {number} [min] - Minimum allowed value
+ * @property {number} [max] - Maximum allowed value
+ * @property {number} [step] - Step increment for arrow buttons
+ * @property {boolean} [showValidation] - Whether to show validation feedback (default: false)
  */
 interface InputNumberProps {
     label: string;
@@ -19,16 +25,32 @@ interface InputNumberProps {
     icon?: "radius" | "border-width";
     onChange?: (value: number) => void;
     tooltip?: string;
+    min?: number;
+    max?: number;
+    step?: number;
+    showValidation?: boolean;
 }
 
 /**
- * Number input component with optional icon and tooltip.
+ * Number input component with validation, optional icon and tooltip.
  *
  * Provides a styled number input with support for contextual icons
- * (radius or border-width) and consistent label alignment.
+ * (radius or border-width), consistent label alignment, and optional
+ * validation with min/max bounds and visual feedback.
  *
  * @param {InputNumberProps} props - Component props
  * @returns {JSX.Element} InputNumber component
+ *
+ * @example
+ * <InputNumber
+ *   label="Border Radius"
+ *   value={radius}
+ *   onChange={setRadius}
+ *   min={0}
+ *   max={50}
+ *   showValidation={true}
+ *   icon="radius"
+ * />
  */
 export default function InputNumber({
     label,
@@ -37,7 +59,16 @@ export default function InputNumber({
     icon,
     onChange,
     tooltip,
+    min = 0,
+    max = 1000,
+    step = 1,
+    showValidation = false,
 }: InputNumberProps) {
+    const [isInvalid, setIsInvalid] = useState(false);
+    const [localValue, setLocalValue] = useState<string>("");
+
+    const currentValue = value ?? defaultValue;
+
     const renderIcon = () => {
         if (icon === "radius") {
             return <RadiusIcon />;
@@ -50,14 +81,70 @@ export default function InputNumber({
         return null;
     };
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const rawValue = e.target.value;
+        setLocalValue(rawValue);
+
+        // Allow empty input during typing
+        if (rawValue === "" || rawValue === "-") {
+            setIsInvalid(false);
+            return;
+        }
+
+        // Sanitize and validate
+        const sanitized = sanitizeNumber(rawValue, { min, max, default: defaultValue });
+
+        // Check if out of range
+        const numValue = parseFloat(rawValue);
+        if (!isNaN(numValue) && (numValue < min || numValue > max)) {
+            setIsInvalid(showValidation);
+        } else {
+            setIsInvalid(false);
+        }
+
+        // Emit validated value
+        onChange?.(sanitized);
+    };
+
+    const handleBlur = () => {
+        // On blur, ensure value is valid
+        setLocalValue("");
+        setIsInvalid(false);
+
+        if (onChange) {
+            const sanitized = sanitizeNumber(currentValue, {
+                min,
+                max,
+                default: defaultValue,
+            });
+            onChange(sanitized);
+        }
+    };
+
+    const displayValue = localValue !== "" ? localValue : currentValue;
+
     const inputElement = (
-        <div className="outline-none w-full cursor-text mt-0.5 flex items-center rounded border border-transparent bg-gray-100 pl-2 transition hover:border-gray-200">
-            {renderIcon()}
+        <div
+            className={`outline-none w-full cursor-text mt-0.5 flex items-center rounded border transition ${
+                isInvalid
+                    ? "border-red-300 bg-red-50 hover:border-red-400"
+                    : "border-transparent bg-gray-100 hover:border-gray-200"
+            }`}
+        >
+            {renderIcon() && <div className="pl-2">{renderIcon()}</div>}
             <input
                 type="number"
-                className="h-6 w-full min-w-[36px] cursor-text rounded border-0 bg-transparent pl-2 pr-1 text-xs transition-colors focus:outline-none text-gray-900"
-                value={value ?? defaultValue}
-                onChange={(e) => onChange?.(parseInt(e.target.value) || 0)}
+                className={`h-6 w-full min-w-[36px] cursor-text rounded border-0 bg-transparent pl-2 pr-1 text-xs transition-colors focus:outline-none ${
+                    isInvalid ? "text-red-700" : "text-gray-900"
+                }`}
+                value={displayValue}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                min={min}
+                max={max}
+                step={step}
+                aria-invalid={isInvalid}
+                aria-describedby={isInvalid ? `${label}-error` : undefined}
             />
         </div>
     );
@@ -65,13 +152,18 @@ export default function InputNumber({
     return (
         <div className="flex px-2">
             <Label>{label}</Label>
-            <div className="flex-1">
+            <div className="flex-1 flex flex-col gap-1">
                 {tooltip ? (
                     <Tooltip content={tooltip} position="bottom">
                         {inputElement}
                     </Tooltip>
                 ) : (
                     inputElement
+                )}
+                {isInvalid && showValidation && (
+                    <div id={`${label}-error`} className="text-xs text-red-600" role="alert">
+                        Value must be between {min} and {max}
+                    </div>
                 )}
             </div>
         </div>

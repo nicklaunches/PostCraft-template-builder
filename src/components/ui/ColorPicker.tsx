@@ -3,6 +3,7 @@ import { HexColorPicker } from "react-colorful";
 import Label from "./Label";
 import Tooltip from "./Tooltip";
 import { PlusIcon, ResetIcon } from "@/utils/icons";
+import { sanitizeHexColor, isValidHexColor } from "@/utils/validators";
 
 /**
  * Props for the ColorPicker component.
@@ -14,6 +15,7 @@ import { PlusIcon, ResetIcon } from "@/utils/icons";
  * @property {string} [tooltip] - Optional tooltip text
  * @property {"inline" | "top"} [labelPosition] - Position of the label relative to the input (default: "inline")
  * @property {"left" | "right"} [position] - Position of the color picker popover (default: "right")
+ * @property {boolean} [showValidation] - Whether to show validation feedback (default: false)
  */
 interface ColorPickerProps {
     label: string;
@@ -23,18 +25,27 @@ interface ColorPickerProps {
     tooltip?: string;
     labelPosition?: "inline" | "top";
     position?: "left" | "right";
+    showValidation?: boolean;
 }
 
 /**
- * Color picker component with popover palette and hex input.
+ * Color picker component with validation, popover palette and hex input.
  *
  * Displays a color swatch that opens a popover with hex color picker.
- * Includes manual hex input and reset functionality. Picker position
- * can be manually controlled via the position prop to accommodate
- * different sidebar layouts.
+ * Includes manual hex input with validation, and reset functionality.
+ * Picker position can be manually controlled via the position prop to
+ * accommodate different sidebar layouts.
  *
  * @param {ColorPickerProps} props - Component props
  * @returns {JSX.Element} Color picker component
+ *
+ * @example
+ * <ColorPicker
+ *   label="Background Color"
+ *   value={bgColor}
+ *   onChange={setBgColor}
+ *   showValidation={true}
+ * />
  */
 export default function ColorPicker({
     label,
@@ -44,10 +55,13 @@ export default function ColorPicker({
     tooltip,
     labelPosition = "inline",
     position = "right",
+    showValidation = false,
 }: ColorPickerProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
+    const [isInvalid, setIsInvalid] = useState(false);
+    const [localValue, setLocalValue] = useState<string>("");
     const containerRef = useRef<HTMLDivElement>(null);
     const pickerRef = useRef<HTMLDivElement>(null);
 
@@ -71,18 +85,55 @@ export default function ColorPicker({
     }, [isOpen]);
 
     const handleColorChange = (newColor: string) => {
-        onChange?.(newColor);
+        const sanitized = sanitizeHexColor(newColor, color);
+        setIsInvalid(false);
+        onChange?.(sanitized);
     };
 
     const handleReset = (e: React.MouseEvent) => {
         e.stopPropagation();
+        setIsInvalid(false);
+        setLocalValue("");
         onChange?.("");
         setIsOpen(false);
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        onChange?.(e.target.value);
+        const rawValue = e.target.value;
+        setLocalValue(rawValue);
+
+        // Allow empty for optional colors
+        if (rawValue === "") {
+            setIsInvalid(false);
+            onChange?.("");
+            return;
+        }
+
+        // Validate hex format
+        if (isValidHexColor(rawValue)) {
+            setIsInvalid(false);
+            const sanitized = sanitizeHexColor(rawValue);
+            onChange?.(sanitized);
+        } else {
+            setIsInvalid(showValidation);
+        }
     };
+
+    const handleInputBlur = () => {
+        setIsFocused(false);
+        setLocalValue("");
+
+        // Sanitize on blur
+        if (color) {
+            const sanitized = sanitizeHexColor(color, defaultValue);
+            if (sanitized !== color) {
+                onChange?.(sanitized);
+            }
+            setIsInvalid(false);
+        }
+    };
+
+    const displayValue = localValue !== "" ? localValue : color;
 
     const colorPickerContent = (
         <div
@@ -94,9 +145,11 @@ export default function ColorPicker({
         >
             <div
                 className={`relative flex w-full items-center rounded border pl-2 transition-colors ${
-                    isOpen
-                        ? "border-gray-300 bg-white"
-                        : "border-transparent bg-gray-100 hover:border-gray-200"
+                    isInvalid
+                        ? "border-red-300 bg-red-50"
+                        : isOpen
+                          ? "border-gray-300 bg-white"
+                          : "border-transparent bg-gray-100 hover:border-gray-200"
                 }`}
             >
                 {/* Color swatch or plus icon */}
@@ -113,15 +166,20 @@ export default function ColorPicker({
 
                 {/* Input or color display */}
                 <div className="relative flex flex-1 items-center justify-between">
-                    {color ? (
+                    {displayValue ? (
                         <div className="flex items-center justify-between w-full">
-                            <span className="pl-2 pr-1 py-1 text-xs text-gray-900 uppercase font-medium">
-                                {color}
+                            <span
+                                className={`pl-2 pr-1 py-1 text-xs uppercase font-medium ${
+                                    isInvalid ? "text-red-700" : "text-gray-900"
+                                }`}
+                            >
+                                {displayValue}
                             </span>
                             {(isHovered || isOpen) && (
                                 <button
                                     onClick={handleReset}
                                     className="h-4 w-4 mr-2 hover:opacity-70 transition-opacity"
+                                    aria-label="Reset color"
                                 >
                                     <ResetIcon />
                                 </button>
@@ -137,16 +195,20 @@ export default function ColorPicker({
                                 </div>
                             )}
                             <input
-                                className="w-full rounded bg-transparent py-1 pl-2 pr-1 text-left text-xs uppercase transition-colors focus:outline-none text-gray-900"
-                                value={color}
+                                className={`w-full rounded bg-transparent py-1 pl-2 pr-1 text-left text-xs uppercase transition-colors focus:outline-none ${
+                                    isInvalid ? "text-red-700" : "text-gray-900"
+                                }`}
+                                value={displayValue}
                                 onChange={handleInputChange}
                                 onClick={(e) => e.stopPropagation()}
                                 onFocus={() => {
                                     setIsFocused(true);
                                     setIsOpen(true);
                                 }}
-                                onBlur={() => setIsFocused(false)}
+                                onBlur={handleInputBlur}
                                 placeholder=""
+                                aria-invalid={isInvalid}
+                                aria-describedby={isInvalid ? `${label}-error` : undefined}
                             />
                         </div>
                     )}
@@ -162,13 +224,25 @@ export default function ColorPicker({
             ) : (
                 <Label>{label}</Label>
             )}
-            <div className={labelPosition === "top" ? "relative" : "flex-1 relative"}>
+            <div
+                className={
+                    labelPosition === "top"
+                        ? "relative flex flex-col gap-1"
+                        : "flex-1 relative flex flex-col gap-1"
+                }
+            >
                 {tooltip ? (
                     <Tooltip content={tooltip} position="bottom">
                         {colorPickerContent}
                     </Tooltip>
                 ) : (
                     colorPickerContent
+                )}
+
+                {isInvalid && showValidation && (
+                    <div id={`${label}-error`} className="text-xs text-red-600" role="alert">
+                        Invalid hex color format (e.g., #fff or #ffffff)
+                    </div>
                 )}
 
                 {/* Color Picker Popover */}

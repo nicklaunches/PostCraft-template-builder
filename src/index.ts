@@ -67,5 +67,22 @@ export {
     cloneBlock,
     createDefaultBlock,
     createBlocksFromTypes,
+    // Validators
+    isValidHexColor,
+    isValidUrl,
+    isPositiveNumber,
+    isInRange,
+    isValidTextContent,
+    isValidHeadingContent,
+    isValidDividerContent,
+    validateBlock,
+    validateBlockStyles,
+    validateEmailStyles,
+    validateTemplateData,
+    sanitizeNumber,
+    sanitizeHexColor,
+    sanitizeUrl,
+    sanitizeString,
+    sanitizeBlockArray,
 } from "./utils";
-export type { BlockType } from "./utils";
+export type { BlockType, ValidationResult, ValidationOptions } from "./utils";
