@@ -1,5 +1,7 @@
-import { Card, Select, Spacing, ColorPicker, InputNumber } from "@/components/ui";
+import { Card, Select, Spacing, ColorPicker, InputNumber, Tooltip } from "@/components/ui";
 import { useGlobalState } from "@/context/GlobalState";
+import ArrowPathIcon from "@heroicons/react/24/outline/ArrowPathIcon";
+import { useState } from "react";
 
 /**
  * Email styles configuration component.
@@ -11,10 +13,30 @@ import { useGlobalState } from "@/context/GlobalState";
  * @returns {JSX.Element} Email styles component
  */
 export default function EmailStyles() {
-    const { emailStyles, updateEmailStyle } = useGlobalState();
+    const { emailStyles, updateEmailStyle, resetEmailStyles } = useGlobalState();
+    const [isSpinning, setIsSpinning] = useState(false);
+
+    const handleReset = () => {
+        setIsSpinning(true);
+        resetEmailStyles();
+        setTimeout(() => setIsSpinning(false), 500);
+    };
 
     return (
-        <Card title="Email styles">
+        <Card
+            title="Email styles"
+            action={
+                <Tooltip content="Reset email styles to default">
+                    <button
+                        onClick={handleReset}
+                        className="flex h-4 w-4 items-center justify-center transition-colors hover:text-gray-600"
+                        title="Reset to defaults"
+                    >
+                        <ArrowPathIcon className={isSpinning ? "animate-spin" : ""} />
+                    </button>
+                </Tooltip>
+            }
+        >
             <Select
                 label="Font"
                 options={[
