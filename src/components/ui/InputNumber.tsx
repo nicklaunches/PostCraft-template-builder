@@ -56,8 +56,7 @@ export default function InputNumber({
             <input
                 type="number"
                 className="h-6 w-full min-w-[36px] cursor-text rounded border-0 bg-transparent pl-2 pr-1 text-xs transition-colors focus:outline-none text-gray-900"
-                value={value}
-                defaultValue={defaultValue}
+                value={value ?? defaultValue}
                 onChange={(e) => onChange?.(parseInt(e.target.value) || 0)}
             />
         </div>

@@ -70,8 +70,7 @@ export default function Spacing({
                     <input
                         type="number"
                         className="h-6 w-full min-w-[36px] cursor-text rounded border-0 bg-transparent pl-2 pr-1 text-xs transition-colors focus:outline-none text-gray-900"
-                        value={horizontal}
-                        defaultValue={defaultHorizontal}
+                        value={horizontal ?? defaultHorizontal}
                         onChange={(e) => handleHorizontalChange(parseInt(e.target.value) || 0)}
                     />
                 </div>
@@ -83,8 +82,7 @@ export default function Spacing({
                     <input
                         type="number"
                         className="h-6 w-full min-w-[36px] cursor-text rounded border-0 bg-transparent pl-2 pr-1 text-xs transition-colors focus:outline-none text-gray-900"
-                        value={vertical}
-                        defaultValue={defaultVertical}
+                        value={vertical ?? defaultVertical}
                         onChange={(e) => handleVerticalChange(parseInt(e.target.value) || 0)}
                     />
                 </div>

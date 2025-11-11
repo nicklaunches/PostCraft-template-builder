@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { EmailStyles } from "@/context/GlobalState";
 import { generateClassName } from "@/utils/helpers";
 
@@ -21,14 +21,14 @@ export function useDynamicCss(
     updateEmailStyle: <K extends keyof EmailStyles>(key: K, value: EmailStyles[K]) => void
 ): { css: string; className: string } {
     // Generate className if it doesn't exist
-    const className = useMemo(() => {
+    useEffect(() => {
         if (!emailStyles.className) {
             const newClassName = generateClassName();
             updateEmailStyle("className", newClassName);
-            return newClassName;
         }
-        return emailStyles.className;
     }, [emailStyles.className, updateEmailStyle]);
+
+    const className = emailStyles.className || "";
 
     const css = useMemo(() => {
         let cssString = `.${className} {\n`;
