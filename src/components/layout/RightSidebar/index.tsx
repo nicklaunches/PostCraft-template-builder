@@ -1,4 +1,4 @@
-import BlockStyles from "@/components/builder/block-styles";
+import BlockStyles from "@/components/panels/BlockStylesPanel";
 
 /**
  * Right sidebar component for block-specific settings.

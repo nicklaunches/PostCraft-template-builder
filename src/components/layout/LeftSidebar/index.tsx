@@ -1,4 +1,4 @@
-import EmailStyles from "@/components/builder/email-styles";
+import EmailStyles from "@/components/panels/EmailStylesPanel";
 
 /**
  * Left sidebar component with email styling controls.
