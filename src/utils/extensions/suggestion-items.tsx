@@ -8,11 +8,15 @@ import type { SuggestionItem } from "./slash-command";
  * Each item includes a title, description, icon, search terms, and the command
  * function to execute when selected.
  *
+ * Commands transform the current paragraph node by first converting its type,
+ * then removing the "/" trigger character. This prevents unwanted extra nodes
+ * from being created in the document structure.
+ *
  * Current commands:
- * - Paragraph: Convert to plain text paragraph
- * - Heading 1: Convert to large heading (h1)
- * - Heading 2: Convert to medium heading (h2)
- * - Heading 3: Convert to small heading (h3)
+ * - Paragraph: Keep as plain text paragraph (removes "/" only)
+ * - Heading 1: Transform current node to large heading (h1)
+ * - Heading 2: Transform current node to medium heading (h2)
+ * - Heading 3: Transform current node to small heading (h3)
  */
 export const suggestionItems: SuggestionItem[] = [
     {
@@ -21,7 +25,15 @@ export const suggestionItems: SuggestionItem[] = [
         searchTerms: ["p", "paragraph", "text"],
         icon: <Bars3BottomLeftIcon className="w-5 h-5" />,
         command: ({ editor, range }) => {
+            console.log("=== Paragraph Command Started ===");
+            console.log("Range before delete:", range);
+            console.log("Editor state before:", editor.state.doc.toJSON());
+
             editor.chain().focus().deleteRange(range).setNode("paragraph").run();
+
+            console.log("Editor state after:", editor.state.doc.toJSON());
+            console.log("HTML output:", editor.getHTML());
+            console.log("=== Paragraph Command Ended ===");
         },
     },
     {
@@ -30,7 +42,15 @@ export const suggestionItems: SuggestionItem[] = [
         searchTerms: ["h1", "heading", "title"],
         icon: <H1Icon className="w-5 h-5" />,
         command: ({ editor, range }) => {
-            editor.chain().focus().deleteRange(range).setNode("heading", { level: 1 }).run();
+            console.log("=== H1 Command Started ===");
+            console.log("Range before:", range);
+            console.log("Editor state before:", editor.state.doc.toJSON());
+
+            editor.chain().focus().setNode("heading", { level: 1 }).deleteRange(range).run();
+
+            console.log("Editor state after:", editor.state.doc.toJSON());
+            console.log("HTML output:", editor.getHTML());
+            console.log("=== H1 Command Ended ===");
         },
     },
     {
@@ -39,7 +59,15 @@ export const suggestionItems: SuggestionItem[] = [
         searchTerms: ["h2", "heading", "subtitle"],
         icon: <H2Icon className="w-5 h-5" />,
         command: ({ editor, range }) => {
-            editor.chain().focus().deleteRange(range).setNode("heading", { level: 2 }).run();
+            console.log("=== H2 Command Started ===");
+            console.log("Range before:", range);
+            console.log("Editor state before:", editor.state.doc.toJSON());
+
+            editor.chain().focus().setNode("heading", { level: 2 }).deleteRange(range).run();
+
+            console.log("Editor state after:", editor.state.doc.toJSON());
+            console.log("HTML output:", editor.getHTML());
+            console.log("=== H2 Command Ended ===");
         },
     },
     {
@@ -48,7 +76,15 @@ export const suggestionItems: SuggestionItem[] = [
         searchTerms: ["h3", "heading", "subheading"],
         icon: <H3Icon className="w-5 h-5" />,
         command: ({ editor, range }) => {
-            editor.chain().focus().deleteRange(range).setNode("heading", { level: 3 }).run();
+            console.log("=== H3 Command Started ===");
+            console.log("Range before:", range);
+            console.log("Editor state before:", editor.state.doc.toJSON());
+
+            editor.chain().focus().setNode("heading", { level: 3 }).deleteRange(range).run();
+
+            console.log("Editor state after:", editor.state.doc.toJSON());
+            console.log("HTML output:", editor.getHTML());
+            console.log("=== H3 Command Ended ===");
         },
     },
 ];
