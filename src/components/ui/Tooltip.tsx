@@ -56,6 +56,7 @@ export default function Tooltip({
         const rect = triggerRef.current.getBoundingClientRect();
         const gap = 8;
         const offset = 4;
+        const padding = 8; // Padding from viewport edges
 
         let top = 0;
         let left = 0;
@@ -77,6 +78,24 @@ export default function Tooltip({
                 top = rect.top + rect.height / 2;
                 left = rect.right + gap;
                 break;
+        }
+
+        // Constrain to viewport bounds
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+
+        // Ensure tooltip stays within horizontal bounds
+        if (left < padding) {
+            left = padding;
+        } else if (left > viewportWidth - padding) {
+            left = viewportWidth - padding;
+        }
+
+        // Ensure tooltip stays within vertical bounds
+        if (top < padding) {
+            top = padding;
+        } else if (top > viewportHeight - padding) {
+            top = viewportHeight - padding;
         }
 
         setCoords({ top, left });
@@ -107,7 +126,7 @@ export default function Tooltip({
 
     const getTooltipClasses = () => {
         const baseClasses =
-            "absolute z-50 px-2 py-1 text-xs text-white bg-gray-900 rounded shadow-lg pointer-events-none whitespace-nowrap";
+            "fixed z-50 px-2 py-1 text-xs text-white bg-gray-900 rounded shadow-lg pointer-events-none whitespace-nowrap";
 
         const positionClasses = {
             top: "-translate-x-1/2 -translate-y-full",
