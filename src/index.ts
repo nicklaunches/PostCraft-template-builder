@@ -15,7 +15,7 @@ export { default as ContentEditor } from "./components/layout/ContentEditor";
 export { default as RightSidebar } from "./components/layout/RightSidebar";
 
 // Hooks
-export { useTemplateBuilder, useEditor } from "./hooks";
+export { useTemplateBuilder, useEditor, useDynamicCss } from "./hooks";
 
 // Context
 export { GlobalStateProvider, useGlobalState } from "./context/GlobalState";

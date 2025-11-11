@@ -1,8 +1,8 @@
-import DragHandle from "@tiptap/extension-drag-handle-react";
-import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useGlobalState } from "@/context/GlobalState";
+import { useDynamicCss } from "@/hooks";
+import { ExtendedTipTap } from "@/components/ui";
+import { generateClassName } from "@/utils/helpers";
 
 /**
  * Props for the ContentEditor component.
@@ -30,20 +30,12 @@ export default function ContentEditor({
     onSave: _onSave,
 }: ContentEditorProps) {
     const { emailStyles } = useGlobalState();
+    const [isEditable, setIsEditable] = useState(true);
 
     // Generate a unique class name for this template
-    const className = useMemo(() => {
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        let result = "postcraft-email-";
-        for (let i = 0; i < 10; i++) {
-            result += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return result;
-    }, []);
+    const className = useMemo(() => generateClassName(), []);
 
-    const editor = useEditor({
-        extensions: [StarterKit],
-        content: `
+    const defaultContent = `
       <h1>
         This is a very unique heading.
       </h1>
@@ -53,46 +45,14 @@ export default function ContentEditor({
       <p>
         And this one, too.
       </p>
-    `,
-    });
+    `;
 
     const toggleEditable = () => {
-        editor?.setEditable(!editor.isEditable);
-        editor?.view.dispatch(editor.view.state.tr);
+        setIsEditable((prev) => !prev);
     };
 
     // Generate dynamic CSS from emailStyles
-    const dynamicCSS = useMemo(() => {
-        let css = `.${className} {\n`;
-
-        css += `  font-family: ${emailStyles.font}, ${emailStyles.fallback};\n`;
-        css += `  padding: ${emailStyles.padding.vertical}px ${emailStyles.padding.horizontal}px;\n`;
-        css += `  margin: ${emailStyles.margin.vertical}px ${emailStyles.margin.horizontal}px;\n`;
-
-        if (emailStyles.bodyColor) {
-            css += `  color: ${emailStyles.bodyColor};\n`;
-        }
-
-        if (emailStyles.backgroundColor) {
-            css += `  background-color: ${emailStyles.backgroundColor};\n`;
-        }
-
-        if (emailStyles.radius > 0) {
-            css += `  border-radius: ${emailStyles.radius}px;\n`;
-        }
-
-        if (emailStyles.borderWidth > 0) {
-            css += `  border-width: ${emailStyles.borderWidth}px;\n`;
-            css += `  border-style: solid;\n`;
-
-            if (emailStyles.borderColor) {
-                css += `  border-color: ${emailStyles.borderColor};\n`;
-            }
-        }
-
-        css += `}`;
-        return css;
-    }, [className, emailStyles]);
+    const dynamicCSS = useDynamicCss(className, emailStyles);
 
     return (
         <main className="flex-1 overflow-y-auto bg-gray-100">
@@ -106,27 +66,10 @@ export default function ContentEditor({
                         Toggle editable
                     </button>
                 </div>
-                <DragHandle editor={editor}>
-                    <div className="flex items-center justify-center w-6 h-6 bg-gray-100 border border-black/10 rounded cursor-grab">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth="1.5"
-                            stroke="currentColor"
-                            className="w-4 h-4"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M3.75 9h16.5m-16.5 6.75h16.5"
-                            />
-                        </svg>
-                    </div>
-                </DragHandle>
-                <EditorContent
-                    editor={editor}
-                    className={`${className} bg-white [&_.ProseMirror]:outline-none [&_.ProseMirror]:focus:outline-none transition-all duration-200`}
+                <ExtendedTipTap
+                    initialContent={defaultContent}
+                    className={className}
+                    editable={isEditable}
                 />
             </div>
         </main>
