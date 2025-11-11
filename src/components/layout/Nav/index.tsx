@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function Nav() {
     return (
         <nav className="flex h-16 items-center justify-between border-b px-4">

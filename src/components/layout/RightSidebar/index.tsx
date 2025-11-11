@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function RightSidebar() {
     return (
         <aside className="w-64 border-l bg-gray-50 p-4">
