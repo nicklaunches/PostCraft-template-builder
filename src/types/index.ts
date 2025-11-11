@@ -56,6 +56,10 @@ export interface TemplateBuilderProps {
  * @property {number} paddingRight - Right padding in pixels
  * @property {number} paddingTop - Top padding in pixels
  * @property {number} paddingBottom - Bottom padding in pixels
+ * @property {number} marginLeft - Left margin in pixels
+ * @property {number} marginRight - Right margin in pixels
+ * @property {number} marginTop - Top margin in pixels
+ * @property {number} marginBottom - Bottom margin in pixels
  * @property {string} backgroundColor - Background color (hex)
  */
 export interface BlockStyles {
@@ -65,6 +69,10 @@ export interface BlockStyles {
     paddingRight: number;
     paddingTop: number;
     paddingBottom: number;
+    marginLeft: number;
+    marginRight: number;
+    marginTop: number;
+    marginBottom: number;
     backgroundColor: string;
 }
 

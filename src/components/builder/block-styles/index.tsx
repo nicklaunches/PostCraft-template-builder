@@ -122,6 +122,18 @@ export default function BlockStyles() {
                 );
             }
 
+            // Margin
+            if (
+                styles.marginLeft > 0 ||
+                styles.marginRight > 0 ||
+                styles.marginTop > 0 ||
+                styles.marginBottom > 0
+            ) {
+                styleArray.push(
+                    `margin: ${styles.marginTop}px ${styles.marginRight}px ${styles.marginBottom}px ${styles.marginLeft}px`
+                );
+            }
+
             // Radius (border-radius)
             if (styles.borderWidth > 0) {
                 styleArray.push(`border-radius: ${styles.borderWidth}px`);
@@ -258,6 +270,28 @@ export default function BlockStyles() {
                     updateBlockStyle(currentBlockId, "paddingBottom", value)
                 }
                 tooltip="Vertical padding (top and bottom)"
+            />
+
+            <Spacing
+                label="X Margin"
+                horizontal={currentBlockStyles.marginLeft}
+                vertical={currentBlockStyles.marginRight}
+                onHorizontalChange={(value) =>
+                    updateBlockStyle(currentBlockId, "marginLeft", value)
+                }
+                onVerticalChange={(value) => updateBlockStyle(currentBlockId, "marginRight", value)}
+                tooltip="Horizontal margin (left and right)"
+            />
+
+            <Spacing
+                label="Y Margin"
+                horizontal={currentBlockStyles.marginTop}
+                vertical={currentBlockStyles.marginBottom}
+                onHorizontalChange={(value) => updateBlockStyle(currentBlockId, "marginTop", value)}
+                onVerticalChange={(value) =>
+                    updateBlockStyle(currentBlockId, "marginBottom", value)
+                }
+                tooltip="Vertical margin (top and bottom)"
             />
 
             <ColorPicker

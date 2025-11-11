@@ -104,6 +104,10 @@ const defaultBlockStyles: BlockStyles = {
     paddingRight: 0,
     paddingTop: 0,
     paddingBottom: 0,
+    marginLeft: 0,
+    marginRight: 0,
+    marginTop: 0,
+    marginBottom: 0,
     backgroundColor: "",
 };
 
