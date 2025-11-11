@@ -1,6 +1,7 @@
 import DragHandle from "@tiptap/extension-drag-handle-react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { useState } from "react";
 
 export interface ContentEditorProps {
     initialContent?: string;
@@ -11,6 +12,8 @@ export default function ContentEditor({
     initialContent: _initialContent,
     onSave: _onSave,
 }: ContentEditorProps) {
+    const [bgColor, setBgColor] = useState("bg-white");
+
     const editor = useEditor({
         extensions: [StarterKit],
         content: `
@@ -31,11 +34,18 @@ export default function ContentEditor({
         editor.view.dispatch(editor.view.state.tr);
     };
 
+    const changeColor = () => {
+        const colors = ["bg-red-100", "bg-green-100", "bg-blue-100"];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        setBgColor(randomColor);
+    };
+
     return (
         <main className="flex-1 overflow-y-auto bg-gray-100">
             <div className="mx-auto px-8 py-16 max-w-[600px]">
-                <div className="mb-8">
+                <div className="mb-8 flex gap-4">
                     <button onClick={toggleEditable}>Toggle editable</button>
+                    <button onClick={changeColor}>Change color</button>
                 </div>
                 <DragHandle editor={editor}>
                     <div className="flex items-center justify-center w-6 h-6 bg-gray-100 border border-black/10 rounded cursor-grab">
@@ -57,7 +67,7 @@ export default function ContentEditor({
                 </DragHandle>
                 <EditorContent
                     editor={editor}
-                    className="[&_.ProseMirror]:outline-none [&_.ProseMirror]:focus:outline-none"
+                    className={`${bgColor} [&_.ProseMirror]:outline-none [&_.ProseMirror]:focus:outline-none`}
                 />
             </div>
         </main>
