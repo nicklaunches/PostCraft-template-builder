@@ -23,13 +23,22 @@ export { GlobalStateProvider, useGlobalState } from "./context/GlobalState";
 // Types
 export type * from "./types";
 
-// Constants
+// Utilities
 export {
+    // Converters
+    blocksToHTML,
+    blocksToJSON,
+    blocksFromJSON,
+    generateEmailTemplate,
+    // Helpers
+    generateClassName,
+    generateBlockId,
+    // Constants
     BLOCK_TYPES,
     DEFAULT_EMAIL_STYLES,
     DEFAULT_BLOCK_STYLES,
     FONT_OPTIONS,
     FALLBACK_OPTIONS,
     MAX_HISTORY_SIZE,
-} from "./utils/constants";
-export type { BlockType } from "./utils/constants";
+} from "./utils";
+export type { BlockType } from "./utils";

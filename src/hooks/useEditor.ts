@@ -3,6 +3,7 @@ import type { Block } from "../types";
 import { useEditorState } from "./useEditorState";
 import { useEditorSelection } from "./useEditorSelection";
 import { useEditorHistory } from "./useEditorHistory";
+import { blocksToHTML } from "@/utils/converters";
 
 /**
  * Custom hook for managing email template editor state and operations.
@@ -60,22 +61,7 @@ export function useEditor(initialContent?: Block[]) {
     );
 
     const exportToHTML = useCallback(() => {
-        // Convert blocks to HTML email template
-        return blocks
-            .map((block) => {
-                // This is a simplified version
-                switch (block.type) {
-                    case "text":
-                        return `<p>${block.content}</p>`;
-                    case "heading":
-                        return `<h2>${block.content}</h2>`;
-                    case "button":
-                        return `<a href="${(block.content as { url?: string; text?: string }).url}">${(block.content as { url?: string; text?: string }).text}</a>`;
-                    default:
-                        return "";
-                }
-            })
-            .join("\n");
+        return blocksToHTML(blocks);
     }, [blocks]);
 
     return {
