@@ -1,16 +1,12 @@
 /**
- * Slash command extensions module exports.
+ * TipTap extensions module exports.
  *
- * Provides a TipTap extension for slash commands, allowing users to quickly
- * insert different block types by typing "/" followed by a command name.
- * Includes the command extension, suggestion items, and utility functions.
+ * Provides custom TipTap extensions including slash commands for quick
+ * formatting and block-level nodes with style support.
  */
 
-export {
-    Command,
-    renderItems,
-    createSuggestionItems,
-    handleCommandNavigation,
-} from "./slash-command";
+export { Command, renderItems } from "./slash-command";
+export { ParagraphWithStyle } from "./paragraph-with-style";
+export { HeadingWithStyle } from "./heading-with-style";
 export type { SuggestionItem } from "./slash-command";
 export { suggestionItems } from "./suggestion-items";

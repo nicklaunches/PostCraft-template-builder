@@ -13,6 +13,7 @@ import { PlusIcon, ResetIcon } from "@/utils/icons";
  * @property {(value: string) => void} [onChange] - Callback when color changes
  * @property {string} [tooltip] - Optional tooltip text
  * @property {"inline" | "top"} [labelPosition] - Position of the label relative to the input (default: "inline")
+ * @property {"left" | "right"} [position] - Position of the color picker popover (default: "right")
  */
 interface ColorPickerProps {
     label: string;
@@ -21,14 +22,16 @@ interface ColorPickerProps {
     onChange?: (value: string) => void;
     tooltip?: string;
     labelPosition?: "inline" | "top";
+    position?: "left" | "right";
 }
 
 /**
  * Color picker component with popover palette and hex input.
  *
  * Displays a color swatch that opens a popover with hex color picker.
- * Includes manual hex input and reset functionality. Automatically
- * positions the picker based on available screen space.
+ * Includes manual hex input and reset functionality. Picker position
+ * can be manually controlled via the position prop to accommodate
+ * different sidebar layouts.
  *
  * @param {ColorPickerProps} props - Component props
  * @returns {JSX.Element} Color picker component
@@ -40,11 +43,11 @@ export default function ColorPicker({
     onChange,
     tooltip,
     labelPosition = "inline",
+    position = "right",
 }: ColorPickerProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
-    const [pickerPosition, setPickerPosition] = useState<"left" | "right">("right");
     const containerRef = useRef<HTMLDivElement>(null);
     const pickerRef = useRef<HTMLDivElement>(null);
 
@@ -65,24 +68,6 @@ export default function ColorPicker({
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [isOpen]);
-
-    // Calculate picker position based on available space
-    useEffect(() => {
-        if (isOpen && containerRef.current) {
-            const rect = containerRef.current.getBoundingClientRect();
-            const spaceOnRight = window.innerWidth - rect.right;
-            const spaceOnLeft = rect.left;
-            const pickerWidth = 240; // Approximate width of color picker
-
-            setPickerPosition(
-                spaceOnRight >= pickerWidth
-                    ? "right"
-                    : spaceOnLeft >= pickerWidth
-                      ? "left"
-                      : "right"
-            );
-        }
     }, [isOpen]);
 
     const handleColorChange = (newColor: string) => {
@@ -191,7 +176,7 @@ export default function ColorPicker({
                     <div
                         ref={pickerRef}
                         className={`absolute top-0 z-50 ${
-                            pickerPosition === "right" ? "left-full ml-2" : "right-full mr-2"
+                            position === "right" ? "left-full ml-2" : "right-full mr-2"
                         }`}
                     >
                         <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-3">

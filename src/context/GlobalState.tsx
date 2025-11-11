@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from "react";
+import type { Editor } from "@tiptap/react";
 
 /**
  * Email styling configuration interface.
@@ -33,7 +34,7 @@ export interface EmailStyles {
  * Block styling configuration interface.
  *
  * @property {"left" | "center" | "right"} alignment - Text/content alignment
- * @property {number} borderWidth - Border width in pixels
+ * @property {number} borderWidth - Border radius in pixels (note: property name is borderWidth but represents radius)
  * @property {{ horizontal: number; vertical: number }} padding - Inner spacing (X and Y)
  * @property {string} backgroundColor - Background color (hex)
  */
@@ -53,6 +54,8 @@ export interface BlockStyles {
  * @property {BlockStyles} blockStyles - Current block styling configuration
  * @property {<K extends keyof BlockStyles>(key: K, value: BlockStyles[K]) => void} updateBlockStyle - Update a specific block style property
  * @property {() => void} resetBlockStyles - Reset all block styles to defaults
+ * @property {Editor | null} editor - TipTap editor instance
+ * @property {(editor: Editor | null) => void} setEditor - Set the TipTap editor instance
  */
 interface GlobalStateContextType {
     emailStyles: EmailStyles;
@@ -61,6 +64,8 @@ interface GlobalStateContextType {
     blockStyles: BlockStyles;
     updateBlockStyle: <K extends keyof BlockStyles>(key: K, value: BlockStyles[K]) => void;
     resetBlockStyles: () => void;
+    editor: Editor | null;
+    setEditor: (editor: Editor | null) => void;
 }
 
 const defaultEmailStyles: EmailStyles = {
@@ -98,6 +103,7 @@ const GlobalStateContext = createContext<GlobalStateContextType | undefined>(und
 export function GlobalStateProvider({ children }: { children: ReactNode }) {
     const [emailStyles, setEmailStyles] = useState<EmailStyles>(defaultEmailStyles);
     const [blockStyles, setBlockStyles] = useState<BlockStyles>(defaultBlockStyles);
+    const [editor, setEditor] = useState<Editor | null>(null);
 
     const updateEmailStyle = <K extends keyof EmailStyles>(key: K, value: EmailStyles[K]) => {
         setEmailStyles((prev) => ({
@@ -130,6 +136,8 @@ export function GlobalStateProvider({ children }: { children: ReactNode }) {
                 blockStyles,
                 updateBlockStyle,
                 resetBlockStyles,
+                editor,
+                setEditor,
             }}
         >
             {children}

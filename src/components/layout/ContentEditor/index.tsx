@@ -28,20 +28,10 @@ export default function ContentEditor({
     initialContent: _initialContent,
     onSave: _onSave,
 }: ContentEditorProps) {
-    const { emailStyles, updateEmailStyle } = useGlobalState();
+    const { emailStyles, updateEmailStyle, setEditor } = useGlobalState();
     const [isEditable, setIsEditable] = useState(true);
 
-    const defaultContent = `
-      <h1>
-        This is a very unique heading.
-      </h1>
-      <p>
-        This is a unique paragraph. It's so unique, it even has an ID attached to it.
-      </p>
-      <p>
-        And this one, too.
-      </p>
-    `;
+    const defaultContent = `<h1>This is a very unique heading.</h1><p>This is a unique paragraph. It's so unique, it even has an ID attached to it.</p><p>And this one, too.</p>`;
 
     const toggleEditable = () => {
         setIsEditable((prev) => !prev);
@@ -69,6 +59,7 @@ export default function ContentEditor({
                     initialContent={defaultContent}
                     className={className}
                     editable={isEditable}
+                    onEditorReady={setEditor}
                 />
             </div>
         </main>

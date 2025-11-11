@@ -2,7 +2,7 @@ import DragHandle from "@tiptap/extension-drag-handle-react";
 import { EditorContent, useEditor, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect } from "react";
-import { Command, renderItems } from "@/utils/extensions";
+import { Command, renderItems, ParagraphWithStyle, HeadingWithStyle } from "@/utils/extensions";
 
 /**
  * Props for the ExtendedTipTap component.
@@ -41,7 +41,11 @@ export default function ExtendedTipTap({
         extensions: [
             StarterKit.configure({
                 gapcursor: false,
+                paragraph: false, // Disable default paragraph
+                heading: false, // Disable default heading
             }),
+            ParagraphWithStyle,
+            HeadingWithStyle,
             Command.configure({
                 suggestion: {
                     items: () => [],
@@ -53,6 +57,11 @@ export default function ExtendedTipTap({
         editable,
         onUpdate: ({ editor }) => {
             onChange?.(editor.getHTML());
+        },
+        editorProps: {
+            attributes: {
+                class: "focus:outline-none",
+            },
         },
     });
 
