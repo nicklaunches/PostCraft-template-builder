@@ -55,7 +55,10 @@ export default function ContentEditor({
                         </svg>
                     </div>
                 </DragHandle>
-                <EditorContent editor={editor} />
+                <EditorContent
+                    editor={editor}
+                    className="[&_.ProseMirror]:outline-none [&_.ProseMirror]:focus:outline-none"
+                />
             </div>
         </main>
     );
