@@ -1,4 +1,4 @@
-import TemplateBuilder from "@/components/TemplateBuilder";
+import TemplateBuilder from "@/components/layout/TemplateBuilder";
 import { useTemplateBuilder } from "@/hooks/useTemplateBuilder";
 import { useEditor } from "@/hooks/useEditor";
 

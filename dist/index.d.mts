@@ -1,5 +1,5 @@
-import * as react from 'react';
-import react__default from 'react';
+import * as react from "react";
+import react__default from "react";
 
 interface TemplateBuilderProps$1 {
     showNav?: boolean;
@@ -8,7 +8,13 @@ interface TemplateBuilderProps$1 {
     onSave?: (content: any) => void;
     initialContent?: any;
 }
-declare function TemplateBuilder({ showNav, showLeftSidebar, showRightSidebar, onSave, initialContent, }: TemplateBuilderProps$1): react.JSX.Element;
+declare function TemplateBuilder({
+    showNav,
+    showLeftSidebar,
+    showRightSidebar,
+    onSave,
+    initialContent,
+}: TemplateBuilderProps$1): react.JSX.Element;
 
 declare function Nav(): react__default.JSX.Element;
 
@@ -18,7 +24,10 @@ interface ContentEditorProps$1 {
     initialContent?: string;
     onSave?: (content: string) => void;
 }
-declare function ContentEditor({ initialContent: _initialContent, onSave: _onSave, }: ContentEditorProps$1): react.JSX.Element;
+declare function ContentEditor({
+    initialContent: _initialContent,
+    onSave: _onSave,
+}: ContentEditorProps$1): react.JSX.Element;
 
 declare function RightSidebar(): react__default.JSX.Element;
 
@@ -83,4 +92,16 @@ interface ContentEditorProps {
     onSave?: (content: any) => void;
 }
 
-export { type Block, ContentEditor, type ContentEditorProps, LeftSidebar, Nav, RightSidebar, TemplateBuilder, type TemplateBuilderProps, type TemplateData, useEditor, useTemplateBuilder };
+export {
+    type Block,
+    ContentEditor,
+    type ContentEditorProps,
+    LeftSidebar,
+    Nav,
+    RightSidebar,
+    TemplateBuilder,
+    type TemplateBuilderProps,
+    type TemplateData,
+    useEditor,
+    useTemplateBuilder,
+};
