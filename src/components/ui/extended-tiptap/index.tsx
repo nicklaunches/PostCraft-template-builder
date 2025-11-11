@@ -83,24 +83,77 @@ export default function ExtendedTipTap({
         return null;
     }
 
+    const handlePlusClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const { state } = editor;
+        const { selection } = state;
+        const { $from } = selection;
+
+        // Find the end position of the current block
+        let depth = $from.depth;
+        let currentBlockPos = $from.pos;
+
+        while (depth > 0) {
+            const node = $from.node(depth);
+            if (node.type.name === "paragraph" || node.type.name === "heading") {
+                currentBlockPos = $from.after(depth);
+                break;
+            }
+            depth--;
+        }
+
+        // Insert a new paragraph after the current block
+        // Then insert "/" which triggers the slash command menu
+        // The "/" will be automatically removed when user selects a command
+        editor
+            .chain()
+            .focus()
+            .insertContentAt(currentBlockPos, { type: "paragraph", content: [] })
+            .setTextSelection(currentBlockPos + 1)
+            .command(({ tr, dispatch }) => {
+                if (dispatch) {
+                    tr.insertText("/");
+                }
+
+                return true;
+            })
+            .run();
+    };
+
     return (
         <>
             <DragHandle editor={editor}>
-                <div className="flex items-center justify-center w-6 h-6 bg-gray-100 border border-black/10 rounded cursor-grab">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="w-4 h-4"
+                <div className="flex items-center gap-1">
+                    <button
+                        onClick={handlePlusClick}
+                        className="flex items-center justify-center w-6 h-6 bg-gray-100 border border-black/10 rounded cursor-pointer hover:bg-gray-50 transition-colors"
+                        title="Insert block"
                     >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M3.75 9h16.5m-16.5 6.75h16.5"
-                        />
-                    </svg>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            className="w-4 h-4"
+                        >
+                            <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z"></path>
+                        </svg>
+                    </button>
+                    <div className="flex items-center justify-center w-6 h-6 bg-gray-100 border border-black/10 rounded cursor-grab">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            className="w-4 h-4"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M2 4.75A.75.75 0 0 1 2.75 4h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 4.75ZM2 10a.75.75 0 0 1 .75-.75h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 10Zm0 5.25a.75.75 0 0 1 .75-.75h14.5a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1-.75-.75Z"
+                                clipRule="evenodd"
+                            />
+                        </svg>
+                    </div>
                 </div>
             </DragHandle>
             <EditorContent
