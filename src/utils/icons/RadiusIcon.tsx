@@ -1,3 +1,11 @@
+/**
+ * Radius icon component.
+ *
+ * Displays a small square with border to represent border radius visually.
+ * The radius is set to 0px by default but could be adjusted.
+ *
+ * @returns {JSX.Element} Radius icon
+ */
 export default function RadiusIcon() {
     return (
         <div className="relative size-3 overflow-hidden">

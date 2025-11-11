@@ -1,6 +1,14 @@
 import { ReactNode, useState, useRef, useEffect, cloneElement, isValidElement } from "react";
 import { createPortal } from "react-dom";
 
+/**
+ * Props for the Tooltip component.
+ *
+ * @property {ReactNode} [content] - Tooltip content to display
+ * @property {ReactNode} children - Element to attach tooltip to
+ * @property {number} [delay] - Delay in ms before showing tooltip
+ * @property {"top" | "bottom" | "left" | "right"} [position] - Tooltip position relative to trigger
+ */
 interface TooltipProps {
     content?: ReactNode;
     children: ReactNode;
@@ -8,6 +16,16 @@ interface TooltipProps {
     position?: "top" | "bottom" | "left" | "right";
 }
 
+/**
+ * Tooltip component with configurable position and delay.
+ *
+ * Displays a tooltip on hover/focus with customizable positioning.
+ * Rendered using React portals to avoid z-index issues. If no content
+ * is provided, renders children without tooltip wrapper.
+ *
+ * @param {TooltipProps} props - Component props
+ * @returns {JSX.Element} Tooltip wrapper component
+ */
 export default function Tooltip({
     content,
     children,

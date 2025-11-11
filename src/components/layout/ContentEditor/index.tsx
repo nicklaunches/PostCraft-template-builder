@@ -4,11 +4,27 @@ import StarterKit from "@tiptap/starter-kit";
 import { useMemo } from "react";
 import { useGlobalState } from "@/context/GlobalState";
 
+/**
+ * Props for the ContentEditor component.
+ *
+ * @property {string} [initialContent] - Initial content to load in the editor
+ * @property {(content: string) => void} [onSave] - Callback when content is saved
+ */
 export interface ContentEditorProps {
     initialContent?: string;
     onSave?: (content: string) => void;
 }
 
+/**
+ * Rich text content editor with drag handle and dynamic styling.
+ *
+ * Provides a TipTap-based WYSIWYG editor with drag-and-drop block reordering.
+ * Applies email styles from global state dynamically via CSS-in-JS. Includes
+ * a toggle for editable mode.
+ *
+ * @param {ContentEditorProps} props - Component props
+ * @returns {JSX.Element} Content editor component
+ */
 export default function ContentEditor({
     initialContent: _initialContent,
     onSave: _onSave,

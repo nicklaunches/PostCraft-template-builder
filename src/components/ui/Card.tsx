@@ -1,8 +1,23 @@
+/**
+ * Props for the Card component.
+ *
+ * @property {string} title - Card title displayed in header
+ * @property {React.ReactNode} children - Content to render inside the card
+ */
 interface CardProps {
     title: string;
     children: React.ReactNode;
 }
 
+/**
+ * Card container component with title header.
+ *
+ * Provides a consistent card layout with a title header and content area
+ * for grouping related UI elements.
+ *
+ * @param {CardProps} props - Component props
+ * @returns {JSX.Element} Card component
+ */
 export default function Card({ title, children }: CardProps) {
     return (
         <div className="space-y-4 py-4">

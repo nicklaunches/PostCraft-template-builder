@@ -2,6 +2,19 @@ import Label from "./Label";
 import Tooltip from "./Tooltip";
 import { PaddingHorizontalIcon, PaddingVerticalIcon } from "@/utils/icons";
 
+/**
+ * Props for the Spacing component.
+ *
+ * @property {string} label - Label text displayed for the spacing control
+ * @property {number} [horizontal] - Controlled horizontal spacing value
+ * @property {number} [vertical] - Controlled vertical spacing value
+ * @property {number} [defaultHorizontal] - Default horizontal value if uncontrolled
+ * @property {number} [defaultVertical] - Default vertical value if uncontrolled
+ * @property {(value: { horizontal: number; vertical: number }) => void} [onChange] - Callback with both values
+ * @property {(value: number) => void} [onHorizontalChange] - Callback for horizontal changes
+ * @property {(value: number) => void} [onVerticalChange] - Callback for vertical changes
+ * @property {string} [tooltip] - Optional tooltip text
+ */
 interface SpacingProps {
     label: string;
     horizontal?: number;
@@ -14,6 +27,15 @@ interface SpacingProps {
     tooltip?: string;
 }
 
+/**
+ * Spacing input control for horizontal and vertical values.
+ *
+ * Provides dual number inputs with icons for managing spacing properties
+ * like padding or margin with separate horizontal and vertical values.
+ *
+ * @param {SpacingProps} props - Component props
+ * @returns {JSX.Element} Spacing component
+ */
 export default function Spacing({
     label,
     horizontal,

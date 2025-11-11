@@ -1,3 +1,11 @@
+/**
+ * Plus icon component.
+ *
+ * Simple plus/add icon used for adding new items or colors.
+ * Rendered as an SVG with centered cross design.
+ *
+ * @returns {JSX.Element} Plus icon
+ */
 export default function PlusIcon() {
     return (
         <svg

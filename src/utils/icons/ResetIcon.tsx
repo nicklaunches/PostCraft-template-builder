@@ -1,3 +1,11 @@
+/**
+ * Reset icon component.
+ *
+ * Circle with X mark used for reset/clear actions.
+ * Commonly used to reset color values or clear inputs.
+ *
+ * @returns {JSX.Element} Reset icon
+ */
 export default function ResetIcon() {
     return (
         <svg

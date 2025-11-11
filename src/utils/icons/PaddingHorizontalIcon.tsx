@@ -1,3 +1,11 @@
+/**
+ * Padding horizontal icon component.
+ *
+ * Visual representation of horizontal padding with vertical lines on sides
+ * and a centered rectangle to show the concept of left/right spacing.
+ *
+ * @returns {JSX.Element} PaddingHorizontal icon
+ */
 export default function PaddingHorizontalIcon() {
     return (
         <svg

@@ -1,6 +1,15 @@
 import { Card, Select, Spacing, ColorPicker, InputNumber } from "@/components/ui";
 import { useGlobalState } from "@/context/GlobalState";
 
+/**
+ * Left sidebar component with email styling controls.
+ *
+ * Provides a control panel for configuring global email styles including
+ * fonts, colors, spacing, borders, and other visual properties. Updates
+ * are applied to global state and reflected in the content editor.
+ *
+ * @returns {JSX.Element} Left sidebar component
+ */
 export default function LeftSidebar() {
     const { emailStyles, updateEmailStyle } = useGlobalState();
 

@@ -1,3 +1,10 @@
+/**
+ * Main exports for PostCraft Template Builder.
+ *
+ * Provides both the full TemplateBuilder component and modular exports
+ * for individual layout components, hooks, context, and types.
+ */
+
 // Full builder export
 export { default as TemplateBuilder } from "./components/layout/TemplateBuilder";
 

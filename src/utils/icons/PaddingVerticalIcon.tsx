@@ -1,3 +1,11 @@
+/**
+ * Padding vertical icon component.
+ *
+ * Visual representation of vertical padding with horizontal lines on top/bottom
+ * and a centered rectangle to show the concept of top/bottom spacing.
+ *
+ * @returns {JSX.Element} PaddingVertical icon
+ */
 export default function PaddingVerticalIcon() {
     return (
         <svg

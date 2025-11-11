@@ -2,6 +2,16 @@ import Label from "./Label";
 import Tooltip from "./Tooltip";
 import { RadiusIcon, BorderWidthIcon } from "@/utils/icons";
 
+/**
+ * Props for the InputNumber component.
+ *
+ * @property {string} label - Label text displayed for the input
+ * @property {number} [value] - Controlled numeric value
+ * @property {number} [defaultValue] - Default value if uncontrolled
+ * @property {"radius" | "border-width"} [icon] - Optional icon to display
+ * @property {(value: number) => void} [onChange] - Callback when value changes
+ * @property {string} [tooltip] - Optional tooltip text
+ */
 interface InputNumberProps {
     label: string;
     value?: number;
@@ -11,6 +21,15 @@ interface InputNumberProps {
     tooltip?: string;
 }
 
+/**
+ * Number input component with optional icon and tooltip.
+ *
+ * Provides a styled number input with support for contextual icons
+ * (radius or border-width) and consistent label alignment.
+ *
+ * @param {InputNumberProps} props - Component props
+ * @returns {JSX.Element} InputNumber component
+ */
 export default function InputNumber({
     label,
     value,

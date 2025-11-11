@@ -4,6 +4,15 @@ import Label from "./Label";
 import Tooltip from "./Tooltip";
 import { PlusIcon, ResetIcon } from "@/utils/icons";
 
+/**
+ * Props for the ColorPicker component.
+ *
+ * @property {string} label - Label text displayed above picker
+ * @property {string} [value] - Controlled color value (hex format)
+ * @property {string} [defaultValue] - Default color if uncontrolled
+ * @property {(value: string) => void} [onChange] - Callback when color changes
+ * @property {string} [tooltip] - Optional tooltip text
+ */
 interface ColorPickerProps {
     label: string;
     value?: string;
@@ -12,6 +21,16 @@ interface ColorPickerProps {
     tooltip?: string;
 }
 
+/**
+ * Color picker component with popover palette and hex input.
+ *
+ * Displays a color swatch that opens a popover with hex color picker.
+ * Includes manual hex input and reset functionality. Automatically
+ * positions the picker based on available screen space.
+ *
+ * @param {ColorPickerProps} props - Component props
+ * @returns {JSX.Element} Color picker component
+ */
 export default function ColorPicker({
     label,
     value,

@@ -1,3 +1,11 @@
+/**
+ * Border width icon component.
+ *
+ * Displays three horizontal lines of increasing thickness to represent
+ * border width options visually.
+ *
+ * @returns {JSX.Element} BorderWidth icon
+ */
 export default function BorderWidthIcon() {
     return (
         <div className="relative size-5 overflow-visible">

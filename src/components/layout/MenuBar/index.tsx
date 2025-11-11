@@ -1,10 +1,25 @@
 import React from "react";
 import { Editor } from "@tiptap/react";
 
+/**
+ * Props for the MenuBar component.
+ *
+ * @property {Editor | null} editor - TipTap editor instance
+ */
 interface MenuBarProps {
     editor: Editor | null;
 }
 
+/**
+ * Editor toolbar with text formatting controls.
+ *
+ * Provides buttons for common text formatting operations like bold, italic,
+ * headings, and lists. Buttons show active state when corresponding format
+ * is applied to selected text.
+ *
+ * @param {MenuBarProps} props - Component props
+ * @returns {JSX.Element | null} Menu bar component or null if no editor
+ */
 export default function MenuBar({ editor }: MenuBarProps) {
     if (!editor) {
         return null;
