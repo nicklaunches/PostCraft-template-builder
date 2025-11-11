@@ -170,13 +170,96 @@ export default function BlockStyles() {
     };
 
     const handleDuplicateBlock = () => {
-        // TODO: Implement duplicate block functionality
-        console.log("Duplicate current block");
+        if (!editor || !currentBlockId) return;
+
+        const { state } = editor;
+        const { selection } = state;
+        const { $from } = selection;
+
+        // Find the parent block node and its position
+        let depth = $from.depth;
+        let blockNode = null;
+        let blockPos = 0;
+
+        while (depth > 0) {
+            const node = $from.node(depth);
+            if (node.type.name === "paragraph" || node.type.name === "heading") {
+                if (node.attrs.id === currentBlockId) {
+                    blockNode = node;
+                    blockPos = $from.before(depth);
+                    break;
+                }
+            }
+            depth--;
+        }
+
+        if (!blockNode) return;
+
+        // Get current block styles
+        const currentStyles = getBlockStyles(currentBlockId);
+
+        // Create a duplicate node with a new ID using block factory approach
+        const newId = `block-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+
+        // Clone the node with new attributes
+        const duplicatedNode = blockNode.type.create(
+            { ...blockNode.attrs, id: newId },
+            blockNode.content
+        );
+
+        // Insert the duplicated node after the current one
+        const transaction = state.tr.insert(blockPos + blockNode.nodeSize, duplicatedNode);
+        editor.view.dispatch(transaction);
+
+        // Copy the block styles to the new block
+        Object.entries(currentStyles).forEach(([key, value]) => {
+            updateBlockStyle(newId, key as keyof typeof currentStyles, value);
+        });
+
+        // Select the duplicated block
+        setSelectedBlockId(newId);
+
+        console.log("Block duplicated:", currentBlockId, "->", newId);
     };
 
     const handleDeleteBlock = () => {
-        // TODO: Implement delete block functionality
-        console.log("Delete current block");
+        if (!editor || !currentBlockId) return;
+
+        const { state } = editor;
+        const { selection } = state;
+        const { $from } = selection;
+
+        // Find the parent block node and its position
+        let depth = $from.depth;
+        let blockPos = 0;
+        let blockSize = 0;
+
+        while (depth > 0) {
+            const node = $from.node(depth);
+            if (node.type.name === "paragraph" || node.type.name === "heading") {
+                if (node.attrs.id === currentBlockId) {
+                    blockPos = $from.before(depth);
+                    blockSize = node.nodeSize;
+                    break;
+                }
+            }
+            depth--;
+        }
+
+        if (!blockSize) return;
+
+        // Delete the node
+        const transaction = state.tr.delete(blockPos, blockPos + blockSize);
+        editor.view.dispatch(transaction);
+
+        // Clean up block styles
+        // Note: We don't have a deleteBlockStyles function exported from GlobalState
+        // This would be a good enhancement to add
+
+        // Clear selection
+        setSelectedBlockId(null);
+
+        console.log("Block deleted:", currentBlockId);
     };
 
     // If no block is selected, show a message

@@ -36,3 +36,16 @@ export {
     isValidBlockArray,
     toTypedBlock,
 } from "./type-guards";
+
+// Block Factories
+export {
+    createBlock,
+    createTextBlock,
+    createHeadingBlock,
+    createButtonBlock,
+    createImageBlock,
+    createDividerBlock,
+    cloneBlock,
+    createDefaultBlock,
+    createBlocksFromTypes,
+} from "./factories/blockFactory";

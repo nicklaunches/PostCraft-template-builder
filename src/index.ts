@@ -52,5 +52,15 @@ export {
     FONT_OPTIONS,
     FALLBACK_OPTIONS,
     MAX_HISTORY_SIZE,
+    // Block Factories
+    createBlock,
+    createTextBlock,
+    createHeadingBlock,
+    createButtonBlock,
+    createImageBlock,
+    createDividerBlock,
+    cloneBlock,
+    createDefaultBlock,
+    createBlocksFromTypes,
 } from "./utils";
 export type { BlockType } from "./utils";
