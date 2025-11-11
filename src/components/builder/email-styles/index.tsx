@@ -70,13 +70,6 @@ export default function EmailStyles() {
                 tooltip="Inner spacing of the email container"
             />
 
-            <ColorPicker
-                label="Body"
-                value={emailStyles.bodyColor}
-                onChange={(value) => updateEmailStyle("bodyColor", value)}
-                tooltip="Text color for email content"
-            />
-
             <Spacing
                 label="Margin"
                 horizontal={emailStyles.margin.horizontal}
@@ -86,10 +79,27 @@ export default function EmailStyles() {
             />
 
             <ColorPicker
-                label="Background"
+                label="Text color"
+                value={emailStyles.bodyColor}
+                onChange={(value) => updateEmailStyle("bodyColor", value)}
+                tooltip="Text color for email content"
+                labelPosition="top"
+            />
+
+            <ColorPicker
+                label="Content background"
+                value={emailStyles.contentBackgroundColor}
+                onChange={(value) => updateEmailStyle("contentBackgroundColor", value)}
+                tooltip="Background color of the email content container"
+                labelPosition="top"
+            />
+
+            <ColorPicker
+                label="Page background"
                 value={emailStyles.backgroundColor}
                 onChange={(value) => updateEmailStyle("backgroundColor", value)}
-                tooltip="Background color of the email container"
+                tooltip="Background color of the page"
+                labelPosition="top"
             />
 
             <InputNumber

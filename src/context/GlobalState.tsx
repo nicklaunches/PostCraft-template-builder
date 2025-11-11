@@ -9,7 +9,8 @@ import { createContext, useContext, useState, ReactNode } from "react";
  * @property {{ horizontal: number; vertical: number }} padding - Inner spacing
  * @property {string} bodyColor - Text color (hex)
  * @property {{ horizontal: number; vertical: number }} margin - Outer spacing
- * @property {string} backgroundColor - Background color (hex)
+ * @property {string} backgroundColor - Page background color (hex)
+ * @property {string} contentBackgroundColor - Content container background color (hex)
  * @property {number} radius - Border radius in pixels
  * @property {number} borderWidth - Border width in pixels
  * @property {string} borderColor - Border color (hex)
@@ -22,6 +23,7 @@ export interface EmailStyles {
     bodyColor: string;
     margin: { horizontal: number; vertical: number };
     backgroundColor: string;
+    contentBackgroundColor: string;
     radius: number;
     borderWidth: number;
     borderColor: string;
@@ -46,7 +48,8 @@ const defaultEmailStyles: EmailStyles = {
     padding: { horizontal: 24, vertical: 12 },
     bodyColor: "",
     margin: { horizontal: 0, vertical: 24 },
-    backgroundColor: "",
+    backgroundColor: "#f3f4f6",
+    contentBackgroundColor: "",
     radius: 0,
     borderWidth: 0,
     borderColor: "",

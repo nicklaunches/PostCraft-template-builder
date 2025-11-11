@@ -51,7 +51,10 @@ export default function ContentEditor({
     const { css: dynamicCSS, className } = useDynamicCss(emailStyles, updateEmailStyle);
 
     return (
-        <main className="flex-1 overflow-y-auto bg-gray-100">
+        <main
+            className="flex-1 overflow-y-auto"
+            style={{ backgroundColor: emailStyles.backgroundColor }}
+        >
             <style>{dynamicCSS}</style>
             <div className="mx-auto px-8 py-16 max-w-[600px]">
                 <div className="mb-8 flex gap-4">

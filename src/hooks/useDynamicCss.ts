@@ -41,8 +41,8 @@ export function useDynamicCss(
             cssString += `  color: ${emailStyles.bodyColor};\n`;
         }
 
-        if (emailStyles.backgroundColor) {
-            cssString += `  background-color: ${emailStyles.backgroundColor};\n`;
+        if (emailStyles.contentBackgroundColor) {
+            cssString += `  background-color: ${emailStyles.contentBackgroundColor};\n`;
         }
 
         if (emailStyles.radius > 0) {

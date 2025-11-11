@@ -12,6 +12,7 @@ import { PlusIcon, ResetIcon } from "@/utils/icons";
  * @property {string} [defaultValue] - Default color if uncontrolled
  * @property {(value: string) => void} [onChange] - Callback when color changes
  * @property {string} [tooltip] - Optional tooltip text
+ * @property {"inline" | "top"} [labelPosition] - Position of the label relative to the input (default: "inline")
  */
 interface ColorPickerProps {
     label: string;
@@ -19,6 +20,7 @@ interface ColorPickerProps {
     defaultValue?: string;
     onChange?: (value: string) => void;
     tooltip?: string;
+    labelPosition?: "inline" | "top";
 }
 
 /**
@@ -37,6 +39,7 @@ export default function ColorPicker({
     defaultValue = "",
     onChange,
     tooltip,
+    labelPosition = "inline",
 }: ColorPickerProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
@@ -168,9 +171,13 @@ export default function ColorPicker({
     );
 
     return (
-        <div className="flex px-2">
-            <Label>{label}</Label>
-            <div className="flex-1 relative">
+        <div className={labelPosition === "top" ? "px-2 space-y-1" : "flex px-2"}>
+            {labelPosition === "top" ? (
+                <div className="text-xs font-medium text-gray-600">{label}</div>
+            ) : (
+                <Label>{label}</Label>
+            )}
+            <div className={labelPosition === "top" ? "relative" : "flex-1 relative"}>
                 {tooltip ? (
                     <Tooltip content={tooltip} position="bottom">
                         {colorPickerContent}
