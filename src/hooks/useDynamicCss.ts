@@ -1,5 +1,5 @@
 import { useMemo, useEffect } from "react";
-import { EmailStyles } from "@/context/GlobalState";
+import type { EmailStyles } from "@/types";
 import { generateClassName } from "@/utils/helpers";
 
 /**
