@@ -39,7 +39,9 @@ export default function ExtendedTipTap({
 }: ExtendedTipTapProps) {
     const editor = useEditor({
         extensions: [
-            StarterKit,
+            StarterKit.configure({
+                gapcursor: false,
+            }),
             Command.configure({
                 suggestion: {
                     items: () => [],

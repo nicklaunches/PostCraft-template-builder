@@ -25,15 +25,7 @@ export const suggestionItems: SuggestionItem[] = [
         searchTerms: ["p", "paragraph", "text"],
         icon: <Bars3BottomLeftIcon className="w-5 h-5" />,
         command: ({ editor, range }) => {
-            console.log("=== Paragraph Command Started ===");
-            console.log("Range before delete:", range);
-            console.log("Editor state before:", editor.state.doc.toJSON());
-
             editor.chain().focus().deleteRange(range).setNode("paragraph").run();
-
-            console.log("Editor state after:", editor.state.doc.toJSON());
-            console.log("HTML output:", editor.getHTML());
-            console.log("=== Paragraph Command Ended ===");
         },
     },
     {
@@ -42,15 +34,7 @@ export const suggestionItems: SuggestionItem[] = [
         searchTerms: ["h1", "heading", "title"],
         icon: <H1Icon className="w-5 h-5" />,
         command: ({ editor, range }) => {
-            console.log("=== H1 Command Started ===");
-            console.log("Range before:", range);
-            console.log("Editor state before:", editor.state.doc.toJSON());
-
-            editor.chain().focus().setNode("heading", { level: 1 }).deleteRange(range).run();
-
-            console.log("Editor state after:", editor.state.doc.toJSON());
-            console.log("HTML output:", editor.getHTML());
-            console.log("=== H1 Command Ended ===");
+            editor.chain().focus().deleteRange(range).setNode("heading", { level: 1 }).run();
         },
     },
     {
@@ -59,15 +43,7 @@ export const suggestionItems: SuggestionItem[] = [
         searchTerms: ["h2", "heading", "subtitle"],
         icon: <H2Icon className="w-5 h-5" />,
         command: ({ editor, range }) => {
-            console.log("=== H2 Command Started ===");
-            console.log("Range before:", range);
-            console.log("Editor state before:", editor.state.doc.toJSON());
-
-            editor.chain().focus().setNode("heading", { level: 2 }).deleteRange(range).run();
-
-            console.log("Editor state after:", editor.state.doc.toJSON());
-            console.log("HTML output:", editor.getHTML());
-            console.log("=== H2 Command Ended ===");
+            editor.chain().focus().deleteRange(range).setNode("heading", { level: 2 }).run();
         },
     },
     {
@@ -76,15 +52,7 @@ export const suggestionItems: SuggestionItem[] = [
         searchTerms: ["h3", "heading", "subheading"],
         icon: <H3Icon className="w-5 h-5" />,
         command: ({ editor, range }) => {
-            console.log("=== H3 Command Started ===");
-            console.log("Range before:", range);
-            console.log("Editor state before:", editor.state.doc.toJSON());
-
-            editor.chain().focus().setNode("heading", { level: 3 }).deleteRange(range).run();
-
-            console.log("Editor state after:", editor.state.doc.toJSON());
-            console.log("HTML output:", editor.getHTML());
-            console.log("=== H3 Command Ended ===");
+            editor.chain().focus().deleteRange(range).setNode("heading", { level: 3 }).run();
         },
     },
 ];
