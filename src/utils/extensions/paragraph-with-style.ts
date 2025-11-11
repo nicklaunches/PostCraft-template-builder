@@ -27,7 +27,7 @@ export const ParagraphWithStyle = Node.create({
             style: {
                 default: null,
                 parseHTML: (element: HTMLElement) => element.getAttribute("style"),
-                renderHTML: (attributes: Record<string, any>) => {
+                renderHTML: (attributes: Record<string, unknown>) => {
                     if (!attributes.style) {
                         return {};
                     }

@@ -143,7 +143,7 @@ export default function Tooltip({
         return <>{children}</>;
     }
 
-    const childElement = cloneElement(children as React.ReactElement<any>, {
+    const childElement = cloneElement(children as React.ReactElement<Record<string, unknown>>, {
         ref: triggerRef,
         onMouseEnter: (e: React.MouseEvent) => {
             handleMouseEnter();

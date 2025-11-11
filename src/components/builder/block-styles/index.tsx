@@ -52,7 +52,6 @@ export default function BlockStyles() {
             // Get the parent block node (paragraph, heading, etc.) instead of the text node
             let depth = $from.depth;
             let parentNode = null;
-            let parentPos = null;
 
             // Walk up the tree to find a block-level node
             while (depth > 0) {
@@ -64,16 +63,11 @@ export default function BlockStyles() {
 
                 if (node.type.name === "paragraph" || node.type.name === "heading") {
                     parentNode = node;
-                    parentPos = $from.before(depth);
                     break;
                 }
+
                 depth--;
             }
-
-            console.log("BlockStyles: Found parent node", {
-                node: parentNode ? { type: parentNode.type.name, attrs: parentNode.attrs } : null,
-                pos: parentPos,
-            });
 
             if (!parentNode) {
                 console.log("BlockStyles: No valid block node found in selection");

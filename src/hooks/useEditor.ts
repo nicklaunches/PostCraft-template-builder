@@ -5,14 +5,14 @@ import { useState, useCallback } from "react";
  *
  * @property {string} id - Unique identifier for the block
  * @property {"text" | "heading" | "image" | "button" | "divider"} type - Type of content block
- * @property {any} content - Block content data (varies by type)
- * @property {Record<string, any>} [styles] - Optional custom styles for the block
+ * @property {unknown} content - Block content data (varies by type)
+ * @property {Record<string, unknown>} [styles] - Optional custom styles for the block
  */
 export interface Block {
     id: string;
     type: "text" | "heading" | "image" | "button" | "divider";
-    content: any;
-    styles?: Record<string, any>;
+    content: unknown;
+    styles?: Record<string, unknown>;
 }
 
 /**
@@ -105,7 +105,7 @@ export function useEditor(initialContent?: Block[]) {
                     case "heading":
                         return `<h2>${block.content}</h2>`;
                     case "button":
-                        return `<a href="${block.content.url}">${block.content.text}</a>`;
+                        return `<a href="${(block.content as { url?: string; text?: string }).url}">${(block.content as { url?: string; text?: string }).text}</a>`;
                     default:
                         return "";
                 }

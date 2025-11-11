@@ -9,15 +9,15 @@ import RightSidebar from "../RightSidebar";
  * @property {boolean} [showNav] - Whether to display the navigation bar
  * @property {boolean} [showLeftSidebar] - Whether to display the left sidebar
  * @property {boolean} [showRightSidebar] - Whether to display the right sidebar
- * @property {(content: any) => void} [onSave] - Callback when content is saved
- * @property {any} [initialContent] - Initial content to load in the builder
+ * @property {(content: unknown) => void} [onSave] - Callback when content is saved
+ * @property {unknown} [initialContent] - Initial content to load in the builder
  */
 export interface TemplateBuilderProps {
     showNav?: boolean;
     showLeftSidebar?: boolean;
     showRightSidebar?: boolean;
-    onSave?: (content: any) => void;
-    initialContent?: any;
+    onSave?: (content: unknown) => void;
+    initialContent?: unknown;
 }
 
 /**

@@ -6,14 +6,14 @@ import { useState, useCallback } from "react";
  * @property {string} [id] - Unique template identifier
  * @property {string} name - Template name/title
  * @property {string} [subject] - Email subject line
- * @property {any} content - Template content data
+ * @property {unknown} content - Template content data
  * @property {Date} [updatedAt] - Last update timestamp
  */
 export interface TemplateData {
     id?: string;
     name: string;
     subject?: string;
-    content: any;
+    content: unknown;
     updatedAt?: Date;
 }
 

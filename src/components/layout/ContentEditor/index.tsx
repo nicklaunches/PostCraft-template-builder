@@ -6,12 +6,12 @@ import { ExtendedTipTap } from "@/components/ui";
 /**
  * Props for the ContentEditor component.
  *
- * @property {any} [initialContent] - Initial content to load in the editor
- * @property {(content: any) => void} [onSave] - Callback when content is saved
+ * @property {unknown} [initialContent] - Initial content to load in the editor
+ * @property {(content: unknown) => void} [onSave] - Callback when content is saved
  */
 export interface ContentEditorProps {
-    initialContent?: any;
-    onSave?: (content: any) => void;
+    initialContent?: unknown;
+    onSave?: (content: unknown) => void;
 }
 
 /**
