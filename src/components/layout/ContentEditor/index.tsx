@@ -15,6 +15,16 @@ export default function ContentEditor({
 }: ContentEditorProps) {
     const { emailStyles } = useGlobalState();
 
+    // Generate a unique class name for this template
+    const className = useMemo(() => {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let result = "postcraft-email-";
+        for (let i = 0; i < 10; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
+    }, []);
+
     const editor = useEditor({
         extensions: [StarterKit],
         content: `
@@ -35,40 +45,42 @@ export default function ContentEditor({
         editor?.view.dispatch(editor.view.state.tr);
     };
 
-    // Generate dynamic inline styles from emailStyles
-    const containerStyle = useMemo(() => {
-        const style: React.CSSProperties = {
-            fontFamily: `${emailStyles.font}, ${emailStyles.fallback}`,
-            padding: `${emailStyles.padding.vertical}px ${emailStyles.padding.horizontal}px`,
-            margin: `${emailStyles.margin.vertical}px ${emailStyles.margin.horizontal}px`,
-        };
+    // Generate dynamic CSS from emailStyles
+    const dynamicCSS = useMemo(() => {
+        let css = `.${className} {\n`;
+
+        css += `  font-family: ${emailStyles.font}, ${emailStyles.fallback};\n`;
+        css += `  padding: ${emailStyles.padding.vertical}px ${emailStyles.padding.horizontal}px;\n`;
+        css += `  margin: ${emailStyles.margin.vertical}px ${emailStyles.margin.horizontal}px;\n`;
 
         if (emailStyles.bodyColor) {
-            style.color = emailStyles.bodyColor;
+            css += `  color: ${emailStyles.bodyColor};\n`;
         }
 
         if (emailStyles.backgroundColor) {
-            style.backgroundColor = emailStyles.backgroundColor;
+            css += `  background-color: ${emailStyles.backgroundColor};\n`;
         }
 
         if (emailStyles.radius > 0) {
-            style.borderRadius = `${emailStyles.radius}px`;
+            css += `  border-radius: ${emailStyles.radius}px;\n`;
         }
 
         if (emailStyles.borderWidth > 0) {
-            style.borderWidth = `${emailStyles.borderWidth}px`;
-            style.borderStyle = "solid";
+            css += `  border-width: ${emailStyles.borderWidth}px;\n`;
+            css += `  border-style: solid;\n`;
 
             if (emailStyles.borderColor) {
-                style.borderColor = emailStyles.borderColor;
+                css += `  border-color: ${emailStyles.borderColor};\n`;
             }
         }
 
-        return style;
-    }, [emailStyles]);
+        css += `}`;
+        return css;
+    }, [className, emailStyles]);
 
     return (
         <main className="flex-1 overflow-y-auto bg-gray-100">
+            <style>{dynamicCSS}</style>
             <div className="mx-auto px-8 py-16 max-w-[600px]">
                 <div className="mb-8 flex gap-4">
                     <button
@@ -98,8 +110,7 @@ export default function ContentEditor({
                 </DragHandle>
                 <EditorContent
                     editor={editor}
-                    style={containerStyle}
-                    className="bg-white [&_.ProseMirror]:outline-none [&_.ProseMirror]:focus:outline-none transition-all duration-200"
+                    className={`${className} bg-white [&_.ProseMirror]:outline-none [&_.ProseMirror]:focus:outline-none transition-all duration-200`}
                 />
             </div>
         </main>

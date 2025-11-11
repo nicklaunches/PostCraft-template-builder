@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { HexColorPicker } from "react-colorful";
 import Label from "./Label";
+import Tooltip from "./Tooltip";
 import { PlusIcon, ResetIcon } from "@/utils/icons";
 
 interface ColorPickerProps {
@@ -8,6 +9,7 @@ interface ColorPickerProps {
     value?: string;
     defaultValue?: string;
     onChange?: (value: string) => void;
+    tooltip?: string;
 }
 
 export default function ColorPicker({
@@ -15,6 +17,7 @@ export default function ColorPicker({
     value,
     defaultValue = "",
     onChange,
+    tooltip,
 }: ColorPickerProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
@@ -79,78 +82,88 @@ export default function ColorPicker({
         onChange?.(e.target.value);
     };
 
+    const colorPickerContent = (
+        <div
+            ref={containerRef}
+            className="relative w-full cursor-pointer"
+            onClick={() => setIsOpen(!isOpen)}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
+            <div
+                className={`relative flex w-full items-center rounded border pl-2 transition-colors ${
+                    isOpen
+                        ? "border-gray-300 bg-white"
+                        : "border-transparent bg-gray-100 hover:border-gray-200"
+                }`}
+            >
+                {/* Color swatch or plus icon */}
+                <div className="cursor-pointer h-4 w-4 min-w-[1rem] overflow-hidden rounded outline-0 focus:outline-0">
+                    {color ? (
+                        <div
+                            className="h-full w-full rounded border border-gray-300"
+                            style={{ backgroundColor: color }}
+                        />
+                    ) : (
+                        <PlusIcon />
+                    )}
+                </div>
+
+                {/* Input or color display */}
+                <div className="relative flex flex-1 items-center justify-between">
+                    {color ? (
+                        <div className="flex items-center justify-between w-full">
+                            <span className="pl-2 pr-1 py-1 text-xs text-gray-900 uppercase font-medium">
+                                {color}
+                            </span>
+                            {(isHovered || isOpen) && (
+                                <button
+                                    onClick={handleReset}
+                                    className="h-4 w-4 mr-2 hover:opacity-70 transition-opacity"
+                                >
+                                    <ResetIcon />
+                                </button>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="relative flex items-center justify-center flex-1">
+                            {!isFocused && (
+                                <div className="absolute left-1 top-1/2 flex -translate-y-1/2 items-center pr-0.5 text-xs pointer-events-none">
+                                    <span className="absolute whitespace-nowrap pt-0.5 text-xs text-gray-500">
+                                        Color
+                                    </span>
+                                </div>
+                            )}
+                            <input
+                                className="w-full rounded bg-transparent py-1 pl-2 pr-1 text-left text-xs uppercase transition-colors focus:outline-none text-gray-900"
+                                value={color}
+                                onChange={handleInputChange}
+                                onClick={(e) => e.stopPropagation()}
+                                onFocus={() => {
+                                    setIsFocused(true);
+                                    setIsOpen(true);
+                                }}
+                                onBlur={() => setIsFocused(false)}
+                                placeholder=""
+                            />
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+
     return (
         <div className="flex px-2">
             <Label>{label}</Label>
             <div className="flex-1 relative">
-                <div
-                    ref={containerRef}
-                    className="relative w-full cursor-pointer"
-                    onClick={() => setIsOpen(!isOpen)}
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
-                >
-                    <div
-                        className={`relative flex w-full items-center rounded border pl-2 transition-colors ${
-                            isOpen
-                                ? "border-gray-300 bg-white"
-                                : "border-transparent bg-gray-100 hover:border-gray-200"
-                        }`}
-                    >
-                        {/* Color swatch or plus icon */}
-                        <div className="cursor-pointer h-4 w-4 min-w-[1rem] overflow-hidden rounded outline-0 focus:outline-0">
-                            {color ? (
-                                <div
-                                    className="h-full w-full rounded border border-gray-300"
-                                    style={{ backgroundColor: color }}
-                                />
-                            ) : (
-                                <PlusIcon />
-                            )}
-                        </div>
-
-                        {/* Input or color display */}
-                        <div className="relative flex flex-1 items-center justify-between">
-                            {color ? (
-                                <div className="flex items-center justify-between w-full">
-                                    <span className="pl-2 pr-1 py-1 text-xs text-gray-900 uppercase font-medium">
-                                        {color}
-                                    </span>
-                                    {(isHovered || isOpen) && (
-                                        <button
-                                            onClick={handleReset}
-                                            className="h-4 w-4 mr-2 hover:opacity-70 transition-opacity"
-                                        >
-                                            <ResetIcon />
-                                        </button>
-                                    )}
-                                </div>
-                            ) : (
-                                <div className="relative flex items-center justify-center flex-1">
-                                    {!isFocused && (
-                                        <div className="absolute left-1 top-1/2 flex -translate-y-1/2 items-center pr-0.5 text-xs pointer-events-none">
-                                            <span className="absolute whitespace-nowrap pt-0.5 text-xs text-gray-500">
-                                                Color
-                                            </span>
-                                        </div>
-                                    )}
-                                    <input
-                                        className="w-full rounded bg-transparent py-1 pl-2 pr-1 text-left text-xs uppercase transition-colors focus:outline-none text-gray-900"
-                                        value={color}
-                                        onChange={handleInputChange}
-                                        onClick={(e) => e.stopPropagation()}
-                                        onFocus={() => {
-                                            setIsFocused(true);
-                                            setIsOpen(true);
-                                        }}
-                                        onBlur={() => setIsFocused(false)}
-                                        placeholder=""
-                                    />
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
+                {tooltip ? (
+                    <Tooltip content={tooltip} position="bottom">
+                        {colorPickerContent}
+                    </Tooltip>
+                ) : (
+                    colorPickerContent
+                )}
 
                 {/* Color Picker Popover */}
                 {isOpen && (

@@ -18,6 +18,7 @@ export default function LeftSidebar() {
                         ]}
                         value={emailStyles.font}
                         onChange={(value) => updateEmailStyle("font", value)}
+                        tooltip="Primary font family for email content"
                     />
 
                     <Select
@@ -29,6 +30,7 @@ export default function LeftSidebar() {
                         ]}
                         value={emailStyles.fallback}
                         onChange={(value) => updateEmailStyle("fallback", value)}
+                        tooltip="Font fallback for unsupported email clients"
                     />
 
                     <Spacing
@@ -36,12 +38,14 @@ export default function LeftSidebar() {
                         horizontal={emailStyles.padding.horizontal}
                         vertical={emailStyles.padding.vertical}
                         onChange={(value) => updateEmailStyle("padding", value)}
+                        tooltip="Inner spacing of the email container"
                     />
 
                     <ColorPicker
                         label="Body"
                         value={emailStyles.bodyColor}
                         onChange={(value) => updateEmailStyle("bodyColor", value)}
+                        tooltip="Text color for email content"
                     />
 
                     <Spacing
@@ -49,12 +53,14 @@ export default function LeftSidebar() {
                         horizontal={emailStyles.margin.horizontal}
                         vertical={emailStyles.margin.vertical}
                         onChange={(value) => updateEmailStyle("margin", value)}
+                        tooltip="Outer spacing around the email container"
                     />
 
                     <ColorPicker
                         label="Background"
                         value={emailStyles.backgroundColor}
                         onChange={(value) => updateEmailStyle("backgroundColor", value)}
+                        tooltip="Background color of the email container"
                     />
 
                     <InputNumber
@@ -62,6 +68,7 @@ export default function LeftSidebar() {
                         icon="radius"
                         value={emailStyles.radius}
                         onChange={(value) => updateEmailStyle("radius", value)}
+                        tooltip="Border radius for rounded corners"
                     />
 
                     <InputNumber
@@ -69,12 +76,14 @@ export default function LeftSidebar() {
                         icon="border-width"
                         value={emailStyles.borderWidth}
                         onChange={(value) => updateEmailStyle("borderWidth", value)}
+                        tooltip="Thickness of the container border"
                     />
 
                     <ColorPicker
                         label="Border color"
                         value={emailStyles.borderColor}
                         onChange={(value) => updateEmailStyle("borderColor", value)}
+                        tooltip="Color of the container border"
                     />
                 </Card>
             </div>
