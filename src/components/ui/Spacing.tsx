@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { Label } from "./Label";
 import { Tooltip } from "./Tooltip";
 import { PaddingHorizontalIcon, PaddingVerticalIcon } from "@/utils/icons";
 import { sanitizeNumber } from "@/utils/validators/sanitizers";
+import { useValidatedInput } from "@/hooks/useValidatedInput";
 
 /**
  * Props for the Spacing component.
@@ -73,99 +73,41 @@ export function Spacing({
     max = 1000,
     showValidation = false,
 }: SpacingProps) {
-    const [horizontalInvalid, setHorizontalInvalid] = useState(false);
-    const [verticalInvalid, setVerticalInvalid] = useState(false);
-    const [localHorizontal, setLocalHorizontal] = useState<string>("");
-    const [localVertical, setLocalVertical] = useState<string>("");
+    const horizontalInput = useValidatedInput({
+        value: horizontal,
+        defaultValue: defaultHorizontal,
+        onChange: (value) => {
+            if (onChange) {
+                onChange({ horizontal: value, vertical: verticalInput.currentValue });
+            }
+            onHorizontalChange?.(value);
+        },
+        validate: (val) => {
+            const numValue = parseFloat(String(val));
+            return !isNaN(numValue) && numValue >= min && numValue <= max;
+        },
+        sanitize: (val) => sanitizeNumber(val, { min, max, default: defaultHorizontal }),
+        showValidation,
+    });
 
-    const currentHorizontal = horizontal ?? defaultHorizontal;
-    const currentVertical = vertical ?? defaultVertical;
+    const verticalInput = useValidatedInput({
+        value: vertical,
+        defaultValue: defaultVertical,
+        onChange: (value) => {
+            if (onChange) {
+                onChange({ horizontal: horizontalInput.currentValue, vertical: value });
+            }
+            onVerticalChange?.(value);
+        },
+        validate: (val) => {
+            const numValue = parseFloat(String(val));
+            return !isNaN(numValue) && numValue >= min && numValue <= max;
+        },
+        sanitize: (val) => sanitizeNumber(val, { min, max, default: defaultVertical }),
+        showValidation,
+    });
 
-    const handleHorizontalChange = (rawValue: string) => {
-        setLocalHorizontal(rawValue);
-
-        // Allow empty input during typing
-        if (rawValue === "" || rawValue === "-") {
-            setHorizontalInvalid(false);
-            return;
-        }
-
-        const sanitized = sanitizeNumber(rawValue, { min, max, default: defaultHorizontal });
-
-        // Check if out of range
-        const numValue = parseFloat(rawValue);
-        if (!isNaN(numValue) && (numValue < min || numValue > max)) {
-            setHorizontalInvalid(showValidation);
-        } else {
-            setHorizontalInvalid(false);
-        }
-
-        if (onChange) {
-            onChange({ horizontal: sanitized, vertical: currentVertical });
-        }
-        onHorizontalChange?.(sanitized);
-    };
-
-    const handleVerticalChange = (rawValue: string) => {
-        setLocalVertical(rawValue);
-
-        // Allow empty input during typing
-        if (rawValue === "" || rawValue === "-") {
-            setVerticalInvalid(false);
-            return;
-        }
-
-        const sanitized = sanitizeNumber(rawValue, { min, max, default: defaultVertical });
-
-        // Check if out of range
-        const numValue = parseFloat(rawValue);
-        if (!isNaN(numValue) && (numValue < min || numValue > max)) {
-            setVerticalInvalid(showValidation);
-        } else {
-            setVerticalInvalid(false);
-        }
-
-        if (onChange) {
-            onChange({ horizontal: currentHorizontal, vertical: sanitized });
-        }
-        onVerticalChange?.(sanitized);
-    };
-
-    const handleHorizontalBlur = () => {
-        setLocalHorizontal("");
-        setHorizontalInvalid(false);
-
-        const sanitized = sanitizeNumber(currentHorizontal, {
-            min,
-            max,
-            default: defaultHorizontal,
-        });
-
-        if (onChange) {
-            onChange({ horizontal: sanitized, vertical: currentVertical });
-        }
-        onHorizontalChange?.(sanitized);
-    };
-
-    const handleVerticalBlur = () => {
-        setLocalVertical("");
-        setVerticalInvalid(false);
-
-        const sanitized = sanitizeNumber(currentVertical, {
-            min,
-            max,
-            default: defaultVertical,
-        });
-
-        if (onChange) {
-            onChange({ horizontal: currentHorizontal, vertical: sanitized });
-        }
-        onVerticalChange?.(sanitized);
-    };
-
-    const displayHorizontal = localHorizontal !== "" ? localHorizontal : currentHorizontal;
-    const displayVertical = localVertical !== "" ? localVertical : currentVertical;
-    const hasError = horizontalInvalid || verticalInvalid;
+    const hasError = horizontalInput.isInvalid || verticalInput.isInvalid;
 
     const spacingInputs = (
         <div className="flex flex-col gap-1">
@@ -174,7 +116,7 @@ export function Spacing({
                 <div className="flex-1">
                     <div
                         className={`outline-none w-full cursor-text flex items-center rounded border transition ${
-                            horizontalInvalid
+                            horizontalInput.isInvalid
                                 ? "border-red-300 bg-red-50 hover:border-red-400"
                                 : "border-transparent bg-gray-100 hover:border-gray-200"
                         }`}
@@ -185,14 +127,14 @@ export function Spacing({
                         <input
                             type="number"
                             className={`h-6 w-full min-w-[46px] cursor-text rounded border-0 bg-transparent pl-2 pr-1 text-xs transition-colors focus:outline-none ${
-                                horizontalInvalid ? "text-red-700" : "text-gray-900"
+                                horizontalInput.isInvalid ? "text-red-700" : "text-gray-900"
                             }`}
-                            value={displayHorizontal}
-                            onChange={(e) => handleHorizontalChange(e.target.value)}
-                            onBlur={handleHorizontalBlur}
+                            value={horizontalInput.displayValue}
+                            onChange={(e) => horizontalInput.handleChange(e.target.value)}
+                            onBlur={horizontalInput.handleBlur}
                             min={min}
                             max={max}
-                            aria-invalid={horizontalInvalid}
+                            aria-invalid={horizontalInput.isInvalid}
                             aria-label={`${label} horizontal`}
                         />
                     </div>
@@ -201,7 +143,7 @@ export function Spacing({
                 <div className="flex-1">
                     <div
                         className={`outline-none w-full cursor-text flex items-center rounded border transition ${
-                            verticalInvalid
+                            verticalInput.isInvalid
                                 ? "border-red-300 bg-red-50 hover:border-red-400"
                                 : "border-transparent bg-gray-100 hover:border-gray-200"
                         }`}
@@ -212,14 +154,14 @@ export function Spacing({
                         <input
                             type="number"
                             className={`h-6 w-full min-w-[46px] cursor-text rounded border-0 bg-transparent pl-2 pr-1 text-xs transition-colors focus:outline-none ${
-                                verticalInvalid ? "text-red-700" : "text-gray-900"
+                                verticalInput.isInvalid ? "text-red-700" : "text-gray-900"
                             }`}
-                            value={displayVertical}
-                            onChange={(e) => handleVerticalChange(e.target.value)}
-                            onBlur={handleVerticalBlur}
+                            value={verticalInput.displayValue}
+                            onChange={(e) => verticalInput.handleChange(e.target.value)}
+                            onBlur={verticalInput.handleBlur}
                             min={min}
                             max={max}
-                            aria-invalid={verticalInvalid}
+                            aria-invalid={verticalInput.isInvalid}
                             aria-label={`${label} vertical`}
                         />
                     </div>

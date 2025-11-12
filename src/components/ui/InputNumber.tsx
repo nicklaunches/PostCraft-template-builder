@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { Label } from "./Label";
 import { Tooltip } from "./Tooltip";
 import { RadiusIcon, BorderWidthIcon, FontSizeIcon, LineHeightIcon } from "@/utils/icons";
 import { sanitizeNumber } from "@/utils/validators/sanitizers";
+import { useValidatedInput } from "@/hooks/useValidatedInput";
 
 /**
  * Props for the InputNumber component.
@@ -68,10 +68,17 @@ export function InputNumber({
     showValidation = false,
     suffix,
 }: InputNumberProps) {
-    const [isInvalid, setIsInvalid] = useState(false);
-    const [localValue, setLocalValue] = useState<string>("");
-
-    const currentValue = value ?? defaultValue;
+    const numberInput = useValidatedInput({
+        value,
+        defaultValue,
+        onChange,
+        validate: (val) => {
+            const numValue = parseFloat(String(val));
+            return !isNaN(numValue) && numValue >= min && numValue <= max;
+        },
+        sanitize: (val) => sanitizeNumber(val, { min, max, default: defaultValue }),
+        showValidation,
+    });
 
     const renderIcon = () => {
         if (icon === "radius") {
@@ -93,52 +100,10 @@ export function InputNumber({
         return null;
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const rawValue = e.target.value;
-        setLocalValue(rawValue);
-
-        // Allow empty input during typing
-        if (rawValue === "" || rawValue === "-") {
-            setIsInvalid(false);
-            return;
-        }
-
-        // Sanitize and validate
-        const sanitized = sanitizeNumber(rawValue, { min, max, default: defaultValue });
-
-        // Check if out of range
-        const numValue = parseFloat(rawValue);
-        if (!isNaN(numValue) && (numValue < min || numValue > max)) {
-            setIsInvalid(showValidation);
-        } else {
-            setIsInvalid(false);
-        }
-
-        // Emit validated value
-        onChange?.(sanitized);
-    };
-
-    const handleBlur = () => {
-        // On blur, ensure value is valid
-        setLocalValue("");
-        setIsInvalid(false);
-
-        if (onChange) {
-            const sanitized = sanitizeNumber(currentValue, {
-                min,
-                max,
-                default: defaultValue,
-            });
-            onChange(sanitized);
-        }
-    };
-
-    const displayValue = localValue !== "" ? localValue : currentValue;
-
     const inputElement = (
         <div
             className={`outline-none w-full cursor-text flex items-center rounded border transition ${
-                isInvalid
+                numberInput.isInvalid
                     ? "border-red-300 bg-red-50 hover:border-red-400"
                     : "border-transparent bg-gray-100 hover:border-gray-200"
             } ${renderIcon() ? "pl-2" : ""}`}
@@ -147,16 +112,16 @@ export function InputNumber({
             <input
                 type="number"
                 className={`no-spin h-6 w-full ${renderIcon() ? "min-w-[36px]" : "min-w-[px]"} cursor-text rounded border-0 bg-transparent pl-2 pr-1 text-xs transition-colors focus:outline-none ${
-                    isInvalid ? "text-red-700" : "text-gray-900"
+                    numberInput.isInvalid ? "text-red-700" : "text-gray-900"
                 }`}
-                value={displayValue}
-                onChange={handleChange}
-                onBlur={handleBlur}
+                value={numberInput.displayValue}
+                onChange={(e) => numberInput.handleChange(e.target.value)}
+                onBlur={numberInput.handleBlur}
                 min={min}
                 max={max}
                 step={step}
-                aria-invalid={isInvalid}
-                aria-describedby={isInvalid ? `${label}-error` : undefined}
+                aria-invalid={numberInput.isInvalid}
+                aria-describedby={numberInput.isInvalid ? `${label}-error` : undefined}
             />
             {suffix && (
                 <span className="-ml-1 pr-[6px] pt-0.5 text-xs text-gray-900">{suffix}</span>
@@ -175,7 +140,7 @@ export function InputNumber({
                 ) : (
                     inputElement
                 )}
-                {isInvalid && showValidation && (
+                {numberInput.isInvalid && showValidation && (
                     <div id={`${label}-error`} className="text-xs text-red-600" role="alert">
                         Value must be between {min} and {max}
                     </div>

@@ -5,6 +5,7 @@ import { Tooltip } from "./Tooltip";
 import { PlusIcon, ResetIcon } from "@/utils/icons";
 import { sanitizeHexColor } from "@/utils/validators/sanitizers";
 import { isValidHexColor } from "@/utils/validators/type-guards";
+import { useValidatedInput } from "@/hooks/useValidatedInput";
 
 /**
  * Props for the ColorPicker component.
@@ -61,12 +62,25 @@ export function ColorPicker({
     const [isOpen, setIsOpen] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
-    const [isInvalid, setIsInvalid] = useState(false);
-    const [localValue, setLocalValue] = useState<string>("");
     const containerRef = useRef<HTMLDivElement>(null);
     const pickerRef = useRef<HTMLDivElement>(null);
 
-    const color = value ?? defaultValue;
+    const colorInput = useValidatedInput({
+        value,
+        defaultValue,
+        onChange,
+        validate: (val) => {
+            const strVal = String(val);
+            return strVal === "" || isValidHexColor(strVal);
+        },
+        sanitize: (val) => {
+            const strVal = String(val);
+            return strVal === "" ? "" : sanitizeHexColor(strVal, defaultValue);
+        },
+        showValidation,
+    });
+
+    const color = colorInput.currentValue;
 
     // Handle click outside to close picker
     useEffect(() => {
@@ -87,54 +101,24 @@ export function ColorPicker({
 
     const handleColorChange = (newColor: string) => {
         const sanitized = sanitizeHexColor(newColor, color);
-        setIsInvalid(false);
         onChange?.(sanitized);
     };
 
     const handleReset = (e: React.MouseEvent) => {
         e.stopPropagation();
-        setIsInvalid(false);
-        setLocalValue("");
         onChange?.("");
         setIsOpen(false);
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const rawValue = e.target.value;
-        setLocalValue(rawValue);
-
-        // Allow empty for optional colors
-        if (rawValue === "") {
-            setIsInvalid(false);
-            onChange?.("");
-            return;
-        }
-
-        // Validate hex format
-        if (isValidHexColor(rawValue)) {
-            setIsInvalid(false);
-            const sanitized = sanitizeHexColor(rawValue);
-            onChange?.(sanitized);
-        } else {
-            setIsInvalid(showValidation);
-        }
+        colorInput.handleChange(rawValue);
     };
 
     const handleInputBlur = () => {
         setIsFocused(false);
-        setLocalValue("");
-
-        // Sanitize on blur
-        if (color) {
-            const sanitized = sanitizeHexColor(color, defaultValue);
-            if (sanitized !== color) {
-                onChange?.(sanitized);
-            }
-            setIsInvalid(false);
-        }
+        colorInput.handleBlur();
     };
-
-    const displayValue = localValue !== "" ? localValue : color;
 
     const colorPickerContent = (
         <div
@@ -146,7 +130,7 @@ export function ColorPicker({
         >
             <div
                 className={`relative flex w-full items-center rounded border pl-2 transition-colors ${
-                    isInvalid
+                    colorInput.isInvalid
                         ? "border-red-300 bg-red-50"
                         : isOpen
                           ? "border-gray-300 bg-white"
@@ -167,14 +151,14 @@ export function ColorPicker({
 
                 {/* Input or color display */}
                 <div className="relative flex flex-1 items-center justify-between">
-                    {displayValue ? (
+                    {colorInput.displayValue ? (
                         <div className="flex items-center justify-between w-full">
                             <span
                                 className={`pl-2 pr-1 py-1 text-xs uppercase font-medium ${
-                                    isInvalid ? "text-red-700" : "text-gray-900"
+                                    colorInput.isInvalid ? "text-red-700" : "text-gray-900"
                                 }`}
                             >
-                                {displayValue}
+                                {colorInput.displayValue}
                             </span>
                             {(isHovered || isOpen) && (
                                 <button
@@ -197,9 +181,9 @@ export function ColorPicker({
                             )}
                             <input
                                 className={`w-full rounded bg-transparent py-1 pl-2 pr-1 text-left text-xs uppercase transition-colors focus:outline-none ${
-                                    isInvalid ? "text-red-700" : "text-gray-900"
+                                    colorInput.isInvalid ? "text-red-700" : "text-gray-900"
                                 }`}
-                                value={displayValue}
+                                value={colorInput.displayValue}
                                 onChange={handleInputChange}
                                 onClick={(e) => e.stopPropagation()}
                                 onFocus={() => {
@@ -208,8 +192,10 @@ export function ColorPicker({
                                 }}
                                 onBlur={handleInputBlur}
                                 placeholder=""
-                                aria-invalid={isInvalid}
-                                aria-describedby={isInvalid ? `${label}-error` : undefined}
+                                aria-invalid={colorInput.isInvalid}
+                                aria-describedby={
+                                    colorInput.isInvalid ? `${label}-error` : undefined
+                                }
                             />
                         </div>
                     )}
@@ -240,7 +226,7 @@ export function ColorPicker({
                     colorPickerContent
                 )}
 
-                {isInvalid && showValidation && (
+                {colorInput.isInvalid && showValidation && (
                     <div id={`${label}-error`} className="text-xs text-red-600" role="alert">
                         Invalid hex color format (e.g., #fff or #ffffff)
                     </div>

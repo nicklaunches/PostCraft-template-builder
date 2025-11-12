@@ -8,6 +8,8 @@
 export { useTemplateBuilder } from "./useTemplateBuilder";
 export { useEditor } from "./useEditor";
 export { useDynamicCss } from "./useDynamicCss";
+export { useValidatedInput } from "./useValidatedInput";
+export type { UseValidatedInputConfig, UseValidatedInputReturn } from "./useValidatedInput";
 
 // Re-export types for convenience
 export type { TemplateData } from "@/types";
