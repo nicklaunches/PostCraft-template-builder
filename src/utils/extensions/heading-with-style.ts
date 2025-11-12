@@ -1,5 +1,5 @@
 import { Node, mergeAttributes } from "@tiptap/core";
-import { generateBlockId } from "@/utils/helpers";
+import { ensureBlockIds } from "./createStyledNode";
 import { DEFAULT_H1_STYLES, DEFAULT_H2_STYLES, DEFAULT_H3_STYLES } from "@/utils/constants";
 import type { BlockStyles } from "@/types";
 
@@ -98,43 +98,16 @@ export const HeadingWithStyle = Node.create({
     },
 
     onCreate() {
-        // Assign unique IDs to all heading nodes that don't have one
-        const { tr } = this.editor.state;
-        let modified = false;
-
-        this.editor.state.doc.descendants((node, pos) => {
-            if (node.type.name === "heading" && !node.attrs.id) {
-                const id = generateBlockId();
-                tr.setNodeMarkup(pos, null, { ...node.attrs, id });
-                modified = true;
-            }
-        });
-
-        if (modified) {
-            this.editor.view.dispatch(tr);
-        }
+        // Use the shared ensureBlockIds utility
+        ensureBlockIds(this.editor, "heading");
     },
 
     onUpdate() {
-        // Assign unique IDs to newly created heading nodes and notify about new blocks
-        const { tr } = this.editor.state;
-        let modified = false;
-
-        this.editor.state.doc.descendants((node, pos) => {
-            if (node.type.name === "heading" && !node.attrs.id) {
-                const id = generateBlockId();
-                tr.setNodeMarkup(pos, null, { ...node.attrs, id });
-                modified = true;
-
-                // Notify that a new heading block was created
-                if (this.options.onBlockCreated) {
-                    this.options.onBlockCreated(id, node.attrs.level);
-                }
+        // Use the shared ensureBlockIds utility with callback
+        ensureBlockIds(this.editor, "heading", (id, attrs) => {
+            if (this.options.onBlockCreated && attrs) {
+                this.options.onBlockCreated(id, attrs.level);
             }
         });
-
-        if (modified) {
-            this.editor.view.dispatch(tr);
-        }
     },
 });

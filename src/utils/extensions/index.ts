@@ -8,5 +8,7 @@
 export { Command, renderItems } from "./slash-command";
 export { ParagraphWithStyle } from "./paragraph-with-style";
 export { HeadingWithStyle } from "./heading-with-style";
+export { createStyledNode, ensureBlockIds } from "./createStyledNode";
 export type { SuggestionItem } from "./slash-command";
+export type { StyledNodeConfig } from "./createStyledNode";
 export { suggestionItems } from "./suggestion-items";
