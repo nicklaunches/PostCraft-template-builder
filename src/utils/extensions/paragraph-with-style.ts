@@ -11,6 +11,7 @@ import { createStyledNode } from "./createStyledNode";
  */
 export const ParagraphWithStyle = createStyledNode({
     name: "paragraph",
+    tag: "p",
     className: "postcraft-editor-paragraph",
     parseHTML: () => [{ tag: "p" }],
 });

@@ -8,6 +8,8 @@ import { generateBlockId } from "@/utils/helpers";
 export interface StyledNodeConfig {
     /** The name of the node (e.g., 'heading', 'paragraph') */
     name: string;
+    /** The HTML tag to render (e.g., 'p', 'h1'). Defaults to name if not provided */
+    tag?: string;
     /** Priority for the extension (default: 1000) */
     priority?: number;
     /** Content model for the node (default: 'inline*') */
@@ -89,6 +91,7 @@ export function ensureBlockIds(
 export function createStyledNode(config: StyledNodeConfig) {
     const {
         name,
+        tag,
         priority = 1000,
         content = "inline*",
         group = "block",
@@ -100,6 +103,9 @@ export function createStyledNode(config: StyledNodeConfig) {
         renderHTML,
         onBlockCreated,
     } = config;
+
+    // Use tag if provided, otherwise default to name
+    const htmlTag = tag || name;
 
     return Node.create({
         name,
@@ -153,20 +159,18 @@ export function createStyledNode(config: StyledNodeConfig) {
                 return parseHTML();
             }
             // Default parseHTML if not provided
-            return [{ tag: name }];
+            return [{ tag: htmlTag }];
         },
 
-        renderHTML(params) {
+        renderHTML({ node, HTMLAttributes }) {
             if (renderHTML) {
-                return renderHTML(params);
+                return renderHTML({ node, HTMLAttributes });
             }
-            // Default renderHTML behavior
+            // Default renderHTML behavior - match the original paragraph pattern
             const attrs = className
-                ? mergeAttributes(this.options.HTMLAttributes, params.HTMLAttributes, {
-                      class: className,
-                  })
-                : mergeAttributes(this.options.HTMLAttributes, params.HTMLAttributes);
-            return [name, attrs, 0];
+                ? mergeAttributes(HTMLAttributes, { class: className })
+                : mergeAttributes(HTMLAttributes);
+            return [htmlTag, attrs, 0];
         },
 
         onCreate() {
