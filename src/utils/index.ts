@@ -47,6 +47,7 @@ export {
 
 // Block Factories
 export {
+    blockBuilder,
     createBlock,
     createTextBlock,
     createHeadingBlock,
