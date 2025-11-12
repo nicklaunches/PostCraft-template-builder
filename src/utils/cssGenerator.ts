@@ -88,9 +88,9 @@ export function generateBlockCSS(styles: BlockStyles, className: string): string
         cssString += `  background-color: ${styles.backgroundColor};\n`;
     }
 
-    // Border radius (note: property is named borderWidth but represents radius)
-    if (styles.borderWidth > 0) {
-        cssString += `  border-radius: ${styles.borderWidth}px;\n`;
+    // Border radius
+    if (styles.borderRadius > 0) {
+        cssString += `  border-radius: ${styles.borderRadius}px;\n`;
     }
 
     cssString += `}`;
@@ -185,8 +185,8 @@ export function generateBlockInlineStyles(styles: BlockStyles): React.CSSPropert
         inlineStyles.backgroundColor = styles.backgroundColor;
     }
 
-    if (styles.borderWidth > 0) {
-        inlineStyles.borderRadius = `${styles.borderWidth}px`;
+    if (styles.borderRadius > 0) {
+        inlineStyles.borderRadius = `${styles.borderRadius}px`;
     }
 
     if (styles.fontSize > 0) {

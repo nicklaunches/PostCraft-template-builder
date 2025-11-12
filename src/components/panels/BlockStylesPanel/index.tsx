@@ -183,8 +183,8 @@ export default function BlockStyles() {
             <InputNumber
                 label="Radius"
                 icon="radius"
-                value={currentBlockStyles?.borderWidth || 0}
-                onChange={(value) => updateBlockStyle(currentBlockId, "borderWidth", value)}
+                value={currentBlockStyles?.borderRadius || 0}
+                onChange={(value) => updateBlockStyle(currentBlockId, "borderRadius", value)}
                 tooltip="Border radius"
             />
 

@@ -29,7 +29,7 @@ export const DEFAULT_EMAIL_STYLES: Readonly<EmailStyles> = {
  */
 export const DEFAULT_P_STYLES: Readonly<BlockStyles> = {
     alignment: "left",
-    borderWidth: 0,
+    borderRadius: 0,
     paddingLeft: 0,
     paddingRight: 0,
     paddingTop: 0,
@@ -49,7 +49,7 @@ export const DEFAULT_P_STYLES: Readonly<BlockStyles> = {
  */
 export const DEFAULT_H1_STYLES: Readonly<BlockStyles> = {
     alignment: "left",
-    borderWidth: 0,
+    borderRadius: 0,
     paddingLeft: 0,
     paddingRight: 0,
     paddingTop: 12,
@@ -69,7 +69,7 @@ export const DEFAULT_H1_STYLES: Readonly<BlockStyles> = {
  */
 export const DEFAULT_H2_STYLES: Readonly<BlockStyles> = {
     alignment: "left",
-    borderWidth: 0,
+    borderRadius: 0,
     paddingLeft: 0,
     paddingRight: 0,
     paddingTop: 12,
@@ -89,7 +89,7 @@ export const DEFAULT_H2_STYLES: Readonly<BlockStyles> = {
  */
 export const DEFAULT_H3_STYLES: Readonly<BlockStyles> = {
     alignment: "left",
-    borderWidth: 0,
+    borderRadius: 0,
     paddingLeft: 0,
     paddingRight: 0,
     paddingTop: 12,

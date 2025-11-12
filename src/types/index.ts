@@ -195,7 +195,7 @@ export interface EmailStyles {
  * Block styling configuration interface.
  *
  * @property {"left" | "center" | "right"} alignment - Text/content alignment
- * @property {number} borderWidth - Border radius in pixels (note: property name is borderWidth but represents radius)
+ * @property {number} borderRadius - Border radius in pixels
  * @property {number} paddingLeft - Left padding in pixels
  * @property {number} paddingRight - Right padding in pixels
  * @property {number} paddingTop - Top padding in pixels
@@ -211,7 +211,7 @@ export interface EmailStyles {
  */
 export interface BlockStyles {
     alignment: "left" | "center" | "right";
-    borderWidth: number;
+    borderRadius: number;
     paddingLeft: number;
     paddingRight: number;
     paddingTop: number;
