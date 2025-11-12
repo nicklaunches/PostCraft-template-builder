@@ -4,7 +4,7 @@ import { useBlockStyles } from "@/context/BlockStylesContext";
 import { useEditorContext } from "@/context/EditorContext";
 import { useDynamicCss } from "@/hooks";
 import { ExtendedTipTap } from "@/components/ui";
-import ErrorBoundary from "@/components/shared/ErrorBoundary";
+import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 import { getDefaultStylesForLevel } from "@/utils/extensions/heading-with-style";
 import { DEFAULT_P_STYLES } from "@/utils/constants";
 
@@ -29,7 +29,7 @@ export interface ContentEditorProps {
  * @param {ContentEditorProps} props - Component props
  * @returns {JSX.Element} Content editor component
  */
-export default function ContentEditor({
+export function ContentEditor({
     initialContent: _initialContent,
     onSave: _onSave,
 }: ContentEditorProps) {

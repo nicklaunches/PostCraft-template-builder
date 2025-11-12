@@ -6,7 +6,7 @@
  *
  * @returns {JSX.Element} PaddingVertical icon
  */
-export default function PaddingVerticalIcon() {
+export function PaddingVerticalIcon() {
     return (
         <svg
             width="15"

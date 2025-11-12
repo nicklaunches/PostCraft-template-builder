@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { HexColorPicker } from "react-colorful";
-import Label from "./Label";
-import Tooltip from "./Tooltip";
+import { Label } from "./Label";
+import { Tooltip } from "./Tooltip";
 import { PlusIcon, ResetIcon } from "@/utils/icons";
 import { sanitizeHexColor } from "@/utils/validators/sanitizers";
 import { isValidHexColor } from "@/utils/validators/type-guards";
@@ -18,7 +18,7 @@ import { isValidHexColor } from "@/utils/validators/type-guards";
  * @property {"left" | "right"} [position] - Position of the color picker popover (default: "right")
  * @property {boolean} [showValidation] - Whether to show validation feedback (default: false)
  */
-interface ColorPickerProps {
+export interface ColorPickerProps {
     label: string;
     value?: string;
     defaultValue?: string;
@@ -48,7 +48,7 @@ interface ColorPickerProps {
  *   showValidation={true}
  * />
  */
-export default function ColorPicker({
+export function ColorPicker({
     label,
     value,
     defaultValue = "",

@@ -6,7 +6,7 @@
  *
  * @returns {JSX.Element} PaddingHorizontal icon
  */
-export default function PaddingHorizontalIcon() {
+export function PaddingHorizontalIcon() {
     return (
         <svg
             width="16"

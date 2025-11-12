@@ -5,7 +5,7 @@
  *
  * @returns {JSX.Element} FontSize icon
  */
-export default function FontSizeIcon() {
+export function FontSizeIcon() {
     return (
         <div className="group relative flex items-center justify-center">
             <svg

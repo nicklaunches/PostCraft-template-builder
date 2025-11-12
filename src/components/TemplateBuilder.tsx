@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
-import TemplateBuilderCore, { TemplateBuilderCoreProps } from "./layout/TemplateBuilderCore";
-import ErrorBoundary from "./shared/ErrorBoundary";
-import LoadingSpinner from "./shared/LoadingSpinner";
+import { TemplateBuilderCore, TemplateBuilderCoreProps } from "./layout/TemplateBuilderCore";
+import { ErrorBoundary } from "./shared/ErrorBoundary";
+import { LoadingSpinner } from "./shared/LoadingSpinner";
 import { GlobalStateProvider } from "@/context/GlobalState";
 import { useTemplateBuilder } from "@/hooks/useTemplateBuilder";
 import { useEditor } from "@/hooks/useEditor";
@@ -102,7 +102,7 @@ function TemplateBuilderInternal({
  * />
  * ```
  */
-export default function TemplateBuilder(props: TemplateBuilderProps) {
+export function TemplateBuilder(props: TemplateBuilderProps) {
     return (
         <GlobalStateProvider>
             <TemplateBuilderInternal {...props} />

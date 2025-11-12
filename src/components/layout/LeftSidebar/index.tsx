@@ -1,4 +1,4 @@
-import EmailStyles from "@/components/panels/EmailStylesPanel";
+import { EmailStylesPanel } from "@/components/panels/EmailStylesPanel";
 
 /**
  * Left sidebar component with email styling controls.
@@ -9,11 +9,11 @@ import EmailStyles from "@/components/panels/EmailStylesPanel";
  *
  * @returns {JSX.Element} Left sidebar component
  */
-export default function LeftSidebar() {
+export function LeftSidebar() {
     return (
         <aside className="w-72 border-r bg-gray-50">
             <div className="min-h-[44px] w-full px-2">
-                <EmailStyles />
+                <EmailStylesPanel />
             </div>
         </aside>
     );

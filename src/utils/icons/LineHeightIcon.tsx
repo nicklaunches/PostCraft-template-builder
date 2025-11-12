@@ -5,7 +5,7 @@
  *
  * @returns {JSX.Element} LineHeight icon
  */
-export default function LineHeightIcon() {
+export function LineHeightIcon() {
     return (
         <div className="group relative flex items-center justify-center">
             <svg

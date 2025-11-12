@@ -13,7 +13,7 @@ import { useState } from "react";
  *
  * @returns {JSX.Element} Email styles component
  */
-export default function EmailStyles() {
+export function EmailStylesPanel() {
     const { emailStyles, updateEmailStyle, resetEmailStyles } = useEmailStyles();
     const [isSpinning, setIsSpinning] = useState(false);
 

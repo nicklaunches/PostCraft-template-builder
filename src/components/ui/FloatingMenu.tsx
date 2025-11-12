@@ -8,9 +8,9 @@ import {
     CodeBracketIcon,
     LinkIcon,
 } from "@heroicons/react/24/outline";
-import Tooltip from "./Tooltip";
+import { Tooltip } from "./Tooltip";
 
-interface FloatingMenuProps {
+export interface FloatingMenuProps {
     editor: Editor | null;
 }
 
@@ -24,7 +24,7 @@ interface FloatingMenuProps {
  * @param {FloatingMenuProps} props - Component props
  * @returns {JSX.Element | null} Floating menu component
  */
-export default function FloatingMenu({ editor }: FloatingMenuProps) {
+export function FloatingMenu({ editor }: FloatingMenuProps) {
     if (!editor) {
         return null;
     }

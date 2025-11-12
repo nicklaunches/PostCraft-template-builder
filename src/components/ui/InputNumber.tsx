@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Label from "./Label";
-import Tooltip from "./Tooltip";
+import { Label } from "./Label";
+import { Tooltip } from "./Tooltip";
 import { RadiusIcon, BorderWidthIcon, FontSizeIcon, LineHeightIcon } from "@/utils/icons";
 import { sanitizeNumber } from "@/utils/validators/sanitizers";
 
@@ -19,7 +19,7 @@ import { sanitizeNumber } from "@/utils/validators/sanitizers";
  * @property {boolean} [showValidation] - Whether to show validation feedback (default: false)
  * @property {string} [suffix] - Optional suffix text to display after the input (e.g., "%", "px")
  */
-interface InputNumberProps {
+export interface InputNumberProps {
     label: string;
     value?: number;
     defaultValue?: number;
@@ -55,7 +55,7 @@ interface InputNumberProps {
  *   icon="radius"
  * />
  */
-export default function InputNumber({
+export function InputNumber({
     label,
     value,
     defaultValue = 0,

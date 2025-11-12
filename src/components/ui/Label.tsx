@@ -3,7 +3,7 @@
  *
  * @property {React.ReactNode} children - Label text content
  */
-interface LabelProps {
+export interface LabelProps {
     children: React.ReactNode;
 }
 
@@ -16,7 +16,7 @@ interface LabelProps {
  * @param {LabelProps} props - Component props
  * @returns {JSX.Element} Label component
  */
-export default function Label({ children }: LabelProps) {
+export function Label({ children }: LabelProps) {
     return (
         <div className="flex h-[26px] w-2/5 items-center gap-1 text-xs font-medium leading-[26px] text-gray-600">
             {children}

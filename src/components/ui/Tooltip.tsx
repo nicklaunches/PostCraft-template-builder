@@ -9,7 +9,7 @@ import { createPortal } from "react-dom";
  * @property {number} [delay] - Delay in ms before showing tooltip
  * @property {"top" | "bottom" | "left" | "right"} [position] - Tooltip position relative to trigger
  */
-interface TooltipProps {
+export interface TooltipProps {
     content?: ReactNode;
     children: ReactNode;
     delay?: number;
@@ -26,12 +26,7 @@ interface TooltipProps {
  * @param {TooltipProps} props - Component props
  * @returns {JSX.Element} Tooltip wrapper component
  */
-export default function Tooltip({
-    content,
-    children,
-    delay = 300,
-    position = "bottom",
-}: TooltipProps) {
+export function Tooltip({ content, children, delay = 300, position = "bottom" }: TooltipProps) {
     const [isVisible, setIsVisible] = useState(false);
     const [coords, setCoords] = useState({ top: 0, left: 0 });
     const triggerRef = useRef<HTMLElement>(null);

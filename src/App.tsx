@@ -1,4 +1,4 @@
-import TemplateBuilder from "@/components/TemplateBuilder";
+import { TemplateBuilder } from "@/components/TemplateBuilder";
 
 /**
  * Main application component.
@@ -8,7 +8,7 @@ import TemplateBuilder from "@/components/TemplateBuilder";
  *
  * @returns {JSX.Element} App component
  */
-export default function App() {
+export function App() {
     const handleSave = async () => {
         // Custom save logic can be added here
         console.log("Custom save handler called");

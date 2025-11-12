@@ -5,14 +5,35 @@
  * cards, inputs, selects, color pickers, tooltips, and editor components.
  */
 
-export { default as Card } from "./Card";
-export { default as Select } from "./Select";
-export { default as Spacing } from "./Spacing";
-export { default as Alignment } from "./Alignment";
-export { default as ColorPicker } from "./ColorPicker";
-export { default as InputNumber } from "./InputNumber";
-export { default as Label } from "./Label";
-export { default as Tooltip } from "./Tooltip";
-export { default as ExtendedTipTap } from "./extended-tiptap";
-export { default as BubbleMenu } from "./BubbleMenu";
-export { default as FloatingMenu } from "./FloatingMenu";
+export { Card } from "./Card";
+export type { CardProps } from "./Card";
+
+export { Select } from "./Select";
+export type { SelectProps, SelectOption } from "./Select";
+
+export { Spacing } from "./Spacing";
+export type { SpacingProps } from "./Spacing";
+
+export { Alignment } from "./Alignment";
+export type { AlignmentProps } from "./Alignment";
+
+export { ColorPicker } from "./ColorPicker";
+export type { ColorPickerProps } from "./ColorPicker";
+
+export { InputNumber } from "./InputNumber";
+export type { InputNumberProps } from "./InputNumber";
+
+export { Label } from "./Label";
+export type { LabelProps } from "./Label";
+
+export { Tooltip } from "./Tooltip";
+export type { TooltipProps } from "./Tooltip";
+
+export { ExtendedTipTap } from "./extended-tiptap";
+export type { ExtendedTipTapProps } from "./extended-tiptap";
+
+export { BubbleMenu } from "./BubbleMenu";
+export type { BubbleMenuProps } from "./BubbleMenu";
+
+export { FloatingMenu } from "./FloatingMenu";
+export type { FloatingMenuProps } from "./FloatingMenu";

@@ -6,7 +6,7 @@
  *
  * @returns {JSX.Element} Navigation component
  */
-export default function Nav() {
+export function Nav() {
     return (
         <nav className="flex h-16 items-center justify-between border-b px-4">
             <div className="text-lg font-semibold">PostCraft Template Builder</div>

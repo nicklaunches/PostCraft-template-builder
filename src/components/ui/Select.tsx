@@ -1,5 +1,5 @@
-import Label from "./Label";
-import Tooltip from "./Tooltip";
+import { Label } from "./Label";
+import { Tooltip } from "./Tooltip";
 
 /**
  * Option item for Select component.
@@ -7,7 +7,7 @@ import Tooltip from "./Tooltip";
  * @property {string} value - Option value
  * @property {string} label - Display text for option
  */
-interface SelectOption {
+export interface SelectOption {
     value: string;
     label: string;
 }
@@ -22,7 +22,7 @@ interface SelectOption {
  * @property {(value: string) => void} [onChange] - Callback when selection changes
  * @property {string} [tooltip] - Optional tooltip text
  */
-interface SelectProps {
+export interface SelectProps {
     label: string;
     options: SelectOption[];
     value?: string;
@@ -40,14 +40,7 @@ interface SelectProps {
  * @param {SelectProps} props - Component props
  * @returns {JSX.Element} Select component
  */
-export default function Select({
-    label,
-    options,
-    value,
-    defaultValue,
-    onChange,
-    tooltip,
-}: SelectProps) {
+export function Select({ label, options, value, defaultValue, onChange, tooltip }: SelectProps) {
     const selectElement = (
         <select
             className="outline-none w-full rounded border border-transparent bg-gray-100 px-2 py-1 text-xs transition hover:border-gray-200 focus:outline-none focus:ring-0 text-gray-600"

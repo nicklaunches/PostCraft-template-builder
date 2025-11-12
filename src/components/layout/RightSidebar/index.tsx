@@ -1,4 +1,4 @@
-import BlockStyles from "@/components/panels/BlockStylesPanel";
+import { BlockStylesPanel } from "@/components/panels/BlockStylesPanel";
 
 /**
  * Right sidebar component for block-specific settings.
@@ -9,11 +9,11 @@ import BlockStyles from "@/components/panels/BlockStylesPanel";
  *
  * @returns {JSX.Element} Right sidebar component
  */
-export default function RightSidebar() {
+export function RightSidebar() {
     return (
         <aside className="w-72 border-l bg-gray-50">
             <div className="min-h-[44px] w-full px-2">
-                <BlockStyles />
+                <BlockStylesPanel />
             </div>
         </aside>
     );

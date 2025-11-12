@@ -26,7 +26,7 @@ import { useEffect, useState } from "react";
  *
  * @returns {JSX.Element} Block styles component
  */
-export default function BlockStyles() {
+export function BlockStylesPanel() {
     const {
         blockStylesMap,
         getBlockStyles,

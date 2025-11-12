@@ -5,7 +5,7 @@
  * @property {React.ReactNode} children - Content to render inside the card
  * @property {React.ReactNode} [action] - Optional action element to display in the header
  */
-interface CardProps {
+export interface CardProps {
     title: string;
     children: React.ReactNode;
     action?: React.ReactNode;
@@ -20,7 +20,7 @@ interface CardProps {
  * @param {CardProps} props - Component props
  * @returns {JSX.Element} Card component
  */
-export default function Card({ title, children, action }: CardProps) {
+export function Card({ title, children, action }: CardProps) {
     return (
         <div className="space-y-4 py-4">
             {/* Header */}

@@ -1,5 +1,5 @@
-import Label from "./Label";
-import Tooltip from "./Tooltip";
+import { Label } from "./Label";
+import { Tooltip } from "./Tooltip";
 import { Bars3BottomLeftIcon, Bars3Icon, Bars3CenterLeftIcon } from "@heroicons/react/24/outline";
 
 /**
@@ -11,7 +11,7 @@ import { Bars3BottomLeftIcon, Bars3Icon, Bars3CenterLeftIcon } from "@heroicons/
  * @property {(value: "left" | "center" | "right") => void} [onChange] - Callback when alignment changes
  * @property {string} [tooltip] - Optional tooltip text
  */
-interface AlignmentProps {
+export interface AlignmentProps {
     label: string;
     value?: "left" | "center" | "right";
     defaultValue?: "left" | "center" | "right";
@@ -28,7 +28,7 @@ interface AlignmentProps {
  * @param {AlignmentProps} props - Component props
  * @returns {JSX.Element} Alignment component
  */
-export default function Alignment({
+export function Alignment({
     label,
     value = "left",
     defaultValue = "left",

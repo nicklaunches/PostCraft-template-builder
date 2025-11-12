@@ -6,7 +6,7 @@
  *
  * @returns {JSX.Element} Radius icon
  */
-export default function RadiusIcon() {
+export function RadiusIcon() {
     return (
         <div className="relative size-3 overflow-hidden">
             <div

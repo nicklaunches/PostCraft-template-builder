@@ -6,7 +6,7 @@
  *
  * @returns {JSX.Element} Reset icon
  */
-export default function ResetIcon() {
+export function ResetIcon() {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -8,9 +8,9 @@ import {
     CodeBracketIcon,
     LinkIcon,
 } from "@heroicons/react/24/outline";
-import Tooltip from "./Tooltip";
+import { Tooltip } from "./Tooltip";
 
-interface BubbleMenuProps {
+export interface BubbleMenuProps {
     editor: Editor | null;
 }
 
@@ -24,7 +24,7 @@ interface BubbleMenuProps {
  * @param {BubbleMenuProps} props - Component props
  * @returns {JSX.Element | null} Bubble menu component
  */
-export default function BubbleMenu({ editor }: BubbleMenuProps) {
+export function BubbleMenu({ editor }: BubbleMenuProps) {
     if (!editor) {
         return null;
     }

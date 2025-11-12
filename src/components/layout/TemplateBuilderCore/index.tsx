@@ -1,7 +1,7 @@
-import Nav from "../Nav";
-import LeftSidebar from "../LeftSidebar";
-import ContentEditor from "../ContentEditor";
-import RightSidebar from "../RightSidebar";
+import { Nav } from "../Nav";
+import { LeftSidebar } from "../LeftSidebar";
+import { ContentEditor } from "../ContentEditor";
+import { RightSidebar } from "../RightSidebar";
 
 /**
  * Props for the TemplateBuilderCore component.
@@ -33,7 +33,7 @@ export interface TemplateBuilderCoreProps {
  * @param {TemplateBuilderCoreProps} props - Component props
  * @returns {JSX.Element} Template builder layout
  */
-export default function TemplateBuilderCore({
+export function TemplateBuilderCore({
     showNav = true,
     showLeftSidebar = true,
     showRightSidebar = true,

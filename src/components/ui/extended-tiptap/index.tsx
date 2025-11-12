@@ -9,8 +9,8 @@ import Code from "@tiptap/extension-code";
 import Link from "@tiptap/extension-link";
 import { useEffect } from "react";
 import { Command, renderItems, ParagraphWithStyle, HeadingWithStyle } from "@/utils/extensions";
-import BubbleMenu from "../BubbleMenu";
-import FloatingMenu from "../FloatingMenu";
+import { BubbleMenu } from "../BubbleMenu";
+import { FloatingMenu } from "../FloatingMenu";
 
 /**
  * Props for the ExtendedTipTap component.
@@ -23,7 +23,7 @@ import FloatingMenu from "../FloatingMenu";
  * @property {(blockId: string, level: number) => void} [onHeadingBlockCreated] - Callback when a new heading block is created
  * @property {(blockId: string) => void} [onParagraphBlockCreated] - Callback when a new paragraph block is created
  */
-interface ExtendedTipTapProps {
+export interface ExtendedTipTapProps {
     initialContent?: string;
     className?: string;
     editable?: boolean;
@@ -42,7 +42,7 @@ interface ExtendedTipTapProps {
  * @param {ExtendedTipTapProps} props - Component props
  * @returns {JSX.Element | null} Extended TipTap editor component
  */
-export default function ExtendedTipTap({
+export function ExtendedTipTap({
     initialContent = "",
     className = "",
     editable = true,

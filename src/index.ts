@@ -24,7 +24,8 @@
  * }
  * ```
  */
-export { default as TemplateBuilder } from "./components/TemplateBuilder";
+export { TemplateBuilder } from "./components/TemplateBuilder";
+export type { TemplateBuilderProps } from "./components/TemplateBuilder";
 
 // =============================================================================
 // TIER 2: INTERMEDIATE USAGE (Manual provider setup)
@@ -49,7 +50,8 @@ export { default as TemplateBuilder } from "./components/TemplateBuilder";
  * }
  * ```
  */
-export { default as TemplateBuilderCore } from "./components/layout/TemplateBuilderCore";
+export { TemplateBuilderCore } from "./components/layout/TemplateBuilderCore";
+export type { TemplateBuilderCoreProps } from "./components/layout/TemplateBuilderCore";
 
 // Context providers for manual setup
 export { GlobalStateProvider } from "./context/GlobalState";
@@ -65,14 +67,15 @@ export { ErrorBoundary, LoadingSpinner } from "./components/shared";
 // =============================================================================
 
 // Layout components for building custom UIs
-export { default as Nav } from "./components/layout/Nav";
-export { default as LeftSidebar } from "./components/layout/LeftSidebar";
-export { default as ContentEditor } from "./components/layout/ContentEditor";
-export { default as RightSidebar } from "./components/layout/RightSidebar";
+export { Nav } from "./components/layout/Nav";
+export { LeftSidebar } from "./components/layout/LeftSidebar";
+export { ContentEditor } from "./components/layout/ContentEditor";
+export type { ContentEditorProps } from "./components/layout/ContentEditor";
+export { RightSidebar } from "./components/layout/RightSidebar";
 
 // Panel components for granular control
-export { default as EmailStylesPanel } from "./components/panels/EmailStylesPanel";
-export { default as BlockStylesPanel } from "./components/panels/BlockStylesPanel";
+export { EmailStylesPanel } from "./components/panels/EmailStylesPanel";
+export { BlockStylesPanel } from "./components/panels/BlockStylesPanel";
 
 // =============================================================================
 // HOOKS

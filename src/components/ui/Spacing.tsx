@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Label from "./Label";
-import Tooltip from "./Tooltip";
+import { Label } from "./Label";
+import { Tooltip } from "./Tooltip";
 import { PaddingHorizontalIcon, PaddingVerticalIcon } from "@/utils/icons";
 import { sanitizeNumber } from "@/utils/validators/sanitizers";
 
@@ -20,7 +20,7 @@ import { sanitizeNumber } from "@/utils/validators/sanitizers";
  * @property {number} [max] - Maximum allowed value (default: 1000)
  * @property {boolean} [showValidation] - Whether to show validation feedback (default: false)
  */
-interface SpacingProps {
+export interface SpacingProps {
     label: string;
     horizontal?: number;
     vertical?: number;
@@ -59,7 +59,7 @@ interface SpacingProps {
  *   showValidation={true}
  * />
  */
-export default function Spacing({
+export function Spacing({
     label,
     horizontal,
     vertical,

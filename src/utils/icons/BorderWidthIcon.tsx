@@ -6,7 +6,7 @@
  *
  * @returns {JSX.Element} BorderWidth icon
  */
-export default function BorderWidthIcon() {
+export function BorderWidthIcon() {
     return (
         <div className="relative size-5 overflow-visible">
             <svg
