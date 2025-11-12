@@ -107,6 +107,8 @@ export default function BlockStyles() {
 
             const styles = getBlockStyles(currentBlockId);
 
+            if (!styles) return;
+
             // Build inline style string
             const styleArray: string[] = [];
 
