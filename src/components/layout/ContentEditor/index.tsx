@@ -31,8 +31,14 @@ export default function ContentEditor({
     initialContent: _initialContent,
     onSave: _onSave,
 }: ContentEditorProps) {
-    const { emailStyles, updateEmailStyle, setEditor, updateBlockStyle, getBlockStyles } =
-        useGlobalState();
+    const {
+        emailStyles,
+        updateEmailStyle,
+        setEditor,
+        updateBlockStyle,
+        getBlockStyles,
+        setDefaultBlockStyles,
+    } = useGlobalState();
     const [isEditable, setIsEditable] = useState(true);
 
     const defaultContent = `<h1>This is a very unique heading.</h1><p>This is a unique paragraph. It's so unique, it even has an ID attached to it.</p><p>And this one, too.</p>`;
@@ -43,6 +49,18 @@ export default function ContentEditor({
 
     // Generate dynamic CSS from emailStyles
     const { css: dynamicCSS, className } = useDynamicCss(emailStyles, updateEmailStyle);
+
+    // Callback for when editor is ready - store the setDefaultBlockStyles function
+    const handleEditorReady = useCallback(
+        (editor: any) => {
+            setEditor(editor);
+            // Store setDefaultBlockStyles in editor's storage for access in slash commands
+            if (editor && editor.storage) {
+                editor.storage.setDefaultBlockStyles = setDefaultBlockStyles;
+            }
+        },
+        [setEditor, setDefaultBlockStyles]
+    );
 
     // Callback for when a new heading block is created
     const handleHeadingBlockCreated = useCallback(
@@ -109,7 +127,7 @@ export default function ContentEditor({
                         initialContent={defaultContent}
                         className={className}
                         editable={isEditable}
-                        onEditorReady={setEditor}
+                        onEditorReady={handleEditorReady}
                         onHeadingBlockCreated={handleHeadingBlockCreated}
                         onParagraphBlockCreated={handleParagraphBlockCreated}
                     />

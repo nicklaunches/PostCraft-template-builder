@@ -31,8 +31,8 @@ export default function BlockStyles() {
     const [currentBlockId, setCurrentBlockId] = useState<string | null>(null);
     const [isSpinning, setIsSpinning] = useState(false);
 
-    // Get the current block's styles or defaults
-    const currentBlockStyles = currentBlockId ? getBlockStyles(currentBlockId) : getBlockStyles("");
+    // Get the current block's styles (may be undefined for new blocks)
+    const currentBlockStyles = currentBlockId ? getBlockStyles(currentBlockId) : undefined;
 
     // Listen to selection changes in the editor to update the current block ID
     useEffect(() => {
@@ -107,7 +107,11 @@ export default function BlockStyles() {
 
             const styles = getBlockStyles(currentBlockId);
 
-            if (!styles) return;
+            // If no styles exist, clear any inline styles (set to null/empty)
+            if (!styles) {
+                editor.chain().focus().updateAttributes(nodeType, { style: null }).run();
+                return;
+            }
 
             // Build inline style string
             const styleArray: string[] = [];
@@ -228,10 +232,12 @@ export default function BlockStyles() {
         const transaction = state.tr.insert(blockPos + blockNode.nodeSize, duplicatedNode);
         editor.view.dispatch(transaction);
 
-        // Copy the block styles to the new block
-        Object.entries(currentStyles).forEach(([key, value]) => {
-            updateBlockStyle(newId, key as keyof typeof currentStyles, value);
-        });
+        // Copy the block styles to the new block (only if they exist)
+        if (currentStyles) {
+            Object.entries(currentStyles).forEach(([key, value]) => {
+                updateBlockStyle(newId, key as keyof typeof currentStyles, value);
+            });
+        }
 
         // Select the duplicated block
         setSelectedBlockId(newId);
@@ -334,22 +340,22 @@ export default function BlockStyles() {
         >
             <Alignment
                 label="Alignment"
-                value={currentBlockStyles.alignment}
+                value={currentBlockStyles?.alignment || "left"}
                 onChange={(value) => updateBlockStyle(currentBlockId, "alignment", value)}
             />
 
             <InputNumber
                 label="Radius"
                 icon="radius"
-                value={currentBlockStyles.borderWidth}
+                value={currentBlockStyles?.borderWidth || 0}
                 onChange={(value) => updateBlockStyle(currentBlockId, "borderWidth", value)}
                 tooltip="Border radius"
             />
 
             <Spacing
                 label="X Padding"
-                horizontal={currentBlockStyles.paddingLeft}
-                vertical={currentBlockStyles.paddingRight}
+                horizontal={currentBlockStyles?.paddingLeft || 0}
+                vertical={currentBlockStyles?.paddingRight || 0}
                 onHorizontalChange={(value) =>
                     updateBlockStyle(currentBlockId, "paddingLeft", value)
                 }
@@ -361,8 +367,8 @@ export default function BlockStyles() {
 
             <Spacing
                 label="Y Padding"
-                horizontal={currentBlockStyles.paddingTop}
-                vertical={currentBlockStyles.paddingBottom}
+                horizontal={currentBlockStyles?.paddingTop || 0}
+                vertical={currentBlockStyles?.paddingBottom || 0}
                 onHorizontalChange={(value) =>
                     updateBlockStyle(currentBlockId, "paddingTop", value)
                 }
@@ -374,8 +380,8 @@ export default function BlockStyles() {
 
             <Spacing
                 label="X Margin"
-                horizontal={currentBlockStyles.marginLeft}
-                vertical={currentBlockStyles.marginRight}
+                horizontal={currentBlockStyles?.marginLeft || 0}
+                vertical={currentBlockStyles?.marginRight || 0}
                 onHorizontalChange={(value) =>
                     updateBlockStyle(currentBlockId, "marginLeft", value)
                 }
@@ -385,8 +391,8 @@ export default function BlockStyles() {
 
             <Spacing
                 label="Y Margin"
-                horizontal={currentBlockStyles.marginTop}
-                vertical={currentBlockStyles.marginBottom}
+                horizontal={currentBlockStyles?.marginTop || 0}
+                vertical={currentBlockStyles?.marginBottom || 0}
                 onHorizontalChange={(value) => updateBlockStyle(currentBlockId, "marginTop", value)}
                 onVerticalChange={(value) =>
                     updateBlockStyle(currentBlockId, "marginBottom", value)
@@ -396,7 +402,7 @@ export default function BlockStyles() {
 
             <ColorPicker
                 label="Background"
-                value={currentBlockStyles.backgroundColor}
+                value={currentBlockStyles?.backgroundColor || ""}
                 onChange={(value) => updateBlockStyle(currentBlockId, "backgroundColor", value)}
                 tooltip="Background color"
                 labelPosition="top"
@@ -406,7 +412,7 @@ export default function BlockStyles() {
             <InputNumber
                 label="Size"
                 icon="font-size"
-                value={currentBlockStyles.fontSize}
+                value={currentBlockStyles?.fontSize || 15}
                 onChange={(value) => updateBlockStyle(currentBlockId, "fontSize", value)}
                 tooltip="Font size"
             />
@@ -414,7 +420,7 @@ export default function BlockStyles() {
             <InputNumber
                 label="Line height"
                 icon="line-height"
-                value={currentBlockStyles.lineHeight}
+                value={currentBlockStyles?.lineHeight || 150}
                 onChange={(value) => updateBlockStyle(currentBlockId, "lineHeight", value)}
                 tooltip="Line height"
                 suffix="%"
@@ -422,7 +428,7 @@ export default function BlockStyles() {
 
             <ColorPicker
                 label="Color"
-                value={currentBlockStyles.color}
+                value={currentBlockStyles?.color || "#000000"}
                 onChange={(value) => updateBlockStyle(currentBlockId, "color", value)}
                 tooltip="Text color"
                 labelPosition="top"

@@ -33,6 +33,7 @@ interface GlobalStateContextType {
     updateBlockStyle: ReturnType<typeof useBlockStyles>["updateBlockStyle"];
     deleteBlockStyles: ReturnType<typeof useBlockStyles>["deleteBlockStyles"];
     resetAllBlockStyles: ReturnType<typeof useBlockStyles>["resetAllBlockStyles"];
+    setDefaultBlockStyles: ReturnType<typeof useBlockStyles>["setDefaultBlockStyles"];
     selectedBlockId: ReturnType<typeof useBlockStyles>["selectedBlockId"];
     setSelectedBlockId: ReturnType<typeof useBlockStyles>["setSelectedBlockId"];
     // Editor

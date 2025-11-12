@@ -12,6 +12,9 @@ import type { SuggestionItem } from "./slash-command";
  * then removing the "/" trigger character. This prevents unwanted extra nodes
  * from being created in the document structure.
  *
+ * When a block type is changed, the command also applies the appropriate default
+ * styles (DEFAULT_P_STYLES, DEFAULT_H1_STYLES, etc.) to ensure proper styling.
+ *
  * Current commands:
  * - Paragraph: Keep as plain text paragraph (removes "/" only)
  * - Heading 1: Transform current node to large heading (h1)
@@ -25,7 +28,35 @@ export const suggestionItems: SuggestionItem[] = [
         searchTerms: ["p", "paragraph", "text"],
         icon: <Bars3BottomLeftIcon className="w-5 h-5" />,
         command: ({ editor, range }) => {
-            editor.chain().focus().deleteRange(range).setNode("paragraph").run();
+            // Get the block ID from the current node
+            const { state } = editor;
+            const { selection } = state;
+            const { $from } = selection;
+
+            let blockId: string | null = null;
+            let depth = $from.depth;
+
+            while (depth > 0) {
+                const node = $from.node(depth);
+                if (node.type.name === "paragraph" || node.type.name === "heading") {
+                    blockId = node.attrs.id || null;
+                    break;
+                }
+                depth--;
+            }
+
+            editor
+                .chain()
+                .focus()
+                .deleteRange(range)
+                .setNode("paragraph")
+                .updateAttributes("paragraph", { style: null })
+                .run();
+
+            // Apply default paragraph styles if setDefaultBlockStyles is available
+            if (blockId && (editor.storage as any)?.setDefaultBlockStyles) {
+                (editor.storage as any).setDefaultBlockStyles(blockId, "paragraph");
+            }
         },
     },
     {
@@ -34,7 +65,35 @@ export const suggestionItems: SuggestionItem[] = [
         searchTerms: ["h1", "heading", "title"],
         icon: <H1Icon className="w-5 h-5" />,
         command: ({ editor, range }) => {
-            editor.chain().focus().deleteRange(range).setNode("heading", { level: 1 }).run();
+            // Get the block ID from the current node
+            const { state } = editor;
+            const { selection } = state;
+            const { $from } = selection;
+
+            let blockId: string | null = null;
+            let depth = $from.depth;
+
+            while (depth > 0) {
+                const node = $from.node(depth);
+                if (node.type.name === "paragraph" || node.type.name === "heading") {
+                    blockId = node.attrs.id || null;
+                    break;
+                }
+                depth--;
+            }
+
+            editor
+                .chain()
+                .focus()
+                .deleteRange(range)
+                .setNode("heading", { level: 1 })
+                .updateAttributes("heading", { style: null })
+                .run();
+
+            // Apply default H1 styles if setDefaultBlockStyles is available
+            if (blockId && (editor.storage as any)?.setDefaultBlockStyles) {
+                (editor.storage as any).setDefaultBlockStyles(blockId, "heading", 1);
+            }
         },
     },
     {
@@ -43,7 +102,35 @@ export const suggestionItems: SuggestionItem[] = [
         searchTerms: ["h2", "heading", "subtitle"],
         icon: <H2Icon className="w-5 h-5" />,
         command: ({ editor, range }) => {
-            editor.chain().focus().deleteRange(range).setNode("heading", { level: 2 }).run();
+            // Get the block ID from the current node
+            const { state } = editor;
+            const { selection } = state;
+            const { $from } = selection;
+
+            let blockId: string | null = null;
+            let depth = $from.depth;
+
+            while (depth > 0) {
+                const node = $from.node(depth);
+                if (node.type.name === "paragraph" || node.type.name === "heading") {
+                    blockId = node.attrs.id || null;
+                    break;
+                }
+                depth--;
+            }
+
+            editor
+                .chain()
+                .focus()
+                .deleteRange(range)
+                .setNode("heading", { level: 2 })
+                .updateAttributes("heading", { style: null })
+                .run();
+
+            // Apply default H2 styles if setDefaultBlockStyles is available
+            if (blockId && (editor.storage as any)?.setDefaultBlockStyles) {
+                (editor.storage as any).setDefaultBlockStyles(blockId, "heading", 2);
+            }
         },
     },
     {
@@ -52,7 +139,35 @@ export const suggestionItems: SuggestionItem[] = [
         searchTerms: ["h3", "heading", "subheading"],
         icon: <H3Icon className="w-5 h-5" />,
         command: ({ editor, range }) => {
-            editor.chain().focus().deleteRange(range).setNode("heading", { level: 3 }).run();
+            // Get the block ID from the current node
+            const { state } = editor;
+            const { selection } = state;
+            const { $from } = selection;
+
+            let blockId: string | null = null;
+            let depth = $from.depth;
+
+            while (depth > 0) {
+                const node = $from.node(depth);
+                if (node.type.name === "paragraph" || node.type.name === "heading") {
+                    blockId = node.attrs.id || null;
+                    break;
+                }
+                depth--;
+            }
+
+            editor
+                .chain()
+                .focus()
+                .deleteRange(range)
+                .setNode("heading", { level: 3 })
+                .updateAttributes("heading", { style: null })
+                .run();
+
+            // Apply default H3 styles if setDefaultBlockStyles is available
+            if (blockId && (editor.storage as any)?.setDefaultBlockStyles) {
+                (editor.storage as any).setDefaultBlockStyles(blockId, "heading", 3);
+            }
         },
     },
 ];
