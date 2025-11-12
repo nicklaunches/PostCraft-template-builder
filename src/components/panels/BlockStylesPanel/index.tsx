@@ -2,7 +2,12 @@ import { Card, Alignment, Spacing, ColorPicker, InputNumber, Tooltip } from "@/c
 import { useBlockStyles } from "@/context/BlockStylesContext";
 import { useEditorContext } from "@/context/EditorContext";
 import { applyBlockStylesToNode } from "@/utils/styleApplicator";
-import { getBlockIdFromSelection, getBlockNodeInfoFromSelection } from "@/utils/helpers";
+import {
+    getBlockIdFromSelection,
+    getBlockNodeInfoFromSelection,
+    findBlockNode,
+    generateBlockId,
+} from "@/utils/helpers";
 import { PlusIcon, DocumentDuplicateIcon, TrashIcon } from "@heroicons/react/24/outline";
 import ArrowPathIcon from "@heroicons/react/24/outline/ArrowPathIcon";
 import { useEffect, useState } from "react";
@@ -90,43 +95,24 @@ export default function BlockStyles() {
     const handleDuplicateBlock = () => {
         if (!editor || !currentBlockId) return;
 
-        const { state } = editor;
-        const { selection } = state;
-        const { $from } = selection;
-
-        // Find the parent block node and its position
-        let depth = $from.depth;
-        let blockNode = null;
-        let blockPos = 0;
-
-        while (depth > 0) {
-            const node = $from.node(depth);
-            if (node.type.name === "paragraph" || node.type.name === "heading") {
-                if (node.attrs.id === currentBlockId) {
-                    blockNode = node;
-                    blockPos = $from.before(depth);
-                    break;
-                }
-            }
-            depth--;
-        }
-
-        if (!blockNode) return;
+        // Find the block node using helper
+        const blockInfo = findBlockNode(editor, currentBlockId);
+        if (!blockInfo) return;
 
         // Get current block styles
         const currentStyles = getBlockStyles(currentBlockId);
 
-        // Create a duplicate node with a new ID using block factory approach
-        const newId = `block-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+        // Create a duplicate node with a new ID
+        const newId = generateBlockId();
 
         // Clone the node with new attributes
-        const duplicatedNode = blockNode.type.create(
-            { ...blockNode.attrs, id: newId },
-            blockNode.content
+        const duplicatedNode = blockInfo.node.type.create(
+            { ...blockInfo.node.attrs, id: newId },
+            blockInfo.node.content
         );
 
         // Insert the duplicated node after the current one
-        const transaction = state.tr.insert(blockPos + blockNode.nodeSize, duplicatedNode);
+        const transaction = editor.state.tr.insert(blockInfo.pos + blockInfo.size, duplicatedNode);
         editor.view.dispatch(transaction);
 
         // Copy the block styles to the new block (only if they exist)
@@ -145,31 +131,12 @@ export default function BlockStyles() {
     const handleDeleteBlock = () => {
         if (!editor || !currentBlockId) return;
 
-        const { state } = editor;
-        const { selection } = state;
-        const { $from } = selection;
-
-        // Find the parent block node and its position
-        let depth = $from.depth;
-        let blockPos = 0;
-        let blockSize = 0;
-
-        while (depth > 0) {
-            const node = $from.node(depth);
-            if (node.type.name === "paragraph" || node.type.name === "heading") {
-                if (node.attrs.id === currentBlockId) {
-                    blockPos = $from.before(depth);
-                    blockSize = node.nodeSize;
-                    break;
-                }
-            }
-            depth--;
-        }
-
-        if (!blockSize) return;
+        // Find the block node using helper
+        const blockInfo = findBlockNode(editor, currentBlockId);
+        if (!blockInfo) return;
 
         // Delete the node
-        const transaction = state.tr.delete(blockPos, blockPos + blockSize);
+        const transaction = editor.state.tr.delete(blockInfo.pos, blockInfo.pos + blockInfo.size);
         editor.view.dispatch(transaction);
 
         // Clean up block styles

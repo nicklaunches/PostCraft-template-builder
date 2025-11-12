@@ -115,6 +115,51 @@ export function getBlockNodeInfoFromSelection(editor: any): {
 }
 
 /**
+ * Find a block node by its ID in the current editor selection context.
+ *
+ * Traverses up the document tree from the current selection position
+ * to find a paragraph or heading node with the specified block ID and
+ * returns comprehensive information about the node including its position and size.
+ *
+ * @param {any} editor - TipTap editor instance
+ * @param {string} blockId - The ID of the block to find
+ * @returns {{ node: any; pos: number; size: number } | null} Block node info or null if not found
+ *
+ * @example
+ * const blockInfo = findBlockNode(editor, "block-123");
+ * if (blockInfo) {
+ *   console.log(blockInfo.node, blockInfo.pos, blockInfo.size);
+ * }
+ */
+export function findBlockNode(
+    editor: any,
+    blockId: string
+): { node: any; pos: number; size: number } | null {
+    const { state } = editor;
+    const { selection } = state;
+    const { $from } = selection;
+
+    let depth = $from.depth;
+
+    while (depth > 0) {
+        const node = $from.node(depth);
+        if (
+            (node.type.name === "paragraph" || node.type.name === "heading") &&
+            node.attrs.id === blockId
+        ) {
+            return {
+                node,
+                pos: $from.before(depth),
+                size: node.nodeSize,
+            };
+        }
+        depth--;
+    }
+
+    return null;
+}
+
+/**
  * Apply default block styles after a block type change via slash command.
  *
  * This function is called after changing a block's type (e.g., paragraph to heading)
