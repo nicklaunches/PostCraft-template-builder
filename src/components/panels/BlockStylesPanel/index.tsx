@@ -5,8 +5,8 @@ import { applyBlockStylesToNode } from "@/utils/styleApplicator";
 import {
     getBlockIdFromSelection,
     getBlockNodeInfoFromSelection,
-    findBlockNode,
-    generateBlockId,
+    duplicateBlock,
+    deleteBlock,
 } from "@/utils/helpers";
 import { PlusIcon, DocumentDuplicateIcon, TrashIcon } from "@heroicons/react/24/outline";
 import ArrowPathIcon from "@heroicons/react/24/outline/ArrowPathIcon";
@@ -31,6 +31,7 @@ export default function BlockStyles() {
         blockStylesMap,
         getBlockStyles,
         updateBlockStyle,
+        deleteBlockStyles,
         setSelectedBlockId,
         resetAllBlockStyles,
     } = useBlockStyles();
@@ -95,58 +96,29 @@ export default function BlockStyles() {
     const handleDuplicateBlock = () => {
         if (!editor || !currentBlockId) return;
 
-        // Find the block node using helper
-        const blockInfo = findBlockNode(editor, currentBlockId);
-        if (!blockInfo) return;
+        const newId = duplicateBlock(editor, currentBlockId, (oldId, newId) => {
+            const currentStyles = getBlockStyles(oldId);
+            if (currentStyles) {
+                Object.entries(currentStyles).forEach(([key, value]) => {
+                    updateBlockStyle(newId, key as keyof typeof currentStyles, value);
+                });
+            }
+        });
 
-        // Get current block styles
-        const currentStyles = getBlockStyles(currentBlockId);
-
-        // Create a duplicate node with a new ID
-        const newId = generateBlockId();
-
-        // Clone the node with new attributes
-        const duplicatedNode = blockInfo.node.type.create(
-            { ...blockInfo.node.attrs, id: newId },
-            blockInfo.node.content
-        );
-
-        // Insert the duplicated node after the current one
-        const transaction = editor.state.tr.insert(blockInfo.pos + blockInfo.size, duplicatedNode);
-        editor.view.dispatch(transaction);
-
-        // Copy the block styles to the new block (only if they exist)
-        if (currentStyles) {
-            Object.entries(currentStyles).forEach(([key, value]) => {
-                updateBlockStyle(newId, key as keyof typeof currentStyles, value);
-            });
+        if (newId) {
+            setSelectedBlockId(newId);
+            console.log("Block duplicated:", currentBlockId, "->", newId);
         }
-
-        // Select the duplicated block
-        setSelectedBlockId(newId);
-
-        console.log("Block duplicated:", currentBlockId, "->", newId);
     };
 
     const handleDeleteBlock = () => {
         if (!editor || !currentBlockId) return;
 
-        // Find the block node using helper
-        const blockInfo = findBlockNode(editor, currentBlockId);
-        if (!blockInfo) return;
-
-        // Delete the node
-        const transaction = editor.state.tr.delete(blockInfo.pos, blockInfo.pos + blockInfo.size);
-        editor.view.dispatch(transaction);
-
-        // Clean up block styles
-        // Note: We don't have a deleteBlockStyles function exported from GlobalState
-        // This would be a good enhancement to add
-
-        // Clear selection
-        setSelectedBlockId(null);
-
-        console.log("Block deleted:", currentBlockId);
+        if (deleteBlock(editor, currentBlockId)) {
+            deleteBlockStyles(currentBlockId);
+            setSelectedBlockId(null);
+            console.log("Block deleted:", currentBlockId);
+        }
     };
 
     // If no block is selected, show a message

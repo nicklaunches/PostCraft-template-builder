@@ -227,3 +227,68 @@ export function createSlashCommand(
         }
     };
 }
+
+/**
+ * Duplicate a block in the editor.
+ *
+ * Creates a copy of the specified block with a new unique ID and inserts it
+ * immediately after the original block. Optionally calls a callback to handle
+ * copying associated styles or other data.
+ *
+ * @param {any} editor - TipTap editor instance
+ * @param {string} blockId - The ID of the block to duplicate
+ * @param {(oldId: string, newId: string) => void} [onStylesCopy] - Optional callback for copying styles
+ * @returns {string | null} The new block ID if successful, null if block not found
+ *
+ * @example
+ * const newId = duplicateBlock(editor, "block-123", (oldId, newId) => {
+ *   // Copy styles from old block to new block
+ *   copyBlockStyles(oldId, newId);
+ * });
+ */
+export function duplicateBlock(
+    editor: any,
+    blockId: string,
+    onStylesCopy?: (oldId: string, newId: string) => void
+): string | null {
+    const blockInfo = findBlockNode(editor, blockId);
+    if (!blockInfo) return null;
+
+    const newId = generateBlockId();
+    const duplicatedNode = blockInfo.node.type.create(
+        { ...blockInfo.node.attrs, id: newId },
+        blockInfo.node.content
+    );
+
+    const transaction = editor.state.tr.insert(blockInfo.pos + blockInfo.size, duplicatedNode);
+    editor.view.dispatch(transaction);
+
+    onStylesCopy?.(blockId, newId);
+    return newId;
+}
+
+/**
+ * Delete a block from the editor.
+ *
+ * Removes the specified block from the document. Does not clean up associated
+ * styles - caller should handle style cleanup separately if needed.
+ *
+ * @param {any} editor - TipTap editor instance
+ * @param {string} blockId - The ID of the block to delete
+ * @returns {boolean} True if the block was deleted successfully, false if not found
+ *
+ * @example
+ * const deleted = deleteBlock(editor, "block-123");
+ * if (deleted) {
+ *   // Clean up associated styles
+ *   deleteBlockStyles("block-123");
+ * }
+ */
+export function deleteBlock(editor: any, blockId: string): boolean {
+    const blockInfo = findBlockNode(editor, blockId);
+    if (!blockInfo) return false;
+
+    const transaction = editor.state.tr.delete(blockInfo.pos, blockInfo.pos + blockInfo.size);
+    editor.view.dispatch(transaction);
+    return true;
+}
