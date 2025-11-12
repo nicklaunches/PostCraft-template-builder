@@ -1,8 +1,16 @@
 import DragHandle from "@tiptap/extension-drag-handle-react";
 import { EditorContent, useEditor, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import Bold from "@tiptap/extension-bold";
+import Italic from "@tiptap/extension-italic";
+import Strike from "@tiptap/extension-strike";
+import Underline from "@tiptap/extension-underline";
+import Code from "@tiptap/extension-code";
+import Link from "@tiptap/extension-link";
 import { useEffect } from "react";
 import { Command, renderItems, ParagraphWithStyle, HeadingWithStyle } from "@/utils/extensions";
+import BubbleMenu from "../BubbleMenu";
+import FloatingMenu from "../FloatingMenu";
 
 /**
  * Props for the ExtendedTipTap component.
@@ -43,9 +51,24 @@ export default function ExtendedTipTap({
                 gapcursor: false,
                 paragraph: false, // Disable default paragraph
                 heading: false, // Disable default heading
+                bold: false, // Disable default bold to use custom
+                italic: false, // Disable default italic to use custom
+                strike: false, // Disable default strike to use custom
+                code: false, // Disable default code to use custom
             }),
             ParagraphWithStyle,
             HeadingWithStyle,
+            Bold,
+            Italic,
+            Strike,
+            Underline,
+            Code,
+            Link.configure({
+                openOnClick: false,
+                HTMLAttributes: {
+                    class: "text-blue-600 underline cursor-pointer",
+                },
+            }),
             Command.configure({
                 suggestion: {
                     items: () => [],
@@ -124,6 +147,8 @@ export default function ExtendedTipTap({
 
     return (
         <>
+            {editor && <BubbleMenu editor={editor} />}
+            {editor && <FloatingMenu editor={editor} />}
             <DragHandle editor={editor}>
                 <div className="flex items-center gap-1">
                     <button

@@ -14,3 +14,5 @@ export { default as InputNumber } from "./InputNumber";
 export { default as Label } from "./Label";
 export { default as Tooltip } from "./Tooltip";
 export { default as ExtendedTipTap } from "./extended-tiptap";
+export { default as BubbleMenu } from "./BubbleMenu";
+export { default as FloatingMenu } from "./FloatingMenu";

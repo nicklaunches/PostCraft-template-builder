@@ -68,3 +68,41 @@ body {
     font-size: 15px;
     line-height: 150%;
 }
+
+/* TipTap text formatting styles */
+.ProseMirror {
+    strong {
+        font-weight: 700;
+    }
+
+    em {
+        font-style: italic;
+    }
+
+    s {
+        text-decoration: line-through;
+    }
+
+    u {
+        text-decoration: underline;
+    }
+
+    code {
+        background-color: #f3f4f6;
+        color: #1f2937;
+        padding: 0.125rem 0.25rem;
+        border-radius: 0.25rem;
+        font-size: 0.875em;
+        font-family: "Courier New", Courier, monospace;
+    }
+
+    a {
+        color: #2563eb;
+        text-decoration: underline;
+        cursor: pointer;
+
+        &:hover {
+            color: #1d4ed8;
+        }
+    }
+}
