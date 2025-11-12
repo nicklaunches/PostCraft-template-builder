@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useGlobalState } from "@/context/GlobalState";
 import { useDynamicCss } from "@/hooks";
 import { ExtendedTipTap } from "@/components/ui";
 import ErrorBoundary from "@/components/shared/ErrorBoundary";
+import { getDefaultStylesForLevel } from "@/utils/extensions/heading-with-style";
+import { DEFAULT_P_STYLES } from "@/utils/constants";
 
 /**
  * Props for the ContentEditor component.
@@ -29,7 +31,8 @@ export default function ContentEditor({
     initialContent: _initialContent,
     onSave: _onSave,
 }: ContentEditorProps) {
-    const { emailStyles, updateEmailStyle, setEditor } = useGlobalState();
+    const { emailStyles, updateEmailStyle, setEditor, updateBlockStyle, getBlockStyles } =
+        useGlobalState();
     const [isEditable, setIsEditable] = useState(true);
 
     const defaultContent = `<h1>This is a very unique heading.</h1><p>This is a unique paragraph. It's so unique, it even has an ID attached to it.</p><p>And this one, too.</p>`;
@@ -40,6 +43,45 @@ export default function ContentEditor({
 
     // Generate dynamic CSS from emailStyles
     const { css: dynamicCSS, className } = useDynamicCss(emailStyles, updateEmailStyle);
+
+    // Callback for when a new heading block is created
+    const handleHeadingBlockCreated = useCallback(
+        (blockId: string, level: number) => {
+            // Check if block already has styles
+            const existingStyles = getBlockStyles(blockId);
+            const hasCustomStyles = existingStyles && Object.keys(existingStyles).length > 0;
+
+            // Only apply default styles if the block doesn't have any custom styles yet
+            if (!hasCustomStyles) {
+                const defaultStyles = getDefaultStylesForLevel(level);
+                if (defaultStyles) {
+                    // Apply each default style property
+                    Object.entries(defaultStyles).forEach(([key, value]) => {
+                        updateBlockStyle(blockId, key as keyof typeof defaultStyles, value);
+                    });
+                }
+            }
+        },
+        [getBlockStyles, updateBlockStyle]
+    );
+
+    // Callback for when a new paragraph block is created
+    const handleParagraphBlockCreated = useCallback(
+        (blockId: string) => {
+            // Check if block already has styles
+            const existingStyles = getBlockStyles(blockId);
+            const hasCustomStyles = existingStyles && Object.keys(existingStyles).length > 0;
+
+            // Only apply default styles if the block doesn't have any custom styles yet
+            if (!hasCustomStyles) {
+                // Apply each default style property for paragraphs
+                Object.entries(DEFAULT_P_STYLES).forEach(([key, value]) => {
+                    updateBlockStyle(blockId, key as keyof typeof DEFAULT_P_STYLES, value);
+                });
+            }
+        },
+        [getBlockStyles, updateBlockStyle]
+    );
 
     return (
         <main
@@ -68,6 +110,8 @@ export default function ContentEditor({
                         className={className}
                         editable={isEditable}
                         onEditorReady={setEditor}
+                        onHeadingBlockCreated={handleHeadingBlockCreated}
+                        onParagraphBlockCreated={handleParagraphBlockCreated}
                     />
                 </ErrorBoundary>
             </div>

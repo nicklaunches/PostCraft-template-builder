@@ -1,12 +1,11 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import type { BlockStyles, BlockStylesMap } from "@/types";
-import { DEFAULT_BLOCK_STYLES } from "@/utils/constants";
 
 /**
  * Block styles context type definition.
  *
  * @property {BlockStylesMap} blockStylesMap - Map of block IDs to their style configurations
- * @property {(blockId: string) => BlockStyles} getBlockStyles - Get styles for a specific block (returns defaults if not found)
+ * @property {(blockId: string) => BlockStyles | undefined} getBlockStyles - Get styles for a specific block (returns undefined if not found)
  * @property {(blockId: string, key: keyof BlockStyles, value: BlockStyles[keyof BlockStyles]) => void} updateBlockStyle - Update a specific style property for a block
  * @property {(blockId: string) => void} deleteBlockStyles - Remove styles for a specific block
  * @property {() => void} resetAllBlockStyles - Reset all block styles
@@ -15,7 +14,7 @@ import { DEFAULT_BLOCK_STYLES } from "@/utils/constants";
  */
 interface BlockStylesContextType {
     blockStylesMap: BlockStylesMap;
-    getBlockStyles: (blockId: string) => BlockStyles;
+    getBlockStyles: (blockId: string) => BlockStyles | undefined;
     updateBlockStyle: (
         blockId: string,
         key: keyof BlockStyles,
@@ -49,8 +48,8 @@ export function BlockStylesProvider({ children }: { children: ReactNode }) {
     const [blockStylesMap, setBlockStylesMap] = useState<BlockStylesMap>({});
     const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
 
-    const getBlockStyles = (blockId: string): BlockStyles => {
-        return blockStylesMap[blockId] || { ...DEFAULT_BLOCK_STYLES };
+    const getBlockStyles = (blockId: string): BlockStyles | undefined => {
+        return blockStylesMap[blockId];
     };
 
     const updateBlockStyle = (
@@ -59,7 +58,7 @@ export function BlockStylesProvider({ children }: { children: ReactNode }) {
         value: BlockStyles[keyof BlockStyles]
     ) => {
         setBlockStylesMap((prev) => {
-            const currentStyles = prev[blockId] || { ...DEFAULT_BLOCK_STYLES };
+            const currentStyles = prev[blockId] || ({} as BlockStyles);
             return {
                 ...prev,
                 [blockId]: {

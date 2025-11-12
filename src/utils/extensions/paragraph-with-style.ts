@@ -16,12 +16,18 @@ export const ParagraphWithStyle = Node.create({
     group: "block",
     content: "inline*",
 
+    addOptions() {
+        return {
+            onBlockCreated: null as ((blockId: string) => void) | null,
+        };
+    },
+
     parseHTML() {
         return [{ tag: "p" }];
     },
 
     renderHTML({ HTMLAttributes }) {
-        return ["p", mergeAttributes(HTMLAttributes, { class: "postcraft-paragraph" }), 0];
+        return ["p", mergeAttributes(HTMLAttributes, { class: "postcraft-editor-paragraph" }), 0];
     },
 
     addAttributes() {
@@ -81,6 +87,11 @@ export const ParagraphWithStyle = Node.create({
                 const id = generateBlockId();
                 tr.setNodeMarkup(pos, null, { ...node.attrs, id });
                 modified = true;
+
+                // Notify that a new paragraph block was created
+                if (this.options.onBlockCreated) {
+                    this.options.onBlockCreated(id);
+                }
             }
         });
 

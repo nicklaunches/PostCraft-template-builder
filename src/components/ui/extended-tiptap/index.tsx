@@ -20,6 +20,8 @@ import FloatingMenu from "../FloatingMenu";
  * @property {boolean} [editable] - Whether the editor is editable (default: true)
  * @property {(editor: Editor) => void} [onEditorReady] - Callback when editor is initialized
  * @property {(content: string) => void} [onChange] - Callback when content changes
+ * @property {(blockId: string, level: number) => void} [onHeadingBlockCreated] - Callback when a new heading block is created
+ * @property {(blockId: string) => void} [onParagraphBlockCreated] - Callback when a new paragraph block is created
  */
 interface ExtendedTipTapProps {
     initialContent?: string;
@@ -27,6 +29,8 @@ interface ExtendedTipTapProps {
     editable?: boolean;
     onEditorReady?: (editor: Editor) => void;
     onChange?: (content: string) => void;
+    onHeadingBlockCreated?: (blockId: string, level: number) => void;
+    onParagraphBlockCreated?: (blockId: string) => void;
 }
 
 /**
@@ -44,6 +48,8 @@ export default function ExtendedTipTap({
     editable = true,
     onEditorReady,
     onChange,
+    onHeadingBlockCreated,
+    onParagraphBlockCreated,
 }: ExtendedTipTapProps) {
     const editor = useEditor({
         extensions: [
@@ -56,8 +62,12 @@ export default function ExtendedTipTap({
                 strike: false, // Disable default strike to use custom
                 code: false, // Disable default code to use custom
             }),
-            ParagraphWithStyle,
-            HeadingWithStyle,
+            ParagraphWithStyle.configure({
+                onBlockCreated: onParagraphBlockCreated,
+            }),
+            HeadingWithStyle.configure({
+                onBlockCreated: onHeadingBlockCreated,
+            }),
             Bold,
             Italic,
             Strike,

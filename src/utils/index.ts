@@ -12,7 +12,10 @@ export { blocksToHTML, blocksToJSON, blocksFromJSON, generateEmailTemplate } fro
 export {
     BLOCK_TYPES,
     DEFAULT_EMAIL_STYLES,
-    DEFAULT_BLOCK_STYLES,
+    DEFAULT_P_STYLES,
+    DEFAULT_H1_STYLES,
+    DEFAULT_H2_STYLES,
+    DEFAULT_H3_STYLES,
     FONT_OPTIONS,
     FALLBACK_OPTIONS,
     MAX_HISTORY_SIZE,

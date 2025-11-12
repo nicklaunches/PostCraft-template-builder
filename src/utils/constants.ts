@@ -35,10 +35,10 @@ export const DEFAULT_EMAIL_STYLES: Readonly<EmailStyles> = {
 } as const;
 
 /**
- * Default block-level styling configuration.
- * Applied to new blocks and used as fallback values.
+ * Default block-level styling configuration for paragraphs.
+ * Applied to new paragraph blocks and used as fallback values.
  */
-export const DEFAULT_BLOCK_STYLES: Readonly<BlockStyles> = {
+export const DEFAULT_P_STYLES: Readonly<BlockStyles> = {
     alignment: "left",
     borderWidth: 0,
     paddingLeft: 0,
@@ -52,6 +52,66 @@ export const DEFAULT_BLOCK_STYLES: Readonly<BlockStyles> = {
     backgroundColor: "",
     fontSize: 15,
     lineHeight: 150,
+    color: "#000000",
+} as const;
+
+/**
+ * Default styling for H1 heading blocks.
+ */
+export const DEFAULT_H1_STYLES: Readonly<BlockStyles> = {
+    alignment: "left",
+    borderWidth: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 12,
+    paddingBottom: 4,
+    marginLeft: 0,
+    marginRight: 0,
+    marginTop: 0,
+    marginBottom: 0,
+    backgroundColor: "",
+    fontSize: 30,
+    lineHeight: 107,
+    color: "#000000",
+} as const;
+
+/**
+ * Default styling for H2 heading blocks.
+ */
+export const DEFAULT_H2_STYLES: Readonly<BlockStyles> = {
+    alignment: "left",
+    borderWidth: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 12,
+    paddingBottom: 4,
+    marginLeft: 0,
+    marginRight: 0,
+    marginTop: 0,
+    marginBottom: 0,
+    backgroundColor: "",
+    fontSize: 24,
+    lineHeight: 133,
+    color: "#000000",
+} as const;
+
+/**
+ * Default styling for H3 heading blocks.
+ */
+export const DEFAULT_H3_STYLES: Readonly<BlockStyles> = {
+    alignment: "left",
+    borderWidth: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 12,
+    paddingBottom: 4,
+    marginLeft: 0,
+    marginRight: 0,
+    marginTop: 0,
+    marginBottom: 0,
+    backgroundColor: "",
+    fontSize: 20,
+    lineHeight: 160,
     color: "#000000",
 } as const;
 

@@ -12,7 +12,6 @@ import type {
     DividerContent,
     BlockType,
 } from "@/types";
-import { DEFAULT_BLOCK_STYLES } from "@/utils/constants";
 import { generateBlockId } from "@/utils/helpers";
 
 /**
@@ -43,7 +42,7 @@ export function createBlock(type: BlockType, content: unknown, options: BlockOpt
         id: options.id || generateBlockId(),
         type,
         content,
-        styles: options.styles || { ...DEFAULT_BLOCK_STYLES },
+        styles: options.styles || {},
     };
 }
 
@@ -77,7 +76,7 @@ export function createTextBlock(
         id: options.id || generateBlockId(),
         type: "text",
         content: normalizedContent,
-        styles: options.styles || { ...DEFAULT_BLOCK_STYLES },
+        styles: options.styles || {},
     };
 }
 
@@ -118,7 +117,7 @@ export function createHeadingBlock(
         id: options.id || generateBlockId(),
         type: "heading",
         content: normalizedContent,
-        styles: options.styles || { ...DEFAULT_BLOCK_STYLES },
+        styles: options.styles || {},
     };
 }
 
@@ -149,7 +148,7 @@ export function createButtonBlock(content: ButtonContent, options: BlockOptions 
         id: options.id || generateBlockId(),
         type: "button",
         content,
-        styles: options.styles || { ...DEFAULT_BLOCK_STYLES },
+        styles: options.styles || {},
     };
 }
 
@@ -185,7 +184,7 @@ export function createImageBlock(content: ImageContent, options: BlockOptions = 
         id: options.id || generateBlockId(),
         type: "image",
         content,
-        styles: options.styles || { ...DEFAULT_BLOCK_STYLES },
+        styles: options.styles || {},
     };
 }
 
@@ -219,7 +218,7 @@ export function createDividerBlock(
         id: options.id || generateBlockId(),
         type: "divider",
         content: content || {},
-        styles: options.styles || { ...DEFAULT_BLOCK_STYLES },
+        styles: options.styles || {},
     };
 }
 

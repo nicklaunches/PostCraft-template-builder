@@ -63,12 +63,6 @@ body {
     }
 }
 
-/* PostCraft default paragraph styles */
-.postcraft-paragraph {
-    font-size: 15px;
-    line-height: 150%;
-}
-
 /* TipTap text formatting styles */
 .ProseMirror {
     strong {
@@ -105,4 +99,27 @@ body {
             color: #1d4ed8;
         }
     }
+}
+
+/* PostCraft Editor */
+.postcraft-editor-paragraph,
+.postcraft-editor-quote,
+/* Explicitly target ol & ul vs the listItem so that we ensure the bullets/numbers show */
+.postcraft-editor-ol,
+.postcraft-editor-ul,
+.postcraft-editor-h1,
+.postcraft-editor-h2,
+.postcraft-editor-h3 {
+    overflow: hidden;
+}
+
+.postcraft-editor-h1,
+.postcraft-editor-h2,
+.postcraft-editor-h3 {
+    @apply m-0 pl-0 font-medium;
+}
+
+.postcraft-editor-paragraph {
+    font-size: 15px;
+    line-height: 150%;
 }

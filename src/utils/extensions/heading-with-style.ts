@@ -1,5 +1,23 @@
 import { Node, mergeAttributes } from "@tiptap/core";
 import { generateBlockId } from "@/utils/helpers";
+import { DEFAULT_H1_STYLES, DEFAULT_H2_STYLES, DEFAULT_H3_STYLES } from "@/utils/constants";
+import type { BlockStyles } from "@/types";
+
+/**
+ * Get default styles for a heading based on its level.
+ */
+export function getDefaultStylesForLevel(level: number): BlockStyles | null {
+    switch (level) {
+        case 1:
+            return { ...DEFAULT_H1_STYLES };
+        case 2:
+            return { ...DEFAULT_H2_STYLES };
+        case 3:
+            return { ...DEFAULT_H3_STYLES };
+        default:
+            return null;
+    }
+}
 
 /**
  * Extended Heading extension that supports inline styles and unique IDs.
@@ -21,6 +39,7 @@ export const HeadingWithStyle = Node.create({
         return {
             levels: [1, 2, 3, 4, 5, 6],
             HTMLAttributes: {},
+            onBlockCreated: null as ((blockId: string, level: number) => void) | null,
         };
     },
 
@@ -68,7 +87,14 @@ export const HeadingWithStyle = Node.create({
         const hasLevel = this.options.levels.includes(node.attrs.level);
         const level = hasLevel ? node.attrs.level : this.options.levels[0];
 
-        return [`h${level}`, mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0];
+        // Add CSS class based on heading level
+        const className = `postcraft-editor-h${level}`;
+
+        return [
+            `h${level}`,
+            mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, { class: className }),
+            0,
+        ];
     },
 
     onCreate() {
@@ -90,7 +116,7 @@ export const HeadingWithStyle = Node.create({
     },
 
     onUpdate() {
-        // Assign unique IDs to newly created heading nodes
+        // Assign unique IDs to newly created heading nodes and notify about new blocks
         const { tr } = this.editor.state;
         let modified = false;
 
@@ -99,6 +125,11 @@ export const HeadingWithStyle = Node.create({
                 const id = generateBlockId();
                 tr.setNodeMarkup(pos, null, { ...node.attrs, id });
                 modified = true;
+
+                // Notify that a new heading block was created
+                if (this.options.onBlockCreated) {
+                    this.options.onBlockCreated(id, node.attrs.level);
+                }
             }
         });
 
