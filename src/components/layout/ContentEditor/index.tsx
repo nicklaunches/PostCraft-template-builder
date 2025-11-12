@@ -1,5 +1,7 @@
 import { useState, useCallback } from "react";
-import { useGlobalState } from "@/context/GlobalState";
+import { useEmailStyles } from "@/context/EmailStylesContext";
+import { useBlockStyles } from "@/context/BlockStylesContext";
+import { useEditorContext } from "@/context/EditorContext";
 import { useDynamicCss } from "@/hooks";
 import { ExtendedTipTap } from "@/components/ui";
 import ErrorBoundary from "@/components/shared/ErrorBoundary";
@@ -31,14 +33,9 @@ export default function ContentEditor({
     initialContent: _initialContent,
     onSave: _onSave,
 }: ContentEditorProps) {
-    const {
-        emailStyles,
-        updateEmailStyle,
-        setEditor,
-        updateBlockStyle,
-        getBlockStyles,
-        setDefaultBlockStyles,
-    } = useGlobalState();
+    const { emailStyles, updateEmailStyle } = useEmailStyles();
+    const { updateBlockStyle, getBlockStyles, setDefaultBlockStyles } = useBlockStyles();
+    const { setEditor } = useEditorContext();
     const [isEditable, setIsEditable] = useState(true);
 
     const defaultContent = `<h1>This is a very unique heading.</h1><p>This is a unique paragraph. It's so unique, it even has an ID attached to it.</p><p>And this one, too.</p>`;

@@ -1,5 +1,5 @@
 import { Card, Select, Spacing, ColorPicker, InputNumber, Tooltip } from "@/components/ui";
-import { useGlobalState } from "@/context/GlobalState";
+import { useEmailStyles } from "@/context/EmailStylesContext";
 import { FONT_OPTIONS, FALLBACK_OPTIONS } from "@/utils/constants";
 import ArrowPathIcon from "@heroicons/react/24/outline/ArrowPathIcon";
 import { useState } from "react";
@@ -14,7 +14,7 @@ import { useState } from "react";
  * @returns {JSX.Element} Email styles component
  */
 export default function EmailStyles() {
-    const { emailStyles, updateEmailStyle, resetEmailStyles } = useGlobalState();
+    const { emailStyles, updateEmailStyle, resetEmailStyles } = useEmailStyles();
     const [isSpinning, setIsSpinning] = useState(false);
 
     const handleReset = () => {

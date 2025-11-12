@@ -13,3 +13,6 @@ export { useDynamicCss } from "./useDynamicCss";
 export { useEditorState } from "./useEditorState";
 export { useEditorSelection } from "./useEditorSelection";
 export { useEditorHistory } from "./useEditorHistory";
+
+// Re-export types for convenience
+export type { TemplateData } from "@/types";

@@ -1,5 +1,6 @@
 import { Card, Alignment, Spacing, ColorPicker, InputNumber, Tooltip } from "@/components/ui";
-import { useGlobalState } from "@/context/GlobalState";
+import { useBlockStyles } from "@/context/BlockStylesContext";
+import { useEditorContext } from "@/context/EditorContext";
 import { PlusIcon, DocumentDuplicateIcon, TrashIcon } from "@heroicons/react/24/outline";
 import ArrowPathIcon from "@heroicons/react/24/outline/ArrowPathIcon";
 import { useEffect, useState } from "react";
@@ -24,9 +25,9 @@ export default function BlockStyles() {
         getBlockStyles,
         updateBlockStyle,
         setSelectedBlockId,
-        editor,
         resetAllBlockStyles,
-    } = useGlobalState();
+    } = useBlockStyles();
+    const { editor } = useEditorContext();
     const [, setSelectionUpdate] = useState(0);
     const [currentBlockId, setCurrentBlockId] = useState<string | null>(null);
     const [isSpinning, setIsSpinning] = useState(false);

@@ -52,7 +52,7 @@ export { default as TemplateBuilder } from "./components/TemplateBuilder";
 export { default as TemplateBuilderCore } from "./components/layout/TemplateBuilderCore";
 
 // Context providers for manual setup
-export { GlobalStateProvider, useGlobalState } from "./context/GlobalState";
+export { GlobalStateProvider } from "./context/GlobalState";
 export { EmailStylesProvider, useEmailStyles } from "./context/EmailStylesContext";
 export { BlockStylesProvider, useBlockStyles } from "./context/BlockStylesContext";
 export { EditorProvider, useEditorContext } from "./context/EditorContext";

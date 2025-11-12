@@ -1,21 +1,5 @@
 import { useState, useCallback } from "react";
-
-/**
- * Represents email template metadata and content.
- *
- * @property {string} [id] - Unique template identifier
- * @property {string} name - Template name/title
- * @property {string} [subject] - Email subject line
- * @property {unknown} content - Template content data
- * @property {Date} [updatedAt] - Last update timestamp
- */
-export interface TemplateData {
-    id?: string;
-    name: string;
-    subject?: string;
-    content: unknown;
-    updatedAt?: Date;
-}
+import type { TemplateData } from "@/types";
 
 /**
  * Custom hook for managing template builder state and operations.
