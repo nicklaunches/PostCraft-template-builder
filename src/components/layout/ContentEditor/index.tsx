@@ -1,4 +1,6 @@
 import { useState, useCallback } from "react";
+import type { Editor } from "@tiptap/core";
+import type { ContentEditorProps } from "@/types";
 import { useEmailStyles } from "@/context/EmailStylesContext";
 import { useBlockStyles } from "@/context/BlockStylesContext";
 import { useEditorContext } from "@/context/EditorContext";
@@ -7,17 +9,6 @@ import { ExtendedTipTap } from "@/components/ui";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 import { getDefaultStylesForLevel } from "@/utils/extensions/heading-with-style";
 import { DEFAULT_P_STYLES } from "@/utils/constants";
-
-/**
- * Props for the ContentEditor component.
- *
- * @property {unknown} [initialContent] - Initial content to load in the editor
- * @property {(content: unknown) => void} [onSave] - Callback when content is saved
- */
-export interface ContentEditorProps {
-    initialContent?: unknown;
-    onSave?: (content: unknown) => void;
-}
 
 /**
  * Rich text content editor with drag handle and dynamic styling.
@@ -49,11 +40,12 @@ export function ContentEditor({
 
     // Callback for when editor is ready - store the setDefaultBlockStyles function
     const handleEditorReady = useCallback(
-        (editor: any) => {
+        (editor: Editor) => {
             setEditor(editor);
             // Store setDefaultBlockStyles in editor's storage for access in slash commands
+            // Using any cast since we're extending storage with custom properties
             if (editor && editor.storage) {
-                editor.storage.setDefaultBlockStyles = setDefaultBlockStyles;
+                (editor.storage as any).setDefaultBlockStyles = setDefaultBlockStyles;
             }
         },
         [setEditor, setDefaultBlockStyles]

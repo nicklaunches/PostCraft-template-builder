@@ -1,4 +1,5 @@
 import type { BlockType as BlockTypeImport } from "@/utils/constants";
+import type { JSONContent } from "@tiptap/core";
 
 /**
  * Re-export BlockType for convenience
@@ -46,19 +47,42 @@ export interface DividerContent {
 }
 
 /**
+ * Union type of all possible block content types.
+ * Provides type safety for block content based on block type.
+ */
+export type BlockContent =
+    | string
+    | TextContent
+    | HeadingContent
+    | ButtonContent
+    | ImageContent
+    | DividerContent;
+
+/**
+ * JSON-serializable value type for template content.
+ */
+export type JSONValue =
+    | string
+    | number
+    | boolean
+    | null
+    | JSONValue[]
+    | { [key: string]: JSONValue };
+
+/**
  * Represents email template metadata and content.
  *
  * @property {string} [id] - Unique template identifier
  * @property {string} name - Template name/title
  * @property {string} [subject] - Email subject line
- * @property {unknown} content - Template content data
+ * @property {JSONValue} content - Template content data (JSON-serializable)
  * @property {Date} [updatedAt] - Last update timestamp
  */
 export interface TemplateData {
     id?: string;
     name: string;
     subject?: string;
-    content: unknown;
+    content: JSONValue;
     updatedAt?: Date;
 }
 
@@ -67,14 +91,14 @@ export interface TemplateData {
  *
  * @property {string} id - Unique identifier for the block
  * @property {BlockType} type - Type of content block
- * @property {unknown} content - Block content data (varies by type)
- * @property {Record<string, unknown>} [styles] - Optional custom styles for the block
+ * @property {BlockContent} content - Block content data (type-safe union)
+ * @property {Partial<BlockStyles>} [styles] - Optional custom styles for the block
  */
 export interface Block {
     id: string;
     type: BlockType;
-    content: unknown;
-    styles?: Record<string, unknown>;
+    content: BlockContent;
+    styles?: Partial<BlockStyles>;
 }
 
 /**
@@ -84,7 +108,7 @@ export interface TextBlock {
     id: string;
     type: "text";
     content: string | TextContent;
-    styles?: Record<string, unknown>;
+    styles?: Partial<BlockStyles>;
 }
 
 /**
@@ -94,7 +118,7 @@ export interface HeadingBlock {
     id: string;
     type: "heading";
     content: string | HeadingContent;
-    styles?: Record<string, unknown>;
+    styles?: Partial<BlockStyles>;
 }
 
 /**
@@ -104,7 +128,7 @@ export interface ButtonBlock {
     id: string;
     type: "button";
     content: ButtonContent;
-    styles?: Record<string, unknown>;
+    styles?: Partial<BlockStyles>;
 }
 
 /**
@@ -114,7 +138,7 @@ export interface ImageBlock {
     id: string;
     type: "image";
     content: ImageContent;
-    styles?: Record<string, unknown>;
+    styles?: Partial<BlockStyles>;
 }
 
 /**
@@ -124,7 +148,7 @@ export interface DividerBlock {
     id: string;
     type: "divider";
     content?: DividerContent;
-    styles?: Record<string, unknown>;
+    styles?: Partial<BlockStyles>;
 }
 
 /**
@@ -139,15 +163,15 @@ export type TypedBlock = TextBlock | HeadingBlock | ButtonBlock | ImageBlock | D
  * @property {boolean} [showNav] - Whether to display the navigation bar
  * @property {boolean} [showLeftSidebar] - Whether to display the left sidebar
  * @property {boolean} [showRightSidebar] - Whether to display the right sidebar
- * @property {(content: unknown) => void} [onSave] - Callback when content is saved
- * @property {unknown} [initialContent] - Initial content to load in the builder
+ * @property {(content: JSONValue) => void} [onSave] - Callback when content is saved
+ * @property {JSONValue} [initialContent] - Initial content to load in the builder
  */
 export interface TemplateBuilderProps {
     showNav?: boolean;
     showLeftSidebar?: boolean;
     showRightSidebar?: boolean;
-    onSave?: (content: unknown) => void;
-    initialContent?: unknown;
+    onSave?: (content: JSONContent) => void;
+    initialContent?: JSONContent;
 }
 
 /**
@@ -236,10 +260,10 @@ export type BlockStylesMap = Record<string, BlockStyles>;
 /**
  * Props for the ContentEditor component.
  *
- * @property {unknown} [initialContent] - Initial content to load in the editor
- * @property {(content: unknown) => void} [onSave] - Callback when content is saved
+ * @property {JSONValue} [initialContent] - Initial content to load in the editor
+ * @property {(content: JSONValue) => void} [onSave] - Callback when content is saved
  */
 export interface ContentEditorProps {
-    initialContent?: unknown;
-    onSave?: (content: unknown) => void;
+    initialContent?: JSONContent;
+    onSave?: (content: JSONContent) => void;
 }

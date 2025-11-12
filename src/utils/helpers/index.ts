@@ -1,3 +1,6 @@
+import type { Editor } from "@tiptap/core";
+import type { Node as ProseMirrorNode } from "@tiptap/pm/model";
+
 /**
  * Generates a unique random class name with a given prefix.
  *
@@ -45,7 +48,7 @@ export function generateBlockId(): string {
  * Traverses up the document tree from the current selection position
  * to find the nearest paragraph or heading node and returns its ID attribute.
  *
- * @param {any} editor - TipTap editor instance
+ * @param {Editor} editor - TipTap editor instance
  * @returns {string | null} Block ID if found, null otherwise
  *
  * @example
@@ -54,7 +57,7 @@ export function generateBlockId(): string {
  *   // Do something with the block ID
  * }
  */
-export function getBlockIdFromSelection(editor: any): string | null {
+export function getBlockIdFromSelection(editor: Editor): string | null {
     const { state } = editor;
     const { selection } = state;
     const { $from } = selection;
@@ -80,7 +83,7 @@ export function getBlockIdFromSelection(editor: any): string | null {
  * Traverses up the document tree from the current selection position
  * to find the nearest paragraph or heading node and returns its ID and type.
  *
- * @param {any} editor - TipTap editor instance
+ * @param {Editor} editor - TipTap editor instance
  * @returns {{ blockId: string | null; nodeType: string | null }} Object containing block ID and node type
  *
  * @example
@@ -89,7 +92,7 @@ export function getBlockIdFromSelection(editor: any): string | null {
  *   // Do something with the block
  * }
  */
-export function getBlockNodeInfoFromSelection(editor: any): {
+export function getBlockNodeInfoFromSelection(editor: Editor): {
     blockId: string | null;
     nodeType: string | null;
 } {
@@ -121,9 +124,9 @@ export function getBlockNodeInfoFromSelection(editor: any): {
  * to find a paragraph or heading node with the specified block ID and
  * returns comprehensive information about the node including its position and size.
  *
- * @param {any} editor - TipTap editor instance
+ * @param {Editor} editor - TipTap editor instance
  * @param {string} blockId - The ID of the block to find
- * @returns {{ node: any; pos: number; size: number } | null} Block node info or null if not found
+ * @returns {{ node: ProseMirrorNode; pos: number; size: number } | null} Block node info or null if not found
  *
  * @example
  * const blockInfo = findBlockNode(editor, "block-123");
@@ -132,9 +135,9 @@ export function getBlockNodeInfoFromSelection(editor: any): {
  * }
  */
 export function findBlockNode(
-    editor: any,
+    editor: Editor,
     blockId: string
-): { node: any; pos: number; size: number } | null {
+): { node: ProseMirrorNode; pos: number; size: number } | null {
     const { state } = editor;
     const { selection } = state;
     const { $from } = selection;
@@ -165,7 +168,7 @@ export function findBlockNode(
  * This function is called after changing a block's type (e.g., paragraph to heading)
  * to ensure the block has the appropriate default styles for its new type.
  *
- * @param {any} editor - TipTap editor instance with storage.setDefaultBlockStyles
+ * @param {Editor} editor - TipTap editor instance with storage.setDefaultBlockStyles
  * @param {string} blockId - The ID of the block to style
  * @param {string} blockType - The type of block ("paragraph" or "heading")
  * @param {number} [level] - The heading level (1, 2, or 3) if blockType is "heading"
@@ -175,7 +178,7 @@ export function findBlockNode(
  * applyDefaultBlockStyles(editor, "block-456", "paragraph");
  */
 export function applyDefaultBlockStyles(
-    editor: any,
+    editor: Editor,
     blockId: string,
     blockType: string,
     level?: number
@@ -208,7 +211,7 @@ export function createSlashCommand(
     blockType: string,
     level?: number
 ) {
-    return ({ editor, range }: { editor: any; range: any }) => {
+    return ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
         // Get the block ID from the current node before transformation
         const blockId = getBlockIdFromSelection(editor);
 
@@ -235,7 +238,7 @@ export function createSlashCommand(
  * immediately after the original block. Optionally calls a callback to handle
  * copying associated styles or other data.
  *
- * @param {any} editor - TipTap editor instance
+ * @param {Editor} editor - TipTap editor instance
  * @param {string} blockId - The ID of the block to duplicate
  * @param {(oldId: string, newId: string) => void} [onStylesCopy] - Optional callback for copying styles
  * @returns {string | null} The new block ID if successful, null if block not found
@@ -247,7 +250,7 @@ export function createSlashCommand(
  * });
  */
 export function duplicateBlock(
-    editor: any,
+    editor: Editor,
     blockId: string,
     onStylesCopy?: (oldId: string, newId: string) => void
 ): string | null {
@@ -273,7 +276,7 @@ export function duplicateBlock(
  * Removes the specified block from the document. Does not clean up associated
  * styles - caller should handle style cleanup separately if needed.
  *
- * @param {any} editor - TipTap editor instance
+ * @param {Editor} editor - TipTap editor instance
  * @param {string} blockId - The ID of the block to delete
  * @returns {boolean} True if the block was deleted successfully, false if not found
  *
@@ -284,7 +287,7 @@ export function duplicateBlock(
  *   deleteBlockStyles("block-123");
  * }
  */
-export function deleteBlock(editor: any, blockId: string): boolean {
+export function deleteBlock(editor: Editor, blockId: string): boolean {
     const blockInfo = findBlockNode(editor, blockId);
     if (!blockInfo) return false;
 

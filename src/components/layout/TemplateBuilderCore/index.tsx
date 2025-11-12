@@ -2,6 +2,7 @@ import { Nav } from "../Nav";
 import { LeftSidebar } from "../LeftSidebar";
 import { ContentEditor } from "../ContentEditor";
 import { RightSidebar } from "../RightSidebar";
+import type { JSONContent } from "@tiptap/core";
 
 /**
  * Props for the TemplateBuilderCore component.
@@ -9,15 +10,15 @@ import { RightSidebar } from "../RightSidebar";
  * @property {boolean} [showNav] - Whether to display the navigation bar
  * @property {boolean} [showLeftSidebar] - Whether to display the left sidebar
  * @property {boolean} [showRightSidebar] - Whether to display the right sidebar
- * @property {(content: unknown) => void} [onSave] - Callback when content is saved
- * @property {unknown} [initialContent] - Initial content to load in the builder
+ * @property {(content: JSONContent) => void} [onSave] - Callback when content is saved
+ * @property {JSONContent} [initialContent] - Initial content to load in the builder
  */
 export interface TemplateBuilderCoreProps {
     showNav?: boolean;
     showLeftSidebar?: boolean;
     showRightSidebar?: boolean;
-    onSave?: (content: unknown) => void;
-    initialContent?: unknown;
+    onSave?: (content: JSONContent) => void;
+    initialContent?: JSONContent;
 }
 
 /**
