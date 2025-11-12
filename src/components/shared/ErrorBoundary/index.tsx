@@ -63,7 +63,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
             return (
                 <div className="flex flex-col items-center justify-center p-8 text-center">
-                    <div className="rounded-lg border border-red-200 bg-red-50 p-6 max-w-md">
+                    <div className="border border-red-200 bg-red-50 p-6 max-w-md">
                         <h2 className="text-lg font-semibold text-red-900 mb-2">
                             Something went wrong
                         </h2>

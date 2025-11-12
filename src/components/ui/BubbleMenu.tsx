@@ -8,6 +8,7 @@ import {
     CodeBracketIcon,
     LinkIcon,
 } from "@heroicons/react/24/outline";
+import Tooltip from "./Tooltip";
 
 interface BubbleMenuProps {
     editor: Editor | null;
@@ -50,81 +51,94 @@ export default function BubbleMenu({ editor }: BubbleMenuProps) {
     return (
         <TiptapBubbleMenu
             editor={editor}
+            updateDelay={0}
             className="flex items-center gap-1 p-1 bg-white border border-gray-200 rounded-lg shadow-lg"
         >
-            <button
-                onClick={() => {
-                    editor.chain().focus().toggleBold().run();
-                }}
-                className={`p-2 rounded hover:bg-gray-100 transition-colors ${
-                    editor.isActive("bold") ? "bg-gray-200" : ""
-                }`}
-                title="Bold"
-            >
-                <BoldIcon className="w-4 h-4" />
-            </button>
+            <Tooltip content="Bold (Ctrl+B)">
+                <button
+                    onClick={() => {
+                        editor.chain().focus().toggleBold().run();
+                    }}
+                    className={`p-2 rounded hover:bg-gray-100 transition-colors ${
+                        editor.isActive("bold") ? "bg-gray-200" : ""
+                    }`}
+                    title="Bold"
+                >
+                    <BoldIcon className="w-4 h-4" />
+                </button>
+            </Tooltip>
 
-            <button
-                onClick={() => {
-                    editor.chain().focus().toggleItalic().run();
-                }}
-                className={`p-2 rounded hover:bg-gray-100 transition-colors ${
-                    editor.isActive("italic") ? "bg-gray-200" : ""
-                }`}
-                title="Italic"
-            >
-                <ItalicIcon className="w-4 h-4" />
-            </button>
+            <Tooltip content="Italic (Ctrl+I)">
+                <button
+                    onClick={() => {
+                        editor.chain().focus().toggleItalic().run();
+                    }}
+                    className={`p-2 rounded hover:bg-gray-100 transition-colors ${
+                        editor.isActive("italic") ? "bg-gray-200" : ""
+                    }`}
+                    title="Italic"
+                >
+                    <ItalicIcon className="w-4 h-4" />
+                </button>
+            </Tooltip>
 
-            <button
-                onClick={() => {
-                    editor.chain().focus().toggleStrike().run();
-                }}
-                className={`p-2 rounded hover:bg-gray-100 transition-colors ${
-                    editor.isActive("strike") ? "bg-gray-200" : ""
-                }`}
-                title="Strikethrough"
-            >
-                <StrikethroughIcon className="w-4 h-4" />
-            </button>
+            <Tooltip content="Strikethrough">
+                <button
+                    onClick={() => {
+                        editor.chain().focus().toggleStrike().run();
+                    }}
+                    className={`p-2 rounded hover:bg-gray-100 transition-colors ${
+                        editor.isActive("strike") ? "bg-gray-200" : ""
+                    }`}
+                    title="Strikethrough"
+                >
+                    <StrikethroughIcon className="w-4 h-4" />
+                </button>
+            </Tooltip>
 
-            <button
-                onClick={() => {
-                    editor.chain().focus().toggleUnderline().run();
-                }}
-                className={`p-2 rounded hover:bg-gray-100 transition-colors ${
-                    editor.isActive("underline") ? "bg-gray-200" : ""
-                }`}
-                title="Underline"
-            >
-                <UnderlineIcon className="w-4 h-4" />
-            </button>
+            <Tooltip content="Underline (Ctrl+U)">
+                <button
+                    onClick={() => {
+                        editor.chain().focus().toggleUnderline().run();
+                    }}
+                    className={`p-2 rounded hover:bg-gray-100 transition-colors ${
+                        editor.isActive("underline") ? "bg-gray-200" : ""
+                    }`}
+                    title="Underline"
+                >
+                    <UnderlineIcon className="w-4 h-4" />
+                </button>
+            </Tooltip>
 
-            <button
-                onClick={() => {
-                    editor.chain().focus().toggleCode().run();
-                }}
-                className={`p-2 rounded hover:bg-gray-100 transition-colors ${
-                    editor.isActive("code") ? "bg-gray-200" : ""
-                }`}
-                title="Code"
-            >
-                <CodeBracketIcon className="w-4 h-4" />
-            </button>
+            <Tooltip content="Code (Ctrl+E)">
+                <button
+                    onClick={() => {
+                        editor.chain().focus().toggleCode().run();
+                    }}
+                    className={`p-2 rounded hover:bg-gray-100 transition-colors ${
+                        editor.isActive("code") ? "bg-gray-200" : ""
+                    }`}
+                    title="Code"
+                >
+                    <CodeBracketIcon className="w-4 h-4" />
+                </button>
+            </Tooltip>
 
             <div className="w-px h-6 bg-gray-300" />
 
-            <button
-                onClick={() => {
-                    setLink();
-                }}
-                className={`p-2 rounded hover:bg-gray-100 transition-colors ${
-                    editor.isActive("link") ? "bg-gray-200" : ""
-                }`}
-                title="Link"
-            >
-                <LinkIcon className="w-4 h-4" />
-            </button>
+            <Tooltip content="Add or edit link (Ctrl+K)">
+                <button
+                    onClick={() => {
+                        setLink();
+                    }}
+                    className={`p-2 rounded hover:bg-gray-100 transition-colors ${
+                        editor.isActive("link") ? "bg-gray-200" : ""
+                    }`}
+                    title="Link"
+                >
+                    <LinkIcon className="w-4 h-4" />
+                </button>
+            </Tooltip>
         </TiptapBubbleMenu>
     );
 }
