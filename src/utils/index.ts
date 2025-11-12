@@ -57,6 +57,12 @@ export {
     cloneBlock,
     createDefaultBlock,
     createBlocksFromTypes,
+    // Simplified convenience functions
+    text,
+    heading,
+    button,
+    image,
+    divider,
 } from "./factories/blockFactory";
 
 // Validators

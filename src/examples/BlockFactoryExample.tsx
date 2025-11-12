@@ -14,11 +14,72 @@ import {
     cloneBlock,
     createDefaultBlock,
     createBlocksFromTypes,
+    blockBuilder,
+    // Simplified convenience functions
+    text,
+    heading,
+    button,
+    divider,
 } from "@/utils/factories/blockFactory";
 import type { Block } from "@/types";
 
 /**
- * Example: Create a welcome email template using block factories
+ * Example: Simple template using the new simplified API
+ * This demonstrates the reduced verbosity for common cases.
+ */
+export function createSimpleWelcomeEmail(): Block[] {
+    return [
+        heading("Welcome!", 1),
+        text("Thanks for joining us."),
+        divider(),
+        button("Get Started", "https://example.com/start"),
+        text("Need help? Contact support anytime."),
+    ];
+}
+
+/**
+ * Example: Using the builder pattern for complex styling
+ */
+export function createStyledWelcomeEmail(): Block[] {
+    return [
+        blockBuilder("heading")
+            .withContent({ text: "Welcome to PostCraft!", level: 1 })
+            .withStyles({
+                alignment: "center",
+                marginBottom: 20,
+                paddingTop: 10,
+                paddingBottom: 10,
+            })
+            .build(),
+
+        text("Thank you for signing up! We're excited to have you on board."),
+
+        blockBuilder("divider")
+            .withStyles({
+                marginTop: 20,
+                marginBottom: 20,
+            })
+            .build(),
+
+        heading("Get Started", 2),
+        text("Explore our powerful email template builder."),
+
+        blockBuilder("button")
+            .withContent({
+                text: "Start Building",
+                url: "https://postcraft.dev/dashboard",
+            })
+            .withStyles({
+                alignment: "center",
+                marginTop: 20,
+                marginBottom: 20,
+            })
+            .build(),
+    ];
+}
+
+/**
+ * Example: Create a welcome email template (original full-featured API)
  */
 export function createWelcomeEmailTemplate(): Block[] {
     return [

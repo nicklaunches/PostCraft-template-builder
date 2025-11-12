@@ -245,3 +245,57 @@ export function createDefaultBlock(type: BlockType, options: BlockOptions = {}):
 export function createBlocksFromTypes(types: BlockType[]): Block[] {
     return types.map((type) => createDefaultBlock(type));
 }
+
+// ============================================================================
+// Simplified Convenience Functions for Common Use Cases
+// ============================================================================
+
+/**
+ * Simplified text block creation - just pass text string.
+ * For advanced options, use createTextBlock() or blockBuilder().
+ *
+ * @example
+ * const block = text('Hello World')
+ */
+export const text = (content: string): TextBlock => createTextBlock(content);
+
+/**
+ * Simplified heading block creation.
+ * For advanced options, use createHeadingBlock() or blockBuilder().
+ *
+ * @example
+ * const h1 = heading('Title')
+ * const h2 = heading('Subtitle', 2)
+ */
+export const heading = (content: string, level: 1 | 2 | 3 | 4 | 5 | 6 = 1): HeadingBlock =>
+    createHeadingBlock(content, level);
+
+/**
+ * Simplified button block creation.
+ * For advanced options, use createButtonBlock() or blockBuilder().
+ *
+ * @example
+ * const btn = button('Click Me', 'https://example.com')
+ */
+export const button = (label: string, url: string): ButtonBlock =>
+    createButtonBlock({ text: label, url });
+
+/**
+ * Simplified image block creation.
+ * For advanced options, use createImageBlock() or blockBuilder().
+ *
+ * @example
+ * const img = image('photo.jpg')
+ * const img = image('photo.jpg', 'Alt text')
+ */
+export const image = (src: string, alt?: string): ImageBlock =>
+    createImageBlock({ src, alt: alt || "" });
+
+/**
+ * Simplified divider block creation.
+ * For advanced options, use createDividerBlock() or blockBuilder().
+ *
+ * @example
+ * const hr = divider()
+ */
+export const divider = (): Block => createDividerBlock() as Block;

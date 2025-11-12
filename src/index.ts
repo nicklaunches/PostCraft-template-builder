@@ -126,6 +126,7 @@ export {
     FALLBACK_OPTIONS,
     MAX_HISTORY_SIZE,
     // Block Factories
+    blockBuilder,
     createBlock,
     createTextBlock,
     createHeadingBlock,
@@ -135,6 +136,12 @@ export {
     cloneBlock,
     createDefaultBlock,
     createBlocksFromTypes,
+    // Simplified convenience factories
+    text,
+    heading,
+    button,
+    image,
+    divider,
     // Validators
     isValidHexColor,
     isValidUrl,
