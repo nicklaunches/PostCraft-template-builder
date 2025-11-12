@@ -3,13 +3,49 @@ import type { Editor } from "@tiptap/core";
 import { generateBlockId } from "@/utils/helpers";
 
 /**
+ * Valid HTML tags that can be used for styled nodes.
+ * This type safety helps prevent bugs like using node names instead of HTML tags.
+ */
+export type HTMLTag =
+    | "p" // Paragraph
+    | "h1" // Heading 1
+    | "h2" // Heading 2
+    | "h3" // Heading 3
+    | "h4" // Heading 4
+    | "h5" // Heading 5
+    | "h6" // Heading 6
+    | "div" // Division
+    | "span" // Span
+    | "section" // Section
+    | "article" // Article
+    | "aside" // Aside
+    | "blockquote" // Blockquote
+    | "pre" // Preformatted text
+    | "code" // Code
+    | "ul" // Unordered list
+    | "ol" // Ordered list
+    | "li" // List item
+    | "table" // Table
+    | "tr" // Table row
+    | "td" // Table data cell
+    | "th"; // Table header cell
+
+/**
  * Configuration options for creating a styled node extension.
+ *
+ * Type safety ensures:
+ * - HTML tag is a valid element name
+ * - renderHTML return type is correctly typed
+ * - Node and HTMLAttributes are properly typed
  */
 export interface StyledNodeConfig {
     /** The name of the node (e.g., 'heading', 'paragraph') */
     name: string;
-    /** The HTML tag to render (e.g., 'p', 'h1'). Defaults to name if not provided */
-    tag?: string;
+    /**
+     * The HTML tag to render (e.g., 'p', 'h1').
+     * REQUIRED to prevent bugs where node name is used instead of tag.
+     */
+    tag: HTMLTag;
     /** Priority for the extension (default: 1000) */
     priority?: number;
     /** Content model for the node (default: 'inline*') */
@@ -26,8 +62,14 @@ export interface StyledNodeConfig {
     additionalAttributes?: Record<string, unknown>;
     /** Custom parseHTML rules */
     parseHTML?: () => Array<{ tag: string; attrs?: Record<string, unknown> }>;
-    /** Custom renderHTML implementation (overrides default) */
-    renderHTML?: (params: { node: any; HTMLAttributes: Record<string, unknown> }) => any;
+    /**
+     * Custom renderHTML implementation (overrides default).
+     * Must return [tag, attributes, content] tuple.
+     */
+    renderHTML?: (params: {
+        node: any;
+        HTMLAttributes: Record<string, unknown>;
+    }) => readonly [HTMLTag, Record<string, unknown>, 0];
     /** Callback when a new block is created with its ID */
     onBlockCreated?: (blockId: string, attrs?: Record<string, unknown>) => void;
 }
@@ -73,7 +115,11 @@ export function ensureBlockIds(
  * - Automatic unique ID assignment to all nodes
  * - Style attribute support for inline CSS
  * - Consistent parseHTML and renderHTML behavior
+ * - Type-safe HTML tag specification
  * - Configurable options via the config parameter
+ *
+ * Type safety ensures that the HTML tag is valid and prevents bugs where
+ * node names (e.g., "paragraph") are accidentally used instead of HTML tags (e.g., "p").
  *
  * @param config - Configuration object for the styled node
  * @returns A TipTap node extension with styling and ID support
@@ -82,6 +128,7 @@ export function ensureBlockIds(
  * ```typescript
  * export const ParagraphWithStyle = createStyledNode({
  *   name: 'paragraph',
+ *   tag: 'p',  // Required - type-checked to be a valid HTML tag
  *   className: 'postcraft-editor-paragraph',
  *   parseHTML: () => [{ tag: 'p' }],
  *   onBlockCreated: (blockId) => console.log('New paragraph:', blockId)
@@ -103,9 +150,6 @@ export function createStyledNode(config: StyledNodeConfig) {
         renderHTML,
         onBlockCreated,
     } = config;
-
-    // Use tag if provided, otherwise default to name
-    const htmlTag = tag || name;
 
     return Node.create({
         name,
@@ -158,19 +202,20 @@ export function createStyledNode(config: StyledNodeConfig) {
             if (parseHTML) {
                 return parseHTML();
             }
-            // Default parseHTML if not provided
-            return [{ tag: htmlTag }];
+            // Default parseHTML if not provided - use the type-safe tag
+            return [{ tag }];
         },
 
-        renderHTML({ node, HTMLAttributes }) {
+        renderHTML({ node, HTMLAttributes }): readonly [HTMLTag, Record<string, unknown>, 0] {
             if (renderHTML) {
                 return renderHTML({ node, HTMLAttributes });
             }
             // Default renderHTML behavior - match the original paragraph pattern
+            // Returns type-safe tuple [tag, attributes, content]
             const attrs = className
                 ? mergeAttributes(HTMLAttributes, { class: className })
                 : mergeAttributes(HTMLAttributes);
-            return [htmlTag, attrs, 0];
+            return [tag, attrs, 0] as const;
         },
 
         onCreate() {

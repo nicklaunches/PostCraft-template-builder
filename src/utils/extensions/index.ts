@@ -10,5 +10,5 @@ export { ParagraphWithStyle } from "./paragraph-with-style";
 export { HeadingWithStyle } from "./heading-with-style";
 export { createStyledNode, ensureBlockIds } from "./createStyledNode";
 export type { SuggestionItem } from "./slash-command";
-export type { StyledNodeConfig } from "./createStyledNode";
+export type { StyledNodeConfig, HTMLTag } from "./createStyledNode";
 export { suggestionItems } from "./suggestion-items";
