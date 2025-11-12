@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import type { Editor } from "@tiptap/core";
-import type { ContentEditorProps } from "@/types";
+import type { JSONContent } from "@tiptap/core";
 import { useEmailStyles } from "@/context/EmailStylesContext";
 import { useBlockStyles } from "@/context/BlockStylesContext";
 import { useEditorContext } from "@/context/EditorContext";
@@ -9,6 +9,17 @@ import { ExtendedTipTap } from "@/components/ui";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 import { getDefaultStylesForLevel } from "@/utils/extensions/heading-with-style";
 import { DEFAULT_P_STYLES } from "@/utils/constants";
+
+/**
+ * Props for the ContentEditor component.
+ *
+ * @property {JSONContent} [initialContent] - Initial content to load in the editor
+ * @property {(content: JSONContent) => void} [onSave] - Callback when content is saved
+ */
+export interface ContentEditorProps {
+    initialContent?: JSONContent;
+    onSave?: (content: JSONContent) => void;
+}
 
 /**
  * Rich text content editor with drag handle and dynamic styling.

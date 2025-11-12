@@ -9,7 +9,7 @@ import { CSSProperties } from "react";
  * @property {boolean} [fullScreen] - Whether to render as full-screen overlay
  * @property {string} [className] - Additional CSS classes
  */
-interface LoadingSpinnerProps {
+export interface LoadingSpinnerProps {
     size?: "sm" | "md" | "lg" | "xl";
     color?: string;
     text?: string;

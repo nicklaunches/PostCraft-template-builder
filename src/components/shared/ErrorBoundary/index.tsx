@@ -7,7 +7,7 @@ import { Component, ReactNode, ErrorInfo } from "react";
  * @property {ReactNode} [fallback] - Custom fallback UI to display on error
  * @property {(error: Error, errorInfo: ErrorInfo) => void} [onError] - Optional error handler callback
  */
-interface ErrorBoundaryProps {
+export interface ErrorBoundaryProps {
     children: ReactNode;
     fallback?: ReactNode;
     onError?: (error: Error, errorInfo: ErrorInfo) => void;
@@ -19,7 +19,7 @@ interface ErrorBoundaryProps {
  * @property {boolean} hasError - Whether an error has been caught
  * @property {Error | null} error - The caught error object
  */
-interface ErrorBoundaryState {
+export interface ErrorBoundaryState {
     hasError: boolean;
     error: Error | null;
 }

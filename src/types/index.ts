@@ -1,5 +1,4 @@
 import type { BlockType as BlockTypeImport } from "@/utils/constants";
-import type { JSONContent } from "@tiptap/core";
 
 /**
  * Re-export BlockType for convenience
@@ -158,23 +157,6 @@ export interface DividerBlock {
 export type TypedBlock = TextBlock | HeadingBlock | ButtonBlock | ImageBlock | DividerBlock;
 
 /**
- * Props for the TemplateBuilder component.
- *
- * @property {boolean} [showNav] - Whether to display the navigation bar
- * @property {boolean} [showLeftSidebar] - Whether to display the left sidebar
- * @property {boolean} [showRightSidebar] - Whether to display the right sidebar
- * @property {(content: JSONValue) => void} [onSave] - Callback when content is saved
- * @property {JSONValue} [initialContent] - Initial content to load in the builder
- */
-export interface TemplateBuilderProps {
-    showNav?: boolean;
-    showLeftSidebar?: boolean;
-    showRightSidebar?: boolean;
-    onSave?: (content: JSONContent) => void;
-    initialContent?: JSONContent;
-}
-
-/**
  * Email styling configuration interface.
  *
  * @property {string} [className] - Unique CSS class name for the template
@@ -256,14 +238,3 @@ export interface BlockStyles {
  * Value: BlockStyles configuration for that block
  */
 export type BlockStylesMap = Record<string, BlockStyles>;
-
-/**
- * Props for the ContentEditor component.
- *
- * @property {JSONValue} [initialContent] - Initial content to load in the editor
- * @property {(content: JSONValue) => void} [onSave] - Callback when content is saved
- */
-export interface ContentEditorProps {
-    initialContent?: JSONContent;
-    onSave?: (content: JSONContent) => void;
-}

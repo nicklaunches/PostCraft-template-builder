@@ -6,7 +6,7 @@ import { Editor } from "@tiptap/react";
  *
  * @property {Editor | null} editor - TipTap editor instance
  */
-interface MenuBarProps {
+export interface MenuBarProps {
     editor: Editor | null;
 }
 
@@ -20,7 +20,7 @@ interface MenuBarProps {
  * @param {MenuBarProps} props - Component props
  * @returns {JSX.Element | null} Menu bar component or null if no editor
  */
-export default function MenuBar({ editor }: MenuBarProps) {
+export function MenuBar({ editor }: MenuBarProps) {
     if (!editor) {
         return null;
     }
