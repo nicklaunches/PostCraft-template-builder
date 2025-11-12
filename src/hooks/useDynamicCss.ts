@@ -23,10 +23,29 @@ export function useDynamicCss(
     emailStyles: EmailStyles,
     updateEmailStyle: <K extends keyof EmailStyles>(key: K, value: EmailStyles[K]) => void
 ): { css: string; className: string } {
-    // Generate className if it doesn't exist
+    // Generate className based on email styles content hash
     useEffect(() => {
         if (!emailStyles.className) {
-            const newClassName = generateClassName();
+            // Create a stable string representation of email styles for hashing
+            const contentString = JSON.stringify({
+                font: emailStyles.font,
+                fallback: emailStyles.fallback,
+                backgroundColor: emailStyles.backgroundColor,
+                contentBackgroundColor: emailStyles.contentBackgroundColor,
+                bodyColor: emailStyles.bodyColor,
+                borderColor: emailStyles.borderColor,
+                paddingLeft: emailStyles.paddingLeft,
+                paddingRight: emailStyles.paddingRight,
+                paddingTop: emailStyles.paddingTop,
+                paddingBottom: emailStyles.paddingBottom,
+                marginLeft: emailStyles.marginLeft,
+                marginRight: emailStyles.marginRight,
+                marginTop: emailStyles.marginTop,
+                marginBottom: emailStyles.marginBottom,
+                radius: emailStyles.radius,
+                borderWidth: emailStyles.borderWidth,
+            });
+            const newClassName = generateClassName(contentString);
             updateEmailStyle("className", newClassName);
         }
     }, [emailStyles.className, updateEmailStyle]);

@@ -70,7 +70,6 @@ export { ErrorBoundary, LoadingSpinner } from "./components/shared";
 export { Nav } from "./components/layout/Nav";
 export { LeftSidebar } from "./components/layout/LeftSidebar";
 export { ContentEditor } from "./components/layout/ContentEditor";
-export type { ContentEditorProps } from "./components/layout/ContentEditor";
 export { RightSidebar } from "./components/layout/RightSidebar";
 
 // Panel components for granular control

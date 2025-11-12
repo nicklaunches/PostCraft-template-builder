@@ -1,5 +1,6 @@
 import type {
     Block,
+    BlockContent,
     TextBlock,
     HeadingBlock,
     ButtonBlock,
@@ -37,7 +38,11 @@ interface BlockOptions {
  * const block = createBlock('text', { text: 'Hello' });
  * // { id: 'block-123...', type: 'text', content: { text: 'Hello' }, styles: {...} }
  */
-export function createBlock(type: BlockType, content: unknown, options: BlockOptions = {}): Block {
+export function createBlock(
+    type: BlockType,
+    content: BlockContent,
+    options: BlockOptions = {}
+): Block {
     return {
         id: options.id || generateBlockId(),
         type,

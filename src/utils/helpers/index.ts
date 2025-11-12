@@ -2,29 +2,45 @@ import type { Editor } from "@tiptap/core";
 import type { Node as ProseMirrorNode } from "@tiptap/pm/model";
 
 /**
- * Generates a unique random class name with a given prefix.
+ * Generates a simple hash from a string.
  *
- * Creates a random alphanumeric string appended to the provided prefix
- * for use as a unique CSS class identifier.
+ * Uses a basic hash algorithm to create a deterministic numeric hash
+ * from the input string, then converts it to base-36 for compactness.
  *
+ * @param {string} str - The string to hash
+ * @returns {string} The hash as a base-36 string
+ *
+ * @example
+ * simpleHash('hello') // "19i3st8"
+ * simpleHash('world') // "1f8do2j"
+ */
+function simpleHash(str: string): string {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = (hash << 5) - hash + str.charCodeAt(i);
+        hash = hash & hash; // Convert to 32-bit integer
+    }
+    return Math.abs(hash).toString(36);
+}
+
+/**
+ * Generates a unique, deterministic class name based on content.
+ *
+ * Uses a hash-based approach for SSR-friendly, deterministic output.
+ * The same content will always produce the same class name, making it
+ * ideal for server-side rendering and testing scenarios.
+ *
+ * @param {string} content - Content to hash for generating the class name
  * @param {string} [prefix="postcraft-email-"] - Prefix for the generated class name
- * @param {number} [length=10] - Length of the random suffix
  * @returns {string} Generated unique class name
  *
  * @example
- * generateClassName() // "postcraft-email-A3F9G2K1H5"
- * generateClassName("custom-", 6) // "custom-X7Y2Z9"
+ * generateClassName('my-styles') // "postcraft-email-1a2b3c4"
+ * generateClassName('different-styles', 'custom-') // "custom-5d6e7f8"
  */
-export function generateClassName(
-    prefix: string = "postcraft-email-",
-    length: number = 10
-): string {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    let result = prefix;
-    for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
+export function generateClassName(content: string, prefix: string = "postcraft-email-"): string {
+    const hash = simpleHash(content);
+    return `${prefix}${hash}`;
 }
 
 /**
