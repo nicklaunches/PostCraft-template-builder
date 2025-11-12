@@ -3,7 +3,8 @@ import { HexColorPicker } from "react-colorful";
 import Label from "./Label";
 import Tooltip from "./Tooltip";
 import { PlusIcon, ResetIcon } from "@/utils/icons";
-import { sanitizeHexColor, isValidHexColor } from "@/utils/validators";
+import { sanitizeHexColor } from "@/utils/validators/sanitizers";
+import { isValidHexColor } from "@/utils/validators/type-guards";
 
 /**
  * Props for the ColorPicker component.

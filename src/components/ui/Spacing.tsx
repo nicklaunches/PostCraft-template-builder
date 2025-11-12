@@ -2,7 +2,7 @@ import { useState } from "react";
 import Label from "./Label";
 import Tooltip from "./Tooltip";
 import { PaddingHorizontalIcon, PaddingVerticalIcon } from "@/utils/icons";
-import { sanitizeNumber } from "@/utils/validators";
+import { sanitizeNumber } from "@/utils/validators/sanitizers";
 
 /**
  * Props for the Spacing component.

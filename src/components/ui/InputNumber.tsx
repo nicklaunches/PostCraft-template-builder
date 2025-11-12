@@ -2,7 +2,7 @@ import { useState } from "react";
 import Label from "./Label";
 import Tooltip from "./Tooltip";
 import { RadiusIcon, BorderWidthIcon, FontSizeIcon, LineHeightIcon } from "@/utils/icons";
-import { sanitizeNumber } from "@/utils/validators";
+import { sanitizeNumber } from "@/utils/validators/sanitizers";
 
 /**
  * Props for the InputNumber component.

@@ -76,8 +76,8 @@ export {
     sanitizeUrl,
     sanitizeString,
     sanitizeBlockArray,
-} from "./validators";
-export type { ValidationResult, ValidationOptions } from "./validators";
+} from "./validators/index";
+export type { ValidationResult, ValidationOptions } from "./validators/index";
 
 // CSS Generators
 export {
