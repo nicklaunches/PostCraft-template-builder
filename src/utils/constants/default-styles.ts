@@ -1,17 +1,6 @@
 import type { EmailStyles, BlockStyles } from "@/types";
 
 /**
- * Block types supported by the email template builder.
- * Use const assertion for strict type safety.
- */
-export const BLOCK_TYPES = ["text", "heading", "image", "button", "divider"] as const;
-
-/**
- * Block type union derived from BLOCK_TYPES constant.
- */
-export type BlockType = (typeof BLOCK_TYPES)[number];
-
-/**
  * Default email-wide styling configuration.
  * Applied to new templates and used as fallback values.
  */
@@ -114,28 +103,3 @@ export const DEFAULT_H3_STYLES: Readonly<BlockStyles> = {
     lineHeight: 160,
     color: "#000000",
 } as const;
-
-/**
- * Available font options for email templates.
- */
-export const FONT_OPTIONS = [
-    { value: "Inter", label: "Inter" },
-    { value: "Arial", label: "Arial" },
-    { value: "Helvetica", label: "Helvetica" },
-    { value: "Georgia", label: "Georgia" },
-];
-
-/**
- * Available font fallback options for email templates.
- */
-export const FALLBACK_OPTIONS = [
-    { value: "sans-serif", label: "Sans" },
-    { value: "serif", label: "Serif" },
-    { value: "monospace", label: "Mono" },
-];
-
-/**
- * Maximum number of history states to keep in undo/redo.
- * Prevents memory issues with very long editing sessions.
- */
-export const MAX_HISTORY_SIZE = 50;
