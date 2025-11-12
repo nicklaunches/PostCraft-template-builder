@@ -144,6 +144,21 @@ export default function BlockStyles() {
                 styleArray.push(`background-color: ${styles.backgroundColor}`);
             }
 
+            // Font size
+            if (styles.fontSize > 0) {
+                styleArray.push(`font-size: ${styles.fontSize}px`);
+            }
+
+            // Line height
+            if (styles.lineHeight > 0) {
+                styleArray.push(`line-height: ${styles.lineHeight}%`);
+            }
+
+            // Text color
+            if (styles.color) {
+                styleArray.push(`color: ${styles.color}`);
+            }
+
             // Alignment
             if (styles.alignment) {
                 styleArray.push(`text-align: ${styles.alignment}`);
@@ -382,6 +397,32 @@ export default function BlockStyles() {
                 value={currentBlockStyles.backgroundColor}
                 onChange={(value) => updateBlockStyle(currentBlockId, "backgroundColor", value)}
                 tooltip="Background color"
+                labelPosition="top"
+                position="left"
+            />
+
+            <InputNumber
+                label="Size"
+                icon="font-size"
+                value={currentBlockStyles.fontSize}
+                onChange={(value) => updateBlockStyle(currentBlockId, "fontSize", value)}
+                tooltip="Font size"
+            />
+
+            <InputNumber
+                label="Line height"
+                icon="line-height"
+                value={currentBlockStyles.lineHeight}
+                onChange={(value) => updateBlockStyle(currentBlockId, "lineHeight", value)}
+                tooltip="Line height"
+                suffix="%"
+            />
+
+            <ColorPicker
+                label="Color"
+                value={currentBlockStyles.color}
+                onChange={(value) => updateBlockStyle(currentBlockId, "color", value)}
+                tooltip="Text color"
                 labelPosition="top"
                 position="left"
             />

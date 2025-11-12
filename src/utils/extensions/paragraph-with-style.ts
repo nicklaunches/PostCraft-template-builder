@@ -21,7 +21,7 @@ export const ParagraphWithStyle = Node.create({
     },
 
     renderHTML({ HTMLAttributes }) {
-        return ["p", mergeAttributes(HTMLAttributes), 0];
+        return ["p", mergeAttributes(HTMLAttributes, { class: "postcraft-paragraph" }), 0];
     },
 
     addAttributes() {

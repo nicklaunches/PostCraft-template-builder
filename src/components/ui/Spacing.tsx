@@ -173,7 +173,7 @@ export default function Spacing({
                 {/* Horizontal */}
                 <div className="flex-1">
                     <div
-                        className={`outline-none w-full cursor-text mt-0.5 flex items-center rounded border transition ${
+                        className={`outline-none w-full cursor-text flex items-center rounded border transition ${
                             horizontalInvalid
                                 ? "border-red-300 bg-red-50 hover:border-red-400"
                                 : "border-transparent bg-gray-100 hover:border-gray-200"
@@ -200,7 +200,7 @@ export default function Spacing({
                 {/* Vertical */}
                 <div className="flex-1">
                     <div
-                        className={`outline-none w-full cursor-text mt-0.5 flex items-center rounded border transition ${
+                        className={`outline-none w-full cursor-text flex items-center rounded border transition ${
                             verticalInvalid
                                 ? "border-red-300 bg-red-50 hover:border-red-400"
                                 : "border-transparent bg-gray-100 hover:border-gray-200"

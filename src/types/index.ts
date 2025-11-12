@@ -205,6 +205,9 @@ export interface EmailStyles {
  * @property {number} marginTop - Top margin in pixels
  * @property {number} marginBottom - Bottom margin in pixels
  * @property {string} backgroundColor - Background color (hex)
+ * @property {number} fontSize - Font size in pixels
+ * @property {number} lineHeight - Line height as percentage
+ * @property {string} color - Text color (hex)
  */
 export interface BlockStyles {
     alignment: "left" | "center" | "right";
@@ -218,6 +221,9 @@ export interface BlockStyles {
     marginTop: number;
     marginBottom: number;
     backgroundColor: string;
+    fontSize: number;
+    lineHeight: number;
+    color: string;
 }
 
 /**

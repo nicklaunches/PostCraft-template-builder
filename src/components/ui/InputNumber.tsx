@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Label from "./Label";
 import Tooltip from "./Tooltip";
-import { RadiusIcon, BorderWidthIcon } from "@/utils/icons";
+import { RadiusIcon, BorderWidthIcon, FontSizeIcon, LineHeightIcon } from "@/utils/icons";
 import { sanitizeNumber } from "@/utils/validators";
 
 /**
@@ -10,33 +10,36 @@ import { sanitizeNumber } from "@/utils/validators";
  * @property {string} label - Label text displayed for the input
  * @property {number} [value] - Controlled numeric value
  * @property {number} [defaultValue] - Default value if uncontrolled
- * @property {"radius" | "border-width"} [icon] - Optional icon to display
+ * @property {"radius" | "border-width" | "font-size" | "line-height"} [icon] - Optional icon to display
  * @property {(value: number) => void} [onChange] - Callback when value changes
  * @property {string} [tooltip] - Optional tooltip text
  * @property {number} [min] - Minimum allowed value
  * @property {number} [max] - Maximum allowed value
  * @property {number} [step] - Step increment for arrow buttons
  * @property {boolean} [showValidation] - Whether to show validation feedback (default: false)
+ * @property {string} [suffix] - Optional suffix text to display after the input (e.g., "%", "px")
  */
 interface InputNumberProps {
     label: string;
     value?: number;
     defaultValue?: number;
-    icon?: "radius" | "border-width";
+    icon?: "radius" | "border-width" | "font-size" | "line-height";
     onChange?: (value: number) => void;
     tooltip?: string;
     min?: number;
     max?: number;
     step?: number;
     showValidation?: boolean;
+    suffix?: string;
 }
 
 /**
  * Number input component with validation, optional icon and tooltip.
  *
  * Provides a styled number input with support for contextual icons
- * (radius or border-width), consistent label alignment, and optional
- * validation with min/max bounds and visual feedback.
+ * (radius, border-width, font-size, line-height), consistent label
+ * alignment, optional suffix text, and optional validation with min/max
+ * bounds and visual feedback.
  *
  * @param {InputNumberProps} props - Component props
  * @returns {JSX.Element} InputNumber component
@@ -63,6 +66,7 @@ export default function InputNumber({
     max = 1000,
     step = 1,
     showValidation = false,
+    suffix,
 }: InputNumberProps) {
     const [isInvalid, setIsInvalid] = useState(false);
     const [localValue, setLocalValue] = useState<string>("");
@@ -76,6 +80,14 @@ export default function InputNumber({
 
         if (icon === "border-width") {
             return <BorderWidthIcon />;
+        }
+
+        if (icon === "font-size") {
+            return <FontSizeIcon />;
+        }
+
+        if (icon === "line-height") {
+            return <LineHeightIcon />;
         }
 
         return null;
@@ -125,16 +137,16 @@ export default function InputNumber({
 
     const inputElement = (
         <div
-            className={`outline-none w-full cursor-text mt-0.5 flex items-center rounded border transition ${
+            className={`outline-none w-full cursor-text flex items-center rounded border transition ${
                 isInvalid
                     ? "border-red-300 bg-red-50 hover:border-red-400"
                     : "border-transparent bg-gray-100 hover:border-gray-200"
-            }`}
+            } ${renderIcon() ? "pl-2" : ""}`}
         >
-            {renderIcon() && <div className="pl-2">{renderIcon()}</div>}
+            {renderIcon() && <div>{renderIcon()}</div>}
             <input
                 type="number"
-                className={`h-6 w-full min-w-[px] cursor-text rounded border-0 bg-transparent pl-2 pr-1 text-xs transition-colors focus:outline-none ${
+                className={`no-spin h-6 w-full ${renderIcon() ? "min-w-[36px]" : "min-w-[px]"} cursor-text rounded border-0 bg-transparent pl-2 pr-1 text-xs transition-colors focus:outline-none ${
                     isInvalid ? "text-red-700" : "text-gray-900"
                 }`}
                 value={displayValue}
@@ -146,6 +158,9 @@ export default function InputNumber({
                 aria-invalid={isInvalid}
                 aria-describedby={isInvalid ? `${label}-error` : undefined}
             />
+            {suffix && (
+                <span className="-ml-1 pr-[6px] pt-0.5 text-xs text-gray-900">{suffix}</span>
+            )}
         </div>
     );
 

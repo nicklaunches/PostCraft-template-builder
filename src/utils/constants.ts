@@ -50,6 +50,9 @@ export const DEFAULT_BLOCK_STYLES: Readonly<BlockStyles> = {
     marginTop: 0,
     marginBottom: 0,
     backgroundColor: "",
+    fontSize: 15,
+    lineHeight: 150,
+    color: "#000000",
 } as const;
 
 /**

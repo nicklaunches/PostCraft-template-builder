@@ -62,3 +62,9 @@ body {
         transform: rotate(360deg);
     }
 }
+
+/* PostCraft default paragraph styles */
+.postcraft-paragraph {
+    font-size: 15px;
+    line-height: 150%;
+}
