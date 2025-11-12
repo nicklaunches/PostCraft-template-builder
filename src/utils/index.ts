@@ -23,7 +23,12 @@ export {
 export type { BlockType } from "./constants";
 
 // Helpers
-export { generateClassName, generateBlockId } from "./helpers";
+export {
+    generateClassName,
+    generateBlockId,
+    getBlockIdFromSelection,
+    getBlockNodeInfoFromSelection,
+} from "./helpers";
 
 // Type Guards
 export {
@@ -84,3 +89,6 @@ export {
     minifyCSS,
     addVendorPrefixes,
 } from "./cssGenerator";
+
+// Style Applicator
+export { applyBlockStylesToNode } from "./styleApplicator";

@@ -155,10 +155,27 @@ export function generateEmailInlineStyles(styles: EmailStyles): React.CSSPropert
  * </div>
  */
 export function generateBlockInlineStyles(styles: BlockStyles): React.CSSProperties {
-    const inlineStyles: React.CSSProperties = {
-        padding: `${styles.paddingTop}px ${styles.paddingRight}px ${styles.paddingBottom}px ${styles.paddingLeft}px`,
-        margin: `${styles.marginTop}px ${styles.marginRight}px ${styles.marginBottom}px ${styles.marginLeft}px`,
-    };
+    const inlineStyles: React.CSSProperties = {};
+
+    // Only add padding if any value is non-zero
+    if (
+        styles.paddingLeft > 0 ||
+        styles.paddingRight > 0 ||
+        styles.paddingTop > 0 ||
+        styles.paddingBottom > 0
+    ) {
+        inlineStyles.padding = `${styles.paddingTop}px ${styles.paddingRight}px ${styles.paddingBottom}px ${styles.paddingLeft}px`;
+    }
+
+    // Only add margin if any value is non-zero
+    if (
+        styles.marginLeft > 0 ||
+        styles.marginRight > 0 ||
+        styles.marginTop > 0 ||
+        styles.marginBottom > 0
+    ) {
+        inlineStyles.margin = `${styles.marginTop}px ${styles.marginRight}px ${styles.marginBottom}px ${styles.marginLeft}px`;
+    }
 
     if (styles.alignment) {
         inlineStyles.textAlign = styles.alignment;
@@ -170,6 +187,18 @@ export function generateBlockInlineStyles(styles: BlockStyles): React.CSSPropert
 
     if (styles.borderWidth > 0) {
         inlineStyles.borderRadius = `${styles.borderWidth}px`;
+    }
+
+    if (styles.fontSize > 0) {
+        inlineStyles.fontSize = `${styles.fontSize}px`;
+    }
+
+    if (styles.lineHeight > 0) {
+        inlineStyles.lineHeight = `${styles.lineHeight}%`;
+    }
+
+    if (styles.color) {
+        inlineStyles.color = styles.color;
     }
 
     return inlineStyles;

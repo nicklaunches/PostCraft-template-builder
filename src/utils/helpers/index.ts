@@ -75,6 +75,46 @@ export function getBlockIdFromSelection(editor: any): string | null {
 }
 
 /**
+ * Get block node information from the current editor selection.
+ *
+ * Traverses up the document tree from the current selection position
+ * to find the nearest paragraph or heading node and returns its ID and type.
+ *
+ * @param {any} editor - TipTap editor instance
+ * @returns {{ blockId: string | null; nodeType: string | null }} Object containing block ID and node type
+ *
+ * @example
+ * const { blockId, nodeType } = getBlockNodeInfoFromSelection(editor);
+ * if (blockId && nodeType) {
+ *   // Do something with the block
+ * }
+ */
+export function getBlockNodeInfoFromSelection(editor: any): {
+    blockId: string | null;
+    nodeType: string | null;
+} {
+    const { state } = editor;
+    const { selection } = state;
+    const { $from } = selection;
+
+    let blockId: string | null = null;
+    let nodeType: string | null = null;
+    let depth = $from.depth;
+
+    while (depth > 0) {
+        const node = $from.node(depth);
+        if (node.type.name === "paragraph" || node.type.name === "heading") {
+            blockId = node.attrs.id || null;
+            nodeType = node.type.name;
+            break;
+        }
+        depth--;
+    }
+
+    return { blockId, nodeType };
+}
+
+/**
  * Apply default block styles after a block type change via slash command.
  *
  * This function is called after changing a block's type (e.g., paragraph to heading)

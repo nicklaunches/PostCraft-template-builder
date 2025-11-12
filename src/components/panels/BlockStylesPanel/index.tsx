@@ -1,6 +1,8 @@
 import { Card, Alignment, Spacing, ColorPicker, InputNumber, Tooltip } from "@/components/ui";
 import { useBlockStyles } from "@/context/BlockStylesContext";
 import { useEditorContext } from "@/context/EditorContext";
+import { applyBlockStylesToNode } from "@/utils/styleApplicator";
+import { getBlockIdFromSelection, getBlockNodeInfoFromSelection } from "@/utils/helpers";
 import { PlusIcon, DocumentDuplicateIcon, TrashIcon } from "@heroicons/react/24/outline";
 import ArrowPathIcon from "@heroicons/react/24/outline/ArrowPathIcon";
 import { useEffect, useState } from "react";
@@ -40,23 +42,7 @@ export default function BlockStyles() {
         if (!editor) return;
 
         const handleUpdate = () => {
-            const { state } = editor;
-            const { selection } = state;
-            const { $from } = selection;
-
-            // Find the parent block node (paragraph, heading, etc.)
-            let depth = $from.depth;
-            let blockId: string | null = null;
-
-            while (depth > 0) {
-                const node = $from.node(depth);
-                if (node.type.name === "paragraph" || node.type.name === "heading") {
-                    blockId = node.attrs.id || null;
-                    break;
-                }
-                depth--;
-            }
-
+            const blockId = getBlockIdFromSelection(editor);
             setCurrentBlockId(blockId);
             setSelectedBlockId(blockId);
             setSelectionUpdate((prev) => prev + 1);
@@ -80,104 +66,14 @@ export default function BlockStyles() {
             return;
         }
 
-        const applyStylesToNode = () => {
-            const { state } = editor;
-            const { selection } = state;
-            const { $from } = selection;
+        const { nodeType } = getBlockNodeInfoFromSelection(editor);
 
-            // Get the parent block node (paragraph, heading, etc.)
-            let depth = $from.depth;
-            let parentNode = null;
-            let nodeType = null;
+        if (!nodeType) {
+            return;
+        }
 
-            while (depth > 0) {
-                const node = $from.node(depth);
-                if (node.type.name === "paragraph" || node.type.name === "heading") {
-                    if (node.attrs.id === currentBlockId) {
-                        parentNode = node;
-                        nodeType = node.type.name;
-                        break;
-                    }
-                }
-                depth--;
-            }
-
-            if (!parentNode || !nodeType) {
-                return;
-            }
-
-            const styles = getBlockStyles(currentBlockId);
-
-            // If no styles exist, clear any inline styles (set to null/empty)
-            if (!styles) {
-                editor.chain().focus().updateAttributes(nodeType, { style: null }).run();
-                return;
-            }
-
-            // Build inline style string
-            const styleArray: string[] = [];
-
-            // Padding
-            if (
-                styles.paddingLeft > 0 ||
-                styles.paddingRight > 0 ||
-                styles.paddingTop > 0 ||
-                styles.paddingBottom > 0
-            ) {
-                styleArray.push(
-                    `padding: ${styles.paddingTop}px ${styles.paddingRight}px ${styles.paddingBottom}px ${styles.paddingLeft}px`
-                );
-            }
-
-            // Margin
-            if (
-                styles.marginLeft > 0 ||
-                styles.marginRight > 0 ||
-                styles.marginTop > 0 ||
-                styles.marginBottom > 0
-            ) {
-                styleArray.push(
-                    `margin: ${styles.marginTop}px ${styles.marginRight}px ${styles.marginBottom}px ${styles.marginLeft}px`
-                );
-            }
-
-            // Radius (border-radius)
-            if (styles.borderWidth > 0) {
-                styleArray.push(`border-radius: ${styles.borderWidth}px`);
-            }
-
-            // Background
-            if (styles.backgroundColor) {
-                styleArray.push(`background-color: ${styles.backgroundColor}`);
-            }
-
-            // Font size
-            if (styles.fontSize > 0) {
-                styleArray.push(`font-size: ${styles.fontSize}px`);
-            }
-
-            // Line height
-            if (styles.lineHeight > 0) {
-                styleArray.push(`line-height: ${styles.lineHeight}%`);
-            }
-
-            // Text color
-            if (styles.color) {
-                styleArray.push(`color: ${styles.color}`);
-            }
-
-            // Alignment
-            if (styles.alignment) {
-                styleArray.push(`text-align: ${styles.alignment}`);
-            }
-
-            const styleString = styleArray.join("; ");
-
-            // Apply styles to the current node
-            editor.chain().focus().updateAttributes(nodeType, { style: styleString }).run();
-        };
-
-        applyStylesToNode();
+        const styles = getBlockStyles(currentBlockId);
+        applyBlockStylesToNode(editor, nodeType, styles);
     }, [currentBlockId, blockStylesMap, editor, getBlockStyles]);
 
     const handleReset = () => {

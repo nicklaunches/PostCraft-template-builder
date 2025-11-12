@@ -99,6 +99,8 @@ export {
     // Helpers
     generateClassName,
     generateBlockId,
+    getBlockIdFromSelection,
+    getBlockNodeInfoFromSelection,
     // Type Guards
     isValidBlockType,
     isTextBlock,
@@ -156,5 +158,7 @@ export {
     generateCompleteStylesheet,
     minifyCSS,
     addVendorPrefixes,
+    // Style Applicator
+    applyBlockStylesToNode,
 } from "./utils";
 export type { BlockType, ValidationResult, ValidationOptions } from "./utils";
