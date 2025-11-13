@@ -40,7 +40,7 @@ export function ContentEditor({
     const { setEditor } = useEditorContext();
     const [isEditable, setIsEditable] = useState(true);
 
-    const defaultContent = `<h1>This is a very unique heading.</h1><p>This is a unique paragraph. It's so unique, it even has an ID attached to it.</p><p>And this one, too.</p>`;
+    const defaultContent = `<h1 style="font-size: 30px; line-height: 107%; padding-top: 12px; padding-bottom: 4px; color: #000000;">This is a very unique heading.</h1><h2 style="font-size: 24px; line-height: 133%; padding-top: 12px; padding-bottom: 4px; color: #000000;">This is H2</h2><p style="font-size: 15px; line-height: 150%; color: #000000;">This is a unique paragraph. It's so unique, it even has an ID attached to it.</p><p style="font-size: 15px; line-height: 150%; color: #000000;">And this one, too.</p><h3 style="font-size: 20px; line-height: 160%; padding-top: 12px; padding-bottom: 4px; color: #000000;">This is H3</h3><ul style="font-size: 15px; line-height: 150%; margin-top: 16px; margin-bottom: 16px; padding-left: 26px; color: #000000;"><li>First bullet item</li><li>Second bullet item</li><li>Third bullet item</li></ul><ol style="font-size: 15px; line-height: 150%; margin-top: 16px; margin-bottom: 16px; padding-left: 26px; color: #000000;"><li>First numbered item</li><li>Second numbered item</li><li>Third numbered item</li></ol>`;
 
     const toggleEditable = () => {
         setIsEditable((prev) => !prev);
