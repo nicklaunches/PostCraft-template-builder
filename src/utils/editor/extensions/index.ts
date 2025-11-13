@@ -8,6 +8,9 @@
 export { Command, renderItems } from "./slash-command";
 export { ParagraphWithStyle } from "./paragraph-with-style";
 export { HeadingWithStyle } from "./heading-with-style";
+export { OrderedListWithStyle } from "./ordered-list-with-style";
+export { BulletListWithStyle } from "./bullet-list-with-style";
+export { ListItemWithStyle } from "./list-item-with-style";
 export { createStyledNode, ensureBlockIds } from "./createStyledNode";
 export type { SuggestionItem } from "./slash-command";
 export type { StyledNodeConfig, HTMLTag } from "./createStyledNode";

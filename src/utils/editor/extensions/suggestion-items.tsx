@@ -1,4 +1,10 @@
-import { Bars3BottomLeftIcon, H1Icon, H2Icon, H3Icon } from "@heroicons/react/24/outline";
+import {
+    Bars3BottomLeftIcon,
+    H1Icon,
+    H2Icon,
+    H3Icon,
+    ListBulletIcon,
+} from "@heroicons/react/24/outline";
 import type { SuggestionItem } from "./slash-command";
 import { createSlashCommand } from "../commands";
 
@@ -21,6 +27,8 @@ import { createSlashCommand } from "../commands";
  * - Heading 1: Transform current node to large heading (h1)
  * - Heading 2: Transform current node to medium heading (h2)
  * - Heading 3: Transform current node to small heading (h3)
+ * - Numbered List: Create an ordered list with numbers
+ * - Bullet List: Create an unordered list with bullets
  */
 export const suggestionItems: SuggestionItem[] = [
     {
@@ -50,5 +58,23 @@ export const suggestionItems: SuggestionItem[] = [
         searchTerms: ["h3", "heading", "subheading"],
         icon: <H3Icon className="w-5 h-5" />,
         command: createSlashCommand("heading", { level: 3 }, "heading", 3),
+    },
+    {
+        title: "Numbered List",
+        description: "Create a list with numbering",
+        searchTerms: ["ol", "ordered", "numbered", "list", "1", "numbers"],
+        icon: <ListBulletIcon className="w-5 h-5" />,
+        command: ({ editor, range }: { editor: any; range: { from: number; to: number } }) => {
+            editor.chain().focus().deleteRange(range).toggleOrderedList().run();
+        },
+    },
+    {
+        title: "Bullet List",
+        description: "Create a list with bullets",
+        searchTerms: ["ul", "unordered", "bullet", "list", "bullets"],
+        icon: <ListBulletIcon className="w-5 h-5" />,
+        command: ({ editor, range }: { editor: any; range: { from: number; to: number } }) => {
+            editor.chain().focus().deleteRange(range).toggleBulletList().run();
+        },
     },
 ];

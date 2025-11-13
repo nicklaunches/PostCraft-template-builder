@@ -103,3 +103,47 @@ export const DEFAULT_H3_STYLES: Readonly<BlockStyles> = {
     lineHeight: 160,
     color: "#000000",
 } as const;
+
+/**
+ * Default styling for ordered list (numbered list) blocks.
+ * Note: paddingLeft of 0 means only the base 26px will be applied.
+ * User adjustments will be added on top of the base value.
+ */
+export const DEFAULT_OL_STYLES: Readonly<BlockStyles> = {
+    alignment: "left",
+    borderRadius: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    marginLeft: 0,
+    marginRight: 0,
+    marginTop: 16,
+    marginBottom: 16,
+    backgroundColor: "",
+    fontSize: 15,
+    lineHeight: 150,
+    color: "#000000",
+} as const;
+
+/**
+ * Default styling for bullet list (unordered list) blocks.
+ * Note: paddingLeft of 0 means only the base 26px will be applied.
+ * User adjustments will be added on top of the base value.
+ */
+export const DEFAULT_UL_STYLES: Readonly<BlockStyles> = {
+    alignment: "left",
+    borderRadius: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    marginLeft: 0,
+    marginRight: 0,
+    marginTop: 16,
+    marginBottom: 16,
+    backgroundColor: "",
+    fontSize: 15,
+    lineHeight: 150,
+    color: "#000000",
+} as const;

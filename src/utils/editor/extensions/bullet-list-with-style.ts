@@ -1,0 +1,92 @@
+import BulletList from "@tiptap/extension-bullet-list";
+import { mergeAttributes } from "@tiptap/core";
+import type { Editor } from "@tiptap/core";
+import { generateBlockId } from "../../shared/generators";
+
+/**
+ * Ensures all bullet list nodes have unique block IDs.
+ * Assigns IDs to nodes that don't have one and optionally notifies via callback.
+ */
+function ensureBulletListIds(editor: Editor, onBlockCreated?: (id: string) => void): void {
+    const { tr } = editor.state;
+    let modified = false;
+
+    editor.state.doc.descendants((node, pos) => {
+        if (node.type.name === "bulletList" && !node.attrs.id) {
+            const id = generateBlockId();
+            tr.setNodeMarkup(pos, null, { ...node.attrs, id });
+            modified = true;
+
+            if (onBlockCreated) {
+                onBlockCreated(id);
+            }
+        }
+    });
+
+    if (modified) {
+        editor.view.dispatch(tr);
+    }
+}
+
+/**
+ * Extended BulletList extension with custom styling and block ID tracking.
+ *
+ * Configures bullet lists with proper styling for the email template builder.
+ */
+export const BulletListWithStyle = BulletList.extend({
+    addOptions() {
+        return {
+            ...this.parent?.(),
+            HTMLAttributes: {},
+            onBlockCreated: null,
+        };
+    },
+
+    addAttributes() {
+        return {
+            ...this.parent?.(),
+            id: {
+                default: null,
+                parseHTML: (element: HTMLElement) => element.getAttribute("data-block-id"),
+                renderHTML: (attributes: Record<string, unknown>) => {
+                    if (!attributes.id) {
+                        return {};
+                    }
+                    return {
+                        "data-block-id": attributes.id,
+                    };
+                },
+            },
+            style: {
+                default: null,
+                parseHTML: (element: HTMLElement) => element.getAttribute("style"),
+                renderHTML: (attributes: Record<string, unknown>) => {
+                    if (!attributes.style) {
+                        return {};
+                    }
+                    return {
+                        style: attributes.style,
+                    };
+                },
+            },
+        };
+    },
+
+    renderHTML({ HTMLAttributes }) {
+        return [
+            "ul",
+            mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
+                class: "postcraft-editor-ul",
+            }),
+            0,
+        ];
+    },
+
+    onCreate() {
+        ensureBulletListIds(this.editor);
+    },
+
+    onUpdate() {
+        ensureBulletListIds(this.editor, (this.options as any).onBlockCreated);
+    },
+});

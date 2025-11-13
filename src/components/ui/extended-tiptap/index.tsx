@@ -13,6 +13,9 @@ import {
     renderItems,
     ParagraphWithStyle,
     HeadingWithStyle,
+    OrderedListWithStyle,
+    BulletListWithStyle,
+    ListItemWithStyle,
 } from "@/utils/editor/extensions";
 import { BubbleMenu } from "../BubbleMenu";
 import { FloatingMenu } from "../FloatingMenu";
@@ -27,6 +30,8 @@ import { FloatingMenu } from "../FloatingMenu";
  * @property {(content: string) => void} [onChange] - Callback when content changes
  * @property {(blockId: string, level: number) => void} [onHeadingBlockCreated] - Callback when a new heading block is created
  * @property {(blockId: string) => void} [onParagraphBlockCreated] - Callback when a new paragraph block is created
+ * @property {(blockId: string) => void} [onOrderedListBlockCreated] - Callback when a new ordered list block is created
+ * @property {(blockId: string) => void} [onBulletListBlockCreated] - Callback when a new bullet list block is created
  */
 export interface ExtendedTipTapProps {
     initialContent?: string;
@@ -36,6 +41,8 @@ export interface ExtendedTipTapProps {
     onChange?: (content: string) => void;
     onHeadingBlockCreated?: (blockId: string, level: number) => void;
     onParagraphBlockCreated?: (blockId: string) => void;
+    onOrderedListBlockCreated?: (blockId: string) => void;
+    onBulletListBlockCreated?: (blockId: string) => void;
 }
 
 /**
@@ -55,6 +62,8 @@ export function ExtendedTipTap({
     onChange,
     onHeadingBlockCreated,
     onParagraphBlockCreated,
+    onOrderedListBlockCreated,
+    onBulletListBlockCreated,
 }: ExtendedTipTapProps) {
     const editor = useEditor({
         extensions: [
@@ -66,6 +75,9 @@ export function ExtendedTipTap({
                 italic: false, // Disable default italic to use custom
                 strike: false, // Disable default strike to use custom
                 code: false, // Disable default code to use custom
+                orderedList: false, // Disable default ordered list to use custom
+                bulletList: false, // Disable default bullet list to use custom
+                listItem: false, // Disable default list item to use custom
             }),
             ParagraphWithStyle.configure({
                 onBlockCreated: onParagraphBlockCreated,
@@ -73,6 +85,13 @@ export function ExtendedTipTap({
             HeadingWithStyle.configure({
                 onBlockCreated: onHeadingBlockCreated,
             }),
+            OrderedListWithStyle.configure({
+                onBlockCreated: onOrderedListBlockCreated,
+            } as any),
+            BulletListWithStyle.configure({
+                onBlockCreated: onBulletListBlockCreated,
+            } as any),
+            ListItemWithStyle,
             Bold,
             Italic,
             Strike,

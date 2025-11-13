@@ -15,6 +15,8 @@ export {
     DEFAULT_H1_STYLES,
     DEFAULT_H2_STYLES,
     DEFAULT_H3_STYLES,
+    DEFAULT_OL_STYLES,
+    DEFAULT_UL_STYLES,
 } from "./default-styles";
 
 // UI options

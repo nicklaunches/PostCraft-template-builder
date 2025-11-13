@@ -14,7 +14,11 @@ export {
 } from "./css-generator";
 
 // Inline styles generation
-export { generateEmailInlineStyles, generateBlockInlineStyles } from "./inline-generator";
+export {
+    generateEmailInlineStyles,
+    generateBlockInlineStyles,
+    generateListInlineStyles,
+} from "./inline-generator";
 
 // Style application
-export { applyBlockStylesToNode } from "./applicator";
+export { applyBlockStylesToNode, applyListStylesToNode } from "./applicator";

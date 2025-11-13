@@ -5,6 +5,8 @@ import {
     DEFAULT_H1_STYLES,
     DEFAULT_H2_STYLES,
     DEFAULT_H3_STYLES,
+    DEFAULT_OL_STYLES,
+    DEFAULT_UL_STYLES,
 } from "@/utils/constants";
 
 /**
@@ -102,6 +104,10 @@ export function BlockStylesProvider({ children }: { children: ReactNode }) {
             } else {
                 defaultStyles = { ...DEFAULT_H1_STYLES }; // fallback to H1
             }
+        } else if (blockType === "orderedList") {
+            defaultStyles = { ...DEFAULT_OL_STYLES };
+        } else if (blockType === "bulletList") {
+            defaultStyles = { ...DEFAULT_UL_STYLES };
         } else {
             // paragraph or other block types
             defaultStyles = { ...DEFAULT_P_STYLES };

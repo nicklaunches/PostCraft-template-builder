@@ -113,6 +113,40 @@ body {
     overflow: hidden;
 }
 
+.postcraft-editor-ol {
+    list-style-type: decimal;
+    list-style-position: outside;
+    /* Base padding for list markers - will be overridden by inline styles */
+    padding-left: 26px;
+}
+
+.postcraft-editor-ol li {
+    padding-left: 2px;
+    margin-bottom: 0.2rem;
+}
+
+.postcraft-editor-ol li::marker {
+    font-weight: 400;
+    color: currentColor;
+}
+
+.postcraft-editor-ul {
+    list-style-type: disc;
+    list-style-position: outside;
+    /* Base padding for list markers - will be overridden by inline styles */
+    padding-left: 26px;
+}
+
+.postcraft-editor-ul li {
+    padding-left: 2px;
+    margin-bottom: 0.2rem;
+}
+
+.postcraft-editor-ul li::marker {
+    font-weight: 400;
+    color: currentColor;
+}
+
 .postcraft-editor-h1,
 .postcraft-editor-h2,
 .postcraft-editor-h3 {

@@ -106,3 +106,68 @@ export function generateBlockInlineStyles(styles: BlockStyles): React.CSSPropert
 
     return inlineStyles;
 }
+
+/**
+ * Base margin for list elements to accommodate list markers (bullets/numbers).
+ * This value is added to any user-defined marginLeft.
+ */
+const LIST_BASE_MARGIN_LEFT = 26;
+
+/**
+ * Generates inline style object for list block styles (ordered/bullet lists).
+ *
+ * Lists require special handling for margin-left:
+ * - A base margin of 26px is always applied to accommodate list markers
+ * - User's paddingLeft value is converted to ADDITIONAL margin-left
+ * - Example: base 26px + user's 20px padding = 46px total margin-left
+ * - This moves the entire list (including numbers/bullets) to the right
+ *
+ * @param {BlockStyles} styles - Block styling configuration
+ * @returns {React.CSSProperties} Inline style object with list-specific margin
+ *
+ * @example
+ * <ol style={generateListInlineStyles(blockStyles)}>
+ *   <li>Item 1</li>
+ * </ol>
+ */
+export function generateListInlineStyles(styles: BlockStyles): React.CSSProperties {
+    const inlineStyles: React.CSSProperties = {};
+
+    // Calculate total margin-left: base margin + user's padding (treated as additional margin)
+    const totalMarginLeft = LIST_BASE_MARGIN_LEFT + styles.paddingLeft;
+
+    // Set margin with the calculated left margin
+    // User's paddingLeft becomes additional margin-left for lists
+    inlineStyles.margin = `${styles.marginTop}px ${styles.marginRight}px ${styles.marginBottom}px ${totalMarginLeft}px`;
+
+    // Apply other padding (top, right, bottom) normally, but not left
+    if (styles.paddingRight > 0 || styles.paddingTop > 0 || styles.paddingBottom > 0) {
+        inlineStyles.padding = `${styles.paddingTop}px ${styles.paddingRight}px ${styles.paddingBottom}px 0`;
+    }
+
+    if (styles.alignment) {
+        inlineStyles.textAlign = styles.alignment;
+    }
+
+    if (styles.backgroundColor) {
+        inlineStyles.backgroundColor = styles.backgroundColor;
+    }
+
+    if (styles.borderRadius > 0) {
+        inlineStyles.borderRadius = `${styles.borderRadius}px`;
+    }
+
+    if (styles.fontSize > 0) {
+        inlineStyles.fontSize = `${styles.fontSize}px`;
+    }
+
+    if (styles.lineHeight > 0) {
+        inlineStyles.lineHeight = `${styles.lineHeight}%`;
+    }
+
+    if (styles.color) {
+        inlineStyles.color = styles.color;
+    }
+
+    return inlineStyles;
+}
