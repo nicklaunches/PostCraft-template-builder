@@ -32,6 +32,7 @@ import { FloatingMenu } from "../FloatingMenu";
  * @property {(blockId: string) => void} [onParagraphBlockCreated] - Callback when a new paragraph block is created
  * @property {(blockId: string) => void} [onOrderedListBlockCreated] - Callback when a new ordered list block is created
  * @property {(blockId: string) => void} [onBulletListBlockCreated] - Callback when a new bullet list block is created
+ * @property {(blockId: string) => void} [onListItemBlockCreated] - Callback when a new list item block is created
  */
 export interface ExtendedTipTapProps {
     initialContent?: string;
@@ -43,6 +44,7 @@ export interface ExtendedTipTapProps {
     onParagraphBlockCreated?: (blockId: string) => void;
     onOrderedListBlockCreated?: (blockId: string) => void;
     onBulletListBlockCreated?: (blockId: string) => void;
+    onListItemBlockCreated?: (blockId: string) => void;
 }
 
 /**
@@ -64,6 +66,7 @@ export function ExtendedTipTap({
     onParagraphBlockCreated,
     onOrderedListBlockCreated,
     onBulletListBlockCreated,
+    onListItemBlockCreated,
 }: ExtendedTipTapProps) {
     const editor = useEditor({
         extensions: [
@@ -91,7 +94,9 @@ export function ExtendedTipTap({
             BulletListWithStyle.configure({
                 onBlockCreated: onBulletListBlockCreated,
             } as any),
-            ListItemWithStyle,
+            ListItemWithStyle.configure({
+                onBlockCreated: onListItemBlockCreated,
+            } as any),
             Bold,
             Italic,
             Strike,

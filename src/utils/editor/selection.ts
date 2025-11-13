@@ -4,7 +4,8 @@ import type { Editor } from "@tiptap/core";
  * Get the block ID from the current editor selection.
  *
  * Traverses up the document tree from the current selection position
- * to find the nearest paragraph or heading node and returns its ID attribute.
+ * to find the nearest block node (listItem, paragraph, or heading) and returns its ID attribute.
+ * Prioritizes listItem over paragraph when inside a list.
  *
  * @param {Editor} editor - TipTap editor instance
  * @returns {string | null} Block ID if found, null otherwise
@@ -23,6 +24,18 @@ export function getBlockIdFromSelection(editor: Editor): string | null {
     let blockId: string | null = null;
     let depth = $from.depth;
 
+    // First pass: look for listItem (highest priority for lists)
+    while (depth > 0) {
+        const node = $from.node(depth);
+        if (node.type.name === "listItem") {
+            blockId = node.attrs.id || null;
+            if (blockId) return blockId;
+        }
+        depth--;
+    }
+
+    // Second pass: look for paragraph or heading
+    depth = $from.depth;
     while (depth > 0) {
         const node = $from.node(depth);
         if (node.type.name === "paragraph" || node.type.name === "heading") {
@@ -39,7 +52,8 @@ export function getBlockIdFromSelection(editor: Editor): string | null {
  * Get block node information from the current editor selection.
  *
  * Traverses up the document tree from the current selection position
- * to find the nearest paragraph or heading node and returns its ID and type.
+ * to find the nearest block node (listItem, paragraph, or heading) and returns its ID and type.
+ * Prioritizes listItem over paragraph when inside a list.
  *
  * @param {Editor} editor - TipTap editor instance
  * @returns {{ blockId: string | null; nodeType: string | null }} Object containing block ID and node type
@@ -62,6 +76,19 @@ export function getBlockNodeInfoFromSelection(editor: Editor): {
     let nodeType: string | null = null;
     let depth = $from.depth;
 
+    // First pass: look for listItem (highest priority for lists)
+    while (depth > 0) {
+        const node = $from.node(depth);
+        if (node.type.name === "listItem") {
+            blockId = node.attrs.id || null;
+            nodeType = node.type.name;
+            if (blockId) return { blockId, nodeType };
+        }
+        depth--;
+    }
+
+    // Second pass: look for paragraph or heading
+    depth = $from.depth;
     while (depth > 0) {
         const node = $from.node(depth);
         if (node.type.name === "paragraph" || node.type.name === "heading") {

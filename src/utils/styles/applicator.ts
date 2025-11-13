@@ -48,7 +48,38 @@ export function applyBlockStylesToNode(
         .map(([key, value]) => `${camelToKebab(key)}: ${value}`)
         .join("; ");
 
-    // Apply the style string to the node
+    // For list items, we need to find the actual listItem node position
+    if (nodeType === "listItem") {
+        const { state } = editor;
+        const { selection } = state;
+        const { $from } = selection;
+
+        // Find the listItem node
+        let depth = $from.depth;
+        let listItemPos = null;
+
+        while (depth > 0) {
+            const node = $from.node(depth);
+            if (node.type.name === "listItem") {
+                listItemPos = $from.before(depth);
+                break;
+            }
+            depth--;
+        }
+
+        if (listItemPos !== null) {
+            const { tr } = state;
+            const node = state.doc.nodeAt(listItemPos);
+            if (node && node.type.name === "listItem") {
+                const newAttrs = { ...node.attrs, style: styleString };
+                tr.setNodeMarkup(listItemPos, null, newAttrs);
+                editor.view.dispatch(tr);
+                return;
+            }
+        }
+    }
+
+    // Apply the style string to the node (for non-listItem nodes)
     editor.chain().focus().updateAttributes(nodeType, { style: styleString }).run();
 }
 

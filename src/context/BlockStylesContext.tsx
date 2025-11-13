@@ -108,6 +108,9 @@ export function BlockStylesProvider({ children }: { children: ReactNode }) {
             defaultStyles = { ...DEFAULT_OL_STYLES };
         } else if (blockType === "bulletList") {
             defaultStyles = { ...DEFAULT_UL_STYLES };
+        } else if (blockType === "listItem") {
+            // List items use paragraph-like defaults
+            defaultStyles = { ...DEFAULT_P_STYLES };
         } else {
             // paragraph or other block types
             defaultStyles = { ...DEFAULT_P_STYLES };

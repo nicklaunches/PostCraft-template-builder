@@ -78,6 +78,9 @@ export interface StyledNodeConfig {
  * Ensures all nodes of a given type have unique block IDs.
  * Assigns IDs to nodes that don't have one and optionally notifies via callback.
  *
+ * Special handling: Paragraphs inside list items should NOT have IDs (the list item gets the ID instead)
+ * This function will also REMOVE IDs from paragraphs that are inside list items.
+ *
  * @param editor - The TipTap editor instance
  * @param nodeName - The name of the node type to process
  * @param onBlockCreated - Optional callback invoked when new IDs are assigned
@@ -90,7 +93,30 @@ export function ensureBlockIds(
     const { tr } = editor.state;
     let modified = false;
 
-    editor.state.doc.descendants((node, pos) => {
+    editor.state.doc.descendants((node, pos, parent) => {
+        // Special case: Remove IDs from paragraphs inside list items
+        if (
+            nodeName === "paragraph" &&
+            node.type.name === "paragraph" &&
+            parent &&
+            parent.type.name === "listItem"
+        ) {
+            if (node.attrs.id) {
+                console.log(
+                    "  🗑️ Removing ID from paragraph inside listItem at pos:",
+                    pos,
+                    "id:",
+                    node.attrs.id
+                );
+                const newAttrs = { ...node.attrs };
+                delete newAttrs.id;
+                delete newAttrs.style;
+                tr.setNodeMarkup(pos, null, newAttrs);
+                modified = true;
+            }
+            return;
+        }
+
         if (node.type.name === nodeName && !node.attrs.id) {
             const id = generateBlockId();
             tr.setNodeMarkup(pos, null, { ...node.attrs, id });
