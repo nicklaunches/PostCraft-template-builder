@@ -8,7 +8,12 @@ import Underline from "@tiptap/extension-underline";
 import Code from "@tiptap/extension-code";
 import Link from "@tiptap/extension-link";
 import { useEffect } from "react";
-import { Command, renderItems, ParagraphWithStyle, HeadingWithStyle } from "@/utils/extensions";
+import {
+    Command,
+    renderItems,
+    ParagraphWithStyle,
+    HeadingWithStyle,
+} from "@/utils/editor/extensions";
 import { BubbleMenu } from "../BubbleMenu";
 import { FloatingMenu } from "../FloatingMenu";
 

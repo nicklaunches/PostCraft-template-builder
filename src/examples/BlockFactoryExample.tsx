@@ -20,7 +20,7 @@ import {
     heading,
     button,
     divider,
-} from "@/utils/factories/blockFactory";
+} from "@/utils";
 import type { Block } from "@/types";
 
 /**

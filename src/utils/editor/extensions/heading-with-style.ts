@@ -1,6 +1,6 @@
 import { Node, mergeAttributes } from "@tiptap/core";
 import { ensureBlockIds } from "./createStyledNode";
-import { DEFAULT_H1_STYLES, DEFAULT_H2_STYLES, DEFAULT_H3_STYLES } from "@/utils/constants";
+import { DEFAULT_H1_STYLES, DEFAULT_H2_STYLES, DEFAULT_H3_STYLES } from "../../constants";
 import type { BlockStyles } from "@/types";
 
 /**

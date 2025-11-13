@@ -7,7 +7,7 @@ import { useEditorContext } from "@/context/EditorContext";
 import { useDynamicCss } from "@/hooks";
 import { ExtendedTipTap } from "@/components/ui";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
-import { getDefaultStylesForLevel } from "@/utils/extensions/heading-with-style";
+import { getDefaultStylesForLevel } from "@/utils/editor/extensions/heading-with-style";
 import { DEFAULT_P_STYLES } from "@/utils/constants";
 
 /**

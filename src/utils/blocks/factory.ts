@@ -14,7 +14,7 @@ import type {
     BlockType,
     BlockStyles,
 } from "@/types";
-import { generateBlockId } from "@/utils/helpers";
+import { generateBlockId } from "../shared/generators";
 
 /**
  * Options for creating blocks with custom properties.

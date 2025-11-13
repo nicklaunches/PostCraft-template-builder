@@ -1,13 +1,13 @@
 import { Card, Alignment, Spacing, ColorPicker, InputNumber, Tooltip } from "@/components/ui";
 import { useBlockStyles } from "@/context/BlockStylesContext";
 import { useEditorContext } from "@/context/EditorContext";
-import { applyBlockStylesToNode } from "@/utils/styleApplicator";
 import {
+    applyBlockStylesToNode,
     getBlockIdFromSelection,
     getBlockNodeInfoFromSelection,
     duplicateBlock,
     deleteBlock,
-} from "@/utils/helpers";
+} from "@/utils";
 import { PlusIcon, DocumentDuplicateIcon, TrashIcon } from "@heroicons/react/24/outline";
 import ArrowPathIcon from "@heroicons/react/24/outline/ArrowPathIcon";
 import { useEffect, useState } from "react";

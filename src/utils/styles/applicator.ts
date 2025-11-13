@@ -1,6 +1,6 @@
 import type { Editor } from "@tiptap/core";
 import type { BlockStyles } from "@/types";
-import { generateBlockInlineStyles } from "./cssGenerator";
+import { generateBlockInlineStyles } from "./inline-generator";
 
 /**
  * Converts a camelCase string to kebab-case.

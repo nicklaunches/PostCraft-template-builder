@@ -1,7 +1,6 @@
 import { useMemo, useEffect } from "react";
 import type { EmailStyles } from "@/types";
-import { generateClassName } from "@/utils/helpers";
-import { generateEmailCSS } from "@/utils/cssGenerator";
+import { generateClassName, generateEmailCSS } from "@/utils";
 
 /**
  * Custom hook for generating dynamic CSS from email styles.

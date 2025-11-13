@@ -1,6 +1,6 @@
 import { Bars3BottomLeftIcon, H1Icon, H2Icon, H3Icon } from "@heroicons/react/24/outline";
 import type { SuggestionItem } from "./slash-command";
-import { createSlashCommand } from "@/utils/helpers";
+import { createSlashCommand } from "../commands";
 
 /**
  * Available slash command suggestions.

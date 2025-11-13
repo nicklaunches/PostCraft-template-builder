@@ -6,10 +6,8 @@ import type {
     ButtonBlock,
     ImageBlock,
     DividerBlock,
-    ButtonContent,
-    ImageContent,
 } from "@/types";
-import { BLOCK_TYPES } from "./constants";
+import { BLOCK_TYPES } from "../constants";
 
 /**
  * Type guard to check if a value is a valid block type.
@@ -112,55 +110,6 @@ export function isValidBlock(value: unknown): value is Block {
         if (typeof obj.styles !== "object" || obj.styles === null) {
             return false;
         }
-    }
-
-    return true;
-}
-
-/**
- * Validates if an unknown value is valid button content.
- *
- * @param {unknown} value - Value to validate
- * @returns {value is ButtonContent} True if the value is valid button content
- */
-export function isValidButtonContent(value: unknown): value is ButtonContent {
-    if (!value || typeof value !== "object") {
-        return false;
-    }
-
-    const obj = value as Record<string, unknown>;
-
-    return typeof obj.text === "string" && typeof obj.url === "string";
-}
-
-/**
- * Validates if an unknown value is valid image content.
- *
- * @param {unknown} value - Value to validate
- * @returns {value is ImageContent} True if the value is valid image content
- */
-export function isValidImageContent(value: unknown): value is ImageContent {
-    if (!value || typeof value !== "object") {
-        return false;
-    }
-
-    const obj = value as Record<string, unknown>;
-
-    if (typeof obj.src !== "string") {
-        return false;
-    }
-
-    // Optional properties
-    if ("alt" in obj && obj.alt !== undefined && typeof obj.alt !== "string") {
-        return false;
-    }
-
-    if ("width" in obj && obj.width !== undefined && typeof obj.width !== "number") {
-        return false;
-    }
-
-    if ("height" in obj && obj.height !== undefined && typeof obj.height !== "number") {
-        return false;
     }
 
     return true;

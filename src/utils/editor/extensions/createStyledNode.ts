@@ -1,6 +1,6 @@
 import { Node, mergeAttributes } from "@tiptap/core";
 import type { Editor } from "@tiptap/core";
-import { generateBlockId } from "@/utils/helpers";
+import { generateBlockId } from "../../shared/generators";
 
 /**
  * Valid HTML tags that can be used for styled nodes.

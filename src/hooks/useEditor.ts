@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import type { Block } from "../types";
-import { blocksToHTML } from "@/utils/converters";
+import { blocksToHTML } from "@/utils";
 
 /**
  * Custom hook for managing email template editor state and operations.

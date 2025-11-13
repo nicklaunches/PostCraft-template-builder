@@ -1,12 +1,17 @@
-import type { Block, HeadingContent, TextContent } from "@/types";
+import type {
+    Block,
+    HeadingContent,
+    TextContent,
+    ImageContent,
+    ButtonContent,
+    DividerContent,
+} from "@/types";
 import {
     isTextBlock,
     isHeadingBlock,
     isButtonBlock,
     isImageBlock,
     isDividerBlock,
-    isValidButtonContent,
-    isValidImageContent,
 } from "./type-guards";
 
 /**
@@ -52,25 +57,35 @@ export function blocksToHTML(blocks: Block[]): string {
             }
 
             if (isImageBlock(block)) {
-                if (!isValidImageContent(block.content)) {
+                const imageContent = block.content as ImageContent;
+                if (typeof imageContent !== "object" || !imageContent?.src) {
                     return "";
                 }
-                const { src, alt = "", width, height } = block.content;
+                const { src, alt = "", width, height } = imageContent;
                 const widthAttr = width ? ` width="${width}"` : "";
                 const heightAttr = height ? ` height="${height}"` : "";
                 return `<img src="${escapeHTML(src)}" alt="${escapeHTML(alt)}"${widthAttr}${heightAttr} />`;
             }
 
             if (isButtonBlock(block)) {
-                if (!isValidButtonContent(block.content)) {
+                const buttonContent = block.content as ButtonContent;
+                if (
+                    typeof buttonContent !== "object" ||
+                    !buttonContent?.text ||
+                    !buttonContent?.url
+                ) {
                     return "";
                 }
-                const { url, text } = block.content;
+                const { url, text } = buttonContent;
                 return `<a href="${escapeHTML(url)}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 4px;">${escapeHTML(text)}</a>`;
             }
 
             if (isDividerBlock(block)) {
-                const style = block.content?.style || "solid";
+                const dividerContent = block.content as DividerContent;
+                const style =
+                    typeof dividerContent === "object" && dividerContent?.style
+                        ? dividerContent.style
+                        : "solid";
                 return `<hr style="border: none; border-top: 1px ${style} #e5e7eb; margin: 20px 0;" />`;
             }
 
