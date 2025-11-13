@@ -241,7 +241,6 @@ export function BlockStylesPanel() {
                 value={currentBlockStyles?.backgroundColor || ""}
                 onChange={(value) => updateBlockStyle(currentBlockId, "backgroundColor", value)}
                 tooltip="Background color"
-                labelPosition="top"
                 position="left"
             />
 
@@ -267,7 +266,6 @@ export function BlockStylesPanel() {
                 value={currentBlockStyles?.color || "#000000"}
                 onChange={(value) => updateBlockStyle(currentBlockId, "color", value)}
                 tooltip="Text color"
-                labelPosition="top"
                 position="left"
             />
         </Card>

@@ -91,27 +91,24 @@ export function EmailStylesPanel() {
             />
 
             <ColorPicker
-                label="Text color"
+                label="Text"
                 value={emailStyles.bodyColor}
                 onChange={(value) => updateEmailStyle("bodyColor", value)}
                 tooltip="Text color for email content"
-                labelPosition="top"
             />
 
             <ColorPicker
-                label="Content background"
+                label="Content BG"
                 value={emailStyles.contentBackgroundColor}
                 onChange={(value) => updateEmailStyle("contentBackgroundColor", value)}
                 tooltip="Background color of the email content container"
-                labelPosition="top"
             />
 
             <ColorPicker
-                label="Page background"
+                label="Page BG"
                 value={emailStyles.backgroundColor}
                 onChange={(value) => updateEmailStyle("backgroundColor", value)}
                 tooltip="Background color of the page"
-                labelPosition="top"
             />
 
             <InputNumber
