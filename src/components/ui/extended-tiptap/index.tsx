@@ -7,7 +7,7 @@ import Strike from "@tiptap/extension-strike";
 import Underline from "@tiptap/extension-underline";
 import Code from "@tiptap/extension-code";
 import Link from "@tiptap/extension-link";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
     Command,
     renderItems,
@@ -68,6 +68,8 @@ export function ExtendedTipTap({
     onBulletListBlockCreated,
     onListItemBlockCreated,
 }: ExtendedTipTapProps) {
+    const editorReadyCalledRef = useRef(false);
+
     const editor = useEditor({
         extensions: [
             StarterKit.configure({
@@ -128,11 +130,18 @@ export function ExtendedTipTap({
     });
 
     // Notify parent when editor is ready
+    // Use requestAnimationFrame to ensure onCreate has completed and IDs are assigned
+    // Use ref to ensure this only runs once per editor instance
     useEffect(() => {
-        if (editor && onEditorReady) {
-            onEditorReady(editor);
+        if (editor && onEditorReady && !editorReadyCalledRef.current) {
+            editorReadyCalledRef.current = true;
+
+            // Wait for next frame to ensure all onCreate hooks have completed
+            requestAnimationFrame(() => {
+                onEditorReady(editor);
+            });
         }
-    }, [editor, onEditorReady]);
+    }, [editor]); // Only depend on editor, not onEditorReady
 
     // Update editable state when prop changes
     useEffect(() => {

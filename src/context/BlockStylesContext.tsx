@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, ReactNode } from "react";
 import type { BlockStyles, BlockStylesMap } from "@/types";
 import {
     DEFAULT_P_STYLES,
@@ -29,6 +29,7 @@ interface BlockStylesContextType {
         key: keyof BlockStyles,
         value: BlockStyles[keyof BlockStyles]
     ) => void;
+    setBulkBlockStyles: (stylesMap: BlockStylesMap) => void;
     deleteBlockStyles: (blockId: string) => void;
     resetAllBlockStyles: () => void;
     setDefaultBlockStyles: (blockId: string, blockType: string, level?: number) => void;
@@ -58,9 +59,12 @@ export function BlockStylesProvider({ children }: { children: ReactNode }) {
     const [blockStylesMap, setBlockStylesMap] = useState<BlockStylesMap>({});
     const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
 
-    const getBlockStyles = (blockId: string): BlockStyles | undefined => {
-        return blockStylesMap[blockId];
-    };
+    const getBlockStyles = useCallback(
+        (blockId: string): BlockStyles | undefined => {
+            return blockStylesMap[blockId];
+        },
+        [blockStylesMap]
+    );
 
     const updateBlockStyle = (
         blockId: string,
@@ -69,15 +73,26 @@ export function BlockStylesProvider({ children }: { children: ReactNode }) {
     ) => {
         setBlockStylesMap((prev) => {
             const currentStyles = prev[blockId] || ({} as BlockStyles);
-            return {
+            const newMap = {
                 ...prev,
                 [blockId]: {
                     ...currentStyles,
                     [key]: value,
                 },
             };
+            return newMap;
         });
     };
+
+    const setBulkBlockStyles = useCallback((stylesMap: BlockStylesMap) => {
+        setBlockStylesMap((prev) => {
+            const newMap = { ...prev };
+            Object.entries(stylesMap).forEach(([blockId, styles]) => {
+                newMap[blockId] = { ...(prev[blockId] || {}), ...styles };
+            });
+            return newMap;
+        });
+    }, []);
 
     const deleteBlockStyles = (blockId: string) => {
         setBlockStylesMap((prev) => {
@@ -128,6 +143,7 @@ export function BlockStylesProvider({ children }: { children: ReactNode }) {
                 blockStylesMap,
                 getBlockStyles,
                 updateBlockStyle,
+                setBulkBlockStyles,
                 deleteBlockStyles,
                 resetAllBlockStyles,
                 setDefaultBlockStyles,
