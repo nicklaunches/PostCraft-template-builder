@@ -45,7 +45,7 @@
         "eslint-plugin-react-refresh": "^0.4.16",
         "husky": "^9.1.7",
         "lint-staged": "^16.2.6",
-        "postcss": "^8.5.6",
+        "postcss": "^8.5.23",
         "prettier": "^3.6.2",
         "react": "^18.0.0",
         "react-dom": "^18.0.0",
@@ -53,7 +53,7 @@
         "tsup": "^8.0.0",
         "typescript": "^5.0.0",
         "typescript-eslint": "^8.46.3",
-        "vite": "^6.0.1"
+        "vite": "^6.4.3"
     },
     "lint-staged": {
         "*.{js,jsx,ts,tsx}": [
@@ -67,7 +67,7 @@
     "dependencies": {
         "@hello-pangea/dnd": "^18.0.1",
         "@heroicons/react": "^2.2.0",
-        "@tiptap/core": "^3.10.5",
+        "@tiptap/core": "^3.30.5",
         "@tiptap/extension-bold": "^3.10.5",
         "@tiptap/extension-bubble-menu": "^3.10.5",
         "@tiptap/extension-bullet-list": "^3.10.7",
